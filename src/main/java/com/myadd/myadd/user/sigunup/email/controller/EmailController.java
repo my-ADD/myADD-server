@@ -1,4 +1,4 @@
-package com.myadd.myadd.sigunup.email.controller;
+package com.myadd.myadd.user.sigunup.email.controller;
 
 import javax.persistence.Column;
 
