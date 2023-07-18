@@ -1,12 +1,14 @@
 package com.myadd.myadd.user.domain;
 
 
+import com.myadd.myadd.post.domain.PostEntity;
 import com.myadd.myadd.user.dto.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
