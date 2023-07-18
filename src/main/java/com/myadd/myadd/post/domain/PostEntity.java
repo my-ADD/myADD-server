@@ -1,5 +1,6 @@
 package com.myadd.myadd.post.domain;
 
+import com.myadd.myadd.user.domain.UserEntity;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class PostEntity {
 
     @ManyToOne
     @JoinColumn(name="user_id")
-    private User user;
+    private UserEntity user;
 
     @NonNull
     private LocalDateTime created_at;
