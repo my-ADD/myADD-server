@@ -15,5 +15,11 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping(value = "/users/join/email")
 @RequiredArgsConstructor
 public class EmailAuthController {
+    private final EmailAuthService emailService;
 
+    @PostMapping("/send-code") // /users/join/email/send-code
+    public String sendEmail(@RequestBody EmailAuthRequestDto emailAuthRequestDto) throws MessagingException, UnsupportedEncodingException {
+        String authCode = emailService.sendEmail(emailAuthRequestDto.getEmail());
+        return authCode;
+    }
 }
