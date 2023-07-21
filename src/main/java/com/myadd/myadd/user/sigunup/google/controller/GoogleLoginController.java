@@ -1,5 +1,6 @@
-package com.myadd.myadd.user.sigunup.google;
+package com.myadd.myadd.user.sigunup.google.controller;
 
+import com.myadd.myadd.user.sigunup.google.service.GoogleLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

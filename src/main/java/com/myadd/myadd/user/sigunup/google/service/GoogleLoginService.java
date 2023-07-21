@@ -1,4 +1,4 @@
-package com.myadd.myadd.user.sigunup.google;
+package com.myadd.myadd.user.sigunup.google.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
