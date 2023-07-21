@@ -3,22 +3,26 @@
 
 <body>
 <div style="margin:95px;">
-    <h1> my ADD 이메일 인증 안내 </h1>
-    <br>
-    <span style="color:#808080"> 안녕하세요, </span>
-    <b style="color:#696969">'비밀번호 찾기'</b>
-    <span style="color:#808080">를 위해 이메일 인증을 진행합니다. </span>
-    <p></p>
-    <span style="color:#808080"> 아래 발급된</span>
-    <b style="color:#696969">이메일 인증번호를 복사하거나 직접 입력하여 인증을 완료</b><span style="color:#808080">해주세요. </span>
-    <p></p>
-    <br>
+    <div style="margin: 95px;">
+        <img src="/myadd-white.png" alt="My ADD 로고" style="max-width: 200px; height: auto;">
+        <h1> my ADD 이메일 인증 안내 </h1>
+        <br>
+        <span style="color:#808080"> 안녕하세요, </span>
+        <b style="color:#696969">'비밀번호 찾기'</b>
+        <span style="color:#808080">를 위해 이메일 인증을 진행합니다. </span>
+        <br>
+        <span style="color:#808080"> 아래 발급된</span>
+        <b style="color:#696969">이메일 인증번호를 복사하거나 직접 입력하여 인증을 완료</b><span style="color:#808080">해주세요. </span>
+        <br><br><br>
 
-    <div align="center" style="border:1px solid black; font-family:verdana;">
-        <b style="color:black; font-size: 24px;">인증번호 </b>
-        <b style="color:red; font-size: 24px;" th:text="${code}"></b>
+        <div align="center" style="border-top: 1px solid black; border-bottom: 1px solid black; font-family:verdana;">
+            <br><br>
+            <b style="color:black; font-size: 24px;">인증번호 </b>
+            <b style="color:red; font-size: 24px;" th:text="${code}"></b>
+            <br><br><br>
+        </div>
+        <br/>
     </div>
-    <br/>
 </div>
 
 </body>
