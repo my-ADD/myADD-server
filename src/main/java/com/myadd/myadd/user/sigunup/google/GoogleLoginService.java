@@ -2,6 +2,9 @@ package com.myadd.myadd.user.sigunup.google;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import com.myadd.myadd.user.domain.UserEntity;
+import com.myadd.myadd.user.domain.UserTypeEnum;
+import com.myadd.myadd.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
@@ -14,10 +17,12 @@ import org.springframework.web.client.RestTemplate;
 public class GoogleLoginService {
     private final Environment env;
     private final RestTemplate restTemplate = new RestTemplate();
+    private final UserRepository userRepository;
 
     @Autowired
-    public GoogleLoginService(Environment env) {
+    public GoogleLoginService(Environment env, UserRepository userRepository) {
         this.env = env;
+        this.userRepository = userRepository;
     }
 
     public void socialLogin(String code, String registrationId) {
@@ -27,10 +32,27 @@ public class GoogleLoginService {
 
         String id = userResourceNode.get("id").asText();
         String email = userResourceNode.get("email").asText();
-        String nickname = userResourceNode.get("name").asText();
-        System.out.println("id = " + id);
-        System.out.println("email = " + email);
-        System.out.println("nickname = " + nickname);
+        String nickName = userResourceNode.get("name").asText();
+        String verified_email = userResourceNode.get("verified_email").asText();
+        String profile = userResourceNode.get("picture").asText();
+
+        if(verified_email.equals("true")){
+            if(userRepository.findByEmail(email).isEmpty()){
+                UserEntity userEntity = new UserEntity();
+                UserTypeEnum userTypeEnum = UserTypeEnum.GOOGLE;
+                userEntity.setUserType(userTypeEnum);
+                userEntity.setProfile(profile);
+                userEntity.setEmail(email);
+                userEntity.setNickname(nickName);
+                userRepository.save(userEntity);
+            }
+            else{
+                // 이미 있는 구글 이메일 계정
+            }
+        }
+        else{
+            // 검증된 이메일이 아니므로 예외처리
+        }
     }
 
     private JsonNode getUserResource(String accessToken, String registrationId) {
