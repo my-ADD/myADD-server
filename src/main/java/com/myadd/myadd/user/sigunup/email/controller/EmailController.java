@@ -1,34 +1,32 @@
 package com.myadd.myadd.user.sigunup.email.controller;
 
+import com.myadd.myadd.user.domain.UserEntity;
+import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.dto.UserDto;
 import com.myadd.myadd.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
+@RequiredArgsConstructor
+@RequestMapping(value = "/users")
 @RestController
 public class EmailController {
 
     private final UserService userService;
 
-    @Autowired
-    public EmailController(UserService userService){
-        this.userService = userService;
-    }
-
-    @PostMapping("/a")
-    public String test(@RequestBody UserDto userDto){
-        log.info("user_Type = {}", userDto.getUserType());
-        log.info("email = {}", userDto.getEmail());
-        log.info("password = {}", userDto.getPassword());
-        log.info("nickname = {}", userDto.getNickname());
-        log.info("profile = {}", userDto.getProfile());
-
+    @PostMapping("/join")
+    public String emailJoin(@ModelAttribute UserDto userDto){
+        userDto.setUserType(UserTypeEnum.EMAIL);
         userService.save(userDto);
 
         return "success";
+    }
+
+    @PostMapping("/login")
+    public void emailLogin(){
+
     }
 }
