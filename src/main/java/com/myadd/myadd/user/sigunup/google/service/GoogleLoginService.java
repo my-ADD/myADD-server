@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -14,16 +14,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@RequiredArgsConstructor
 public class GoogleLoginService {
     private final Environment env;
     private final RestTemplate restTemplate = new RestTemplate();
     private final UserRepository userRepository;
-
-    @Autowired
-    public GoogleLoginService(Environment env, UserRepository userRepository) {
-        this.env = env;
-        this.userRepository = userRepository;
-    }
 
     public void socialLogin(String code, String registrationId) {
         String accessToken = getAccessToken(code, registrationId);
