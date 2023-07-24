@@ -1,6 +1,8 @@
 package com.myadd.myadd.post.search.controller;
 
+import com.myadd.myadd.post.search.dto.PostSearchBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchDto;
+import com.myadd.myadd.post.search.dto.PostSearchFrontDto;
 import com.myadd.myadd.post.search.service.PostSearchService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +25,34 @@ public class PostSearchController {
     //PathVariable
     @GetMapping("/posts/get-post-list/{user_id}")
     @ResponseBody
-    public List<PostSearchDto> postList(@PathVariable("user_id") Long user_id, Model model){
-        List<PostSearchDto> postSearchDtoList = postSearchService.getPostList(user_id);
+    public List<PostSearchDto> postList(@PathVariable("user_id") Long userId, Model model){
+        List<PostSearchDto> postSearchDtoList = postSearchService.getPostList(userId);
         model.addAttribute("postList",postSearchDtoList);
 
         return postSearchDtoList;
+    }
+
+    /**
+     포토 카드 하나의 앞장 상세 정보 조회
+     [GET] /posts/get-post/:post_id/front
+     */
+    @GetMapping("/posts/get-post/{post_id}/front")
+    @ResponseBody
+    public PostSearchFrontDto frontPage(@PathVariable("post_id") Long postId,Model model){
+        PostSearchFrontDto postSearchFrontDto = postSearchService.getFrontPage(postId);
+
+        return postSearchFrontDto;
+    }
+
+    /**
+     포토 카드 하나의 뒷장 상세 정보 조회
+     [GET] /posts/get-post/:post_id/back
+     */
+    @GetMapping("/posts/get-post/{post_id}/back")
+    @ResponseBody
+    public PostSearchBackDto backPage(@PathVariable("post_id") Long postId,Model model){
+        PostSearchBackDto postSearchBackDto = postSearchService.getBackPage(postId);
+
+        return postSearchBackDto;
     }
 }
