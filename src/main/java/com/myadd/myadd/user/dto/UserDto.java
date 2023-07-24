@@ -1,6 +1,7 @@
 package com.myadd.myadd.user.dto;
 
 import com.myadd.myadd.user.domain.UserEntity;
+import com.myadd.myadd.user.domain.UserTypeEnum;
 import lombok.*;
 
 @Getter
@@ -14,16 +15,16 @@ public class UserDto {
     private String password;
     private String nickname;
     private String profile;
-    private int loginWay;
+    private UserTypeEnum userType;
 
-    public static UserDto toEmailDto(UserEntity userEntity) {
+    public static UserDto toUserDto(UserEntity userEntity) {
         UserDto userDto = new UserDto();
         userDto.setUserId(userEntity.getUserId());
         userDto.setEmail(userEntity.getEmail());
         userDto.setPassword(userEntity.getPassword());
         userDto.setNickname(userEntity.getNickname());
         userDto.setProfile(userEntity.getProfile());
-        userDto.setLoginWay(userEntity.getLoginWay());
+        userDto.setUserType(userEntity.getUserType());
 
         return userDto;
     }
