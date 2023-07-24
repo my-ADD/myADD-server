@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class PostSearchDto {
-    private Long post_id;
-    private LocalDateTime created_at;
-    private LocalDateTime modified_at;
-    private LocalDateTime started_at;
-    private LocalDateTime ended_at;
+    private Long postId;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+    private LocalDateTime startedAt;
+    private LocalDateTime endedAt;
     private String comment; // 필수여부?
     private String title;
     private String memo; // 필수여부?
@@ -28,13 +28,14 @@ public class PostSearchDto {
     private int platform;
     private int emoji;
 
+    // 없어도 상관없을 거 같은데 일단 보류
     public PostEntity toPostEntity(PostSearchDto postSearchDto){
         PostEntity post = new PostEntity();
-        post.setPost_id(postSearchDto.getPost_id());
-        post.setCreated_at(postSearchDto.getCreated_at());
-        post.setModified_at(postSearchDto.getModified_at());
-        post.setStarted_at(postSearchDto.getStarted_at());
-        post.setEnded_at(postSearchDto.getEnded_at());
+        post.setPostId(postSearchDto.getPostId());
+        post.setCreatedAt(postSearchDto.getCreatedAt());
+        post.setModifiedAt(postSearchDto.getModifiedAt());
+        post.setStartedAt(postSearchDto.getStartedAt());
+        post.setEndedAt(postSearchDto.getEndedAt());
         post.setComment(postSearchDto.getComment());
         post.setTitle(postSearchDto.getTitle());
         post.setMemo(postSearchDto.getMemo());
@@ -46,4 +47,5 @@ public class PostSearchDto {
         post.setEmoji(postSearchDto.getEmoji());
         return post;
     }
+
 }
