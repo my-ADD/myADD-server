@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +17,22 @@ import java.util.Optional;
 public class PostCrudService {
 
     private final PostCrudRepository postCrudRepository;
+
+    public List<PostCrudDto> getPostList() {
+        List<PostEntity> postEntities = postCrudRepository.findAll();
+        List<PostCrudDto> postCrudDtoList = new ArrayList<>();
+
+        for (PostEntity postEntity : postEntities) {
+            PostCrudDto postCrudDto = new PostCrudDto();
+            postCrudDto.setPostId(postEntity.getPostId());
+            postCrudDto.setTitle(postEntity.getTitle());
+            postCrudDto.setCategory(postEntity.getCategory());
+
+            postCrudDtoList.add(postCrudDto);
+        }
+
+        return postCrudDtoList;
+    }
 
     @Transactional
     public void savePost(PostCrudDto postDto) {
@@ -27,21 +45,20 @@ public class PostCrudService {
     }
 
     @Transactional
-    public PostCrudDto getPost(Long id) {
-        Optional<PostEntity> postWrapper = postCrudRepository.findById(id);
-        PostEntity postEntity = postWrapper.get();
+    public PostCrudDto findOne(Long id) {
+        PostEntity postEntity = postCrudRepository.findByPostId(id);
 
         PostCrudDto postCrudDto = new PostCrudDto();
-        postCrudDto.setPost_id((postEntity.getPost_id()));
+        postCrudDto.setPostId((postEntity.getPostId()));
         postCrudDto.setCategory(postEntity.getCategory());
         postCrudDto.setComment(postEntity.getComment());
         postCrudDto.setEmoji(postEntity.getEmoji());
-        postCrudDto.setEnded_at(postEntity.getEnded_at());
+        postCrudDto.setEndedAt(postEntity.getEndedAt());
         postCrudDto.setGenre(postEntity.getGenre());
         postCrudDto.setImage(postEntity.getImage());
         postCrudDto.setMemo(postEntity.getMemo());
         postCrudDto.setPlatform(postEntity.getPlatform());
-        postCrudDto.setStarted_at(postEntity.getStarted_at());
+        postCrudDto.setStartedAt(postEntity.getStartedAt());
         postCrudDto.setTitle(postEntity.getTitle());
 
         return postCrudDto;
