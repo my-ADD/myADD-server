@@ -11,11 +11,11 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class PostCrudDto {
-    private Long post_id;
-    private LocalDateTime created_at;
-    private LocalDateTime modified_at;
-    private String started_at;
-    private String ended_at;
+    private Long postId;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+    private String startedAt;
+    private String endedAt;
     private String comment; // 필수여부?
     private String title;
     private String memo; // 필수여부?
@@ -27,16 +27,16 @@ public class PostCrudDto {
     private int emoji;
 
     public String toString() {
-        return post_id + " " + category;
+        return postId + " " + category;
     }
 
     public PostEntity toPostEntity(PostCrudDto postCrudDto){
         PostEntity post = new PostEntity();
-        post.setPost_id(postCrudDto.getPost_id());
-        post.setCreated_at(LocalDateTime.now());
-        post.setModified_at(LocalDateTime.now());
-        post.setStarted_at(postCrudDto.getStarted_at());
-        post.setEnded_at(postCrudDto.getEnded_at());
+        post.setPostId(postCrudDto.getPostId());
+        post.setCreatedAt(LocalDateTime.now());
+        post.setModifiedAt(LocalDateTime.now());
+        post.setStartedAt(postCrudDto.getStartedAt());
+        post.setEndedAt(postCrudDto.getEndedAt());
         post.setComment(postCrudDto.getComment());
         post.setTitle(postCrudDto.getTitle());
         post.setMemo(postCrudDto.getMemo());
