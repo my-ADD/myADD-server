@@ -40,12 +40,11 @@ public class PostCrudController {
     }
 
     //포토카드 삭제
-    @ResponseBody
     @DeleteMapping(value = "/posts/delete-post/{postId}")
     public String delete(@PathVariable("postId") Long id) {
        postCrudService.deletePost(id);
 
-       return "delete" + id;
+       return "redirect:/home";
     }
 
     //포토카드 글 조회(for test)
