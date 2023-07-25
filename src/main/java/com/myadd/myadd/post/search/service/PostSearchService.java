@@ -20,10 +20,15 @@ public class PostSearchService {
         this.postRepository = postRepository;
     }
 
-    //특정 사용자의 전체 게시글을 불러옴
+    //특정 사용자의 포토카드 전체 목록 조회(기록순,이름순)
+    //flag 0: 기록순, 1:이름순
     @Transactional
-    public List<PostSearchDto> getPostList(Long userId) {
-        List<PostEntity> posts = postRepository.findAll();
+    public List<PostSearchDto> getPostList(Long userId, int flag) {
+        List<PostEntity> posts;
+        if(flag == 0)
+            posts = postRepository.findAllByOrderByCreatedAtDesc();
+        else
+            posts = postRepository.findAllByOrderByTitle();
         List<PostSearchDto> postSearchDtoList = new ArrayList<>();
 
         for (PostEntity post : posts) {
