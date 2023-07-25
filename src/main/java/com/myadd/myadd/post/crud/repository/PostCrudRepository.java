@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface CrudRepository extends JpaRepository<PostEntity, Long> {
+public interface PostCrudRepository extends JpaRepository<PostEntity, Long> {
 
+    PostEntity findByPostId(Long postId);
 }
