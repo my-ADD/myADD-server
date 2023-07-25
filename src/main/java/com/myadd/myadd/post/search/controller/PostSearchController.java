@@ -19,14 +19,27 @@ public class PostSearchController {
         this.postSearchService = postSearchService;
     }
     /**
-    특정 유저의 포토카드 전체 목록 조회 API
-     [GET] /posts/get-post-list/:user_id
+    특정 유저의 포토카드 전체 목록 조회 API(기록순)
+     [GET] /posts/get-post-list/:user_id/createdAt
      */
     //PathVariable
-    @GetMapping("/posts/get-post-list/{user_id}")
+    @GetMapping("/posts/get-post-list/{user_id}/createdAt")
     @ResponseBody
-    public List<PostSearchDto> postList(@PathVariable("user_id") Long userId, Model model){
-        List<PostSearchDto> postSearchDtoList = postSearchService.getPostList(userId);
+    public List<PostSearchDto> postListByCreatedAt(@PathVariable("user_id") Long userId, Model model){
+        List<PostSearchDto> postSearchDtoList = postSearchService.getPostList(userId,0);
+        model.addAttribute("postList",postSearchDtoList);
+
+        return postSearchDtoList;
+    }
+    /**
+     특정 유저의 포토카드 전체 목록 조회 API(이름순)
+     [GET] /posts/get-post-list/:user_id/title
+     */
+    //PathVariable
+    @GetMapping("/posts/get-post-list/{user_id}/title")
+    @ResponseBody
+    public List<PostSearchDto> postListByTitle(@PathVariable("user_id") Long userId, Model model){
+        List<PostSearchDto> postSearchDtoList = postSearchService.getPostList(userId,1);
         model.addAttribute("postList",postSearchDtoList);
 
         return postSearchDtoList;
