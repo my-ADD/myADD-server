@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.myadd.myadd.post.search.dto.PostSearchDto;
 import com.myadd.myadd.user.domain.UserEntity;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,34 +19,39 @@ public class PostEntity {
     @Column(name="post_id")
     private Long postId;
 
-    //@JsonIgnore 이걸 붙이면 에러 해결할 수 있는데 일단 DTO로 해결..
+    @JsonIgnore //이걸 붙이면 에러 해결할 수 있는데 일단 DTO로 해결..
     @ManyToOne @JoinColumn(name="user_id")
     private UserEntity user;
 
-    @Column(name="created_at",nullable = false)
+    @Column(name="created_at")
     private LocalDateTime createdAt;
+
     @Column(name="modified_at")
     private LocalDateTime modifiedAt;
-    @Column(name="started_at",nullable = false)
-    private LocalDateTime startedAt;
-    @Column(name="ended_at",nullable = false)
-    private LocalDateTime endedAt;
-    @Column(nullable = false)
-    private String comment; // 필수여부?
-    @Column(nullable = false)
+
+    @Column(name="started_at")
+    private String startedAt;
+
+    @Column(name="ended_at")
+    private String endedAt;
+
+    private String comment;
+
     private String title;
-    @Column(nullable = false)
-    private String memo; // 필수여부?
-    private String image; // null이면 기본 이미지 보여지게끔
-    @Column(nullable = false)
+
+    private String memo;
+
+    private String image;
+
     private String category;
-    @Column(nullable = false)
+
+    @ColumnDefault("0")
     private Long views;
-    @Column(nullable = false)
+
     private String genre;
-    @Column(nullable = false)
+
     private int platform;
-    @Column(nullable = false)
+
     private int emoji;
 
     public PostSearchDto toPostSearchDto(PostEntity post){
