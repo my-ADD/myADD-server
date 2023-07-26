@@ -1,6 +1,6 @@
 package com.myadd.myadd.post.crud.service;
 
-import com.myadd.myadd.post.crud.dto.PostCrudDto;
+import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.post.crud.repository.PostCrudRepository;
 import com.myadd.myadd.post.domain.PostEntity;
 import lombok.RequiredArgsConstructor;
@@ -17,24 +17,23 @@ public class PostCrudService {
 
     private final PostCrudRepository postCrudRepository;
 
-    public List<PostCrudDto> getPostList() {
+    public List<PostBackDto> getPostList() {
         List<PostEntity> postEntities = postCrudRepository.findAll();
-        List<PostCrudDto> postCrudDtoList = new ArrayList<>();
+        List<PostBackDto> postBackDtoList = new ArrayList<>();
 
         for (PostEntity postEntity : postEntities) {
-            PostCrudDto postCrudDto = new PostCrudDto();
-            postCrudDto.setPostId(postEntity.getPostId());
-            postCrudDto.setTitle(postEntity.getTitle());
-            postCrudDto.setCategory(postEntity.getCategory());
+            PostBackDto PostBackDto = new PostBackDto();
+            PostBackDto.setPostId(postEntity.getPostId());
+            PostBackDto.setTitle(postEntity.getTitle());
 
-            postCrudDtoList.add(postCrudDto);
+            postBackDtoList.add(PostBackDto);
         }
 
-        return postCrudDtoList;
+        return postBackDtoList;
     }
 
     @Transactional
-    public void savePost(PostCrudDto postDto) {
+    public void savePost(PostBackDto postDto) {
         postCrudRepository.save(postDto.toPostEntity(postDto));
     }
 
@@ -44,22 +43,22 @@ public class PostCrudService {
     }
 
     @Transactional
-    public PostCrudDto findOne(Long id) {
+    public PostBackDto findOne(Long id) {
         PostEntity postEntity = postCrudRepository.findByPostId(id);
 
-        PostCrudDto postCrudDto = new PostCrudDto();
-        postCrudDto.setPostId((postEntity.getPostId()));
-        postCrudDto.setCategory(postEntity.getCategory());
-        postCrudDto.setComment(postEntity.getComment());
-        postCrudDto.setEmoji(postEntity.getEmoji());
-        postCrudDto.setEndedAt(postEntity.getEndedAt());
-        postCrudDto.setGenre(postEntity.getGenre());
-        postCrudDto.setImage(postEntity.getImage());
-        postCrudDto.setMemo(postEntity.getMemo());
-        postCrudDto.setPlatform(postEntity.getPlatform());
-        postCrudDto.setStartedAt(postEntity.getStartedAt());
-        postCrudDto.setTitle(postEntity.getTitle());
+        PostBackDto PostBackDto = new PostBackDto();
+        PostBackDto.setPostId((postEntity.getPostId()));
+        PostBackDto.setCategory(postEntity.getCategory());
+        PostBackDto.setComment(postEntity.getComment());
+        PostBackDto.setEmoji(postEntity.getEmoji());
+        PostBackDto.setEndedAt(postEntity.getEndedAt());
+        PostBackDto.setGenre(postEntity.getGenre());
+        PostBackDto.setImage(postEntity.getImage());
+        PostBackDto.setMemo(postEntity.getMemo());
+        PostBackDto.setPlatform(postEntity.getPlatform());
+        PostBackDto.setStartedAt(postEntity.getStartedAt());
+        PostBackDto.setTitle(postEntity.getTitle());
 
-        return postCrudDto;
+        return PostBackDto;
     }
 }
