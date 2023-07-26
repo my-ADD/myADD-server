@@ -1,5 +1,6 @@
 package com.myadd.myadd.user.sigunup.email.controller;
 
+import com.myadd.myadd.user.SessionConst;
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.dto.UserDto;
@@ -11,8 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Slf4j
@@ -31,13 +33,14 @@ public class EmailController {
         return "success";
     }
 
-    @PostMapping("/login") // 이메일 로그인
-    public String emailLoginForm(@Valid @ModelAttribute EmailLoginForm emailLoginForm, BindingResult bindingResult, HttpServletResponse response){
+    @PostMapping("/login") // 로그인을 하기 위해 입력하는 창에서의 로직(실제 로그인)
+    public String login(@Valid @ModelAttribute EmailLoginForm emailLoginForm, BindingResult bindingResult, HttpServletRequest request){
         if (bindingResult.hasErrors()){
-            return "has Error";
+            return "login hasErrors";
         }
 
         UserEntity loginUser = userService.emailLogin(emailLoginForm.getLoginEmail(), emailLoginForm.getLoginPassWord());
+        log.info("login? {}", loginUser);
 
         if (loginUser == null){
             bindingResult.reject("loginFail", "이메일 또는 비밀번호가 맞지 않습니다.");
@@ -45,35 +48,40 @@ public class EmailController {
         }
 
         // 로그인 성공 처리
-        // 쿠키에 시간 정보를 주지 않으면 세션 쿠키(브라우저 종료 시 모두 종료)
-        Cookie idCookie = new Cookie("cookieUserId", String.valueOf(loginUser.getUserId()));
-        response.addCookie(idCookie);
+        // 세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
+        HttpSession session = request.getSession();
+        // 세션에 로그인 회원 정보 보관
+        session.setAttribute(SessionConst.LOGIN_MEMBER, loginUser);
 
-        return "success!";
+        return "login success! go to individual page";
     }
 
-    @GetMapping("/home") // 로그인 화면에서 수행하여 로그인 수행 시
-    public String homeLogin(@CookieValue(name = "cookieUserId", required = false) Long userId, Model model){
-        // 쿠키가 없는 사용자
-        if(userId == null){
-            return "no cookie user";
+    @GetMapping("/") // 로그인되어 있는지 확인하고, 그에 따라 적절한 페이지로 이동
+    public String homeLogin(HttpServletRequest request, Model model){
+
+        // 세션이 없으면 로그인 화면
+        HttpSession session = request.getSession(false);
+        if (session == null){
+            return "home";
         }
 
-        // 쿠키가 있는 사용자
-        UserEntity userEntity = userService.findById(userId);
-        if (userEntity == null) { // 쿠키가 옛날에 만들어져서 db에 없을 수도 있음
-            return "no cookie user";
+        UserEntity userEntity = (UserEntity)session.getAttribute(SessionConst.LOGIN_MEMBER);
+        // 세션에 회원 데이터가 없으면 home
+        if (userEntity == null){
+            return "home";
         }
-        else{ // 성공 로직
-            model.addAttribute("user", userEntity);
-            return "success! go to individual page";
-        }
+
+        // 세션이 유지되면 개인 화면 유지
+        model.addAttribute("user", userEntity);
+        return "login status continue!! go to individual page";
     }
 
     @PostMapping("/logout")
-    public void logout(HttpServletResponse response) {
-        Cookie expiredCookie = new Cookie("cookieUserId", null);
-        expiredCookie.setMaxAge(0);
-        response.addCookie(expiredCookie);
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false); // true면 없을 시 생성되므로 false로 함. true가 default임
+        if (session != null){
+            session.invalidate();
+        }
+        return "logout success!";
     }
 }
