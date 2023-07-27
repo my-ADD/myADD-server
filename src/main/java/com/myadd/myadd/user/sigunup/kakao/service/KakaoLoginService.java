@@ -20,22 +20,28 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @RequiredArgsConstructor
 public class KakaoLoginService {
-    private final RestTemplate restTemplate = new RestTemplate();
     private final UserRepository userRepository;
     private final Environment env;
 
-    public String getAccessToken(String code) throws JsonProcessingException {
+    public String getAccessTokenResponse(String code) throws JsonProcessingException {
 
+        RestTemplate restTemplate = new RestTemplate();
+
+        // HttpHeader object 생성
         HttpHeaders headers = new HttpHeaders();;
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
+        // HttpBody object 생성
         String clientId = env.getProperty("oauth2.kakao.client-id");
         String redirectUri = env.getProperty("oauth2.kakao.redirect-uri");
         String resourceUri = env.getProperty("oauth2.kakao.resource-uri");
 
+        // 확인을 위한 log
         log.info("clientId = {}", clientId);
         log.info("redirectUri = {}", redirectUri);
         log.info("resourceUri = {}", resourceUri);
+
+        // HttpHeader와 HttpBody를 하나의 obejct에 담기
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", clientId);
@@ -51,10 +57,43 @@ public class KakaoLoginService {
                 String.class
         );
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        OAuthToken oAuthToken = objectMapper.readValue(response.getBody().toString(), OAuthToken.class);
-
         return response.getBody().toString();
+    }
+
+    public void getUserInfoByAccessTokenResponse(String code) throws JsonProcessingException {
+        String accessTokenResponse = getAccessTokenResponse(code);
+
+        // json object를 자바에서 처리하기 위한 변환 과정
+        ObjectMapper objectMapper = new ObjectMapper();
+        OAuthToken oAuthToken = objectMapper.readValue(accessTokenResponse, OAuthToken.class);
+        log.info("accesstoken = {}", oAuthToken.getAccess_token());
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        // HttpHeader object 생성
+        HttpHeaders headers = new HttpHeaders();;
+        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+        // HttpBody object 생성
+        String clientId = env.getProperty("oauth2.kakao.client-id");
+        String redirectUri = env.getProperty("oauth2.kakao.redirect-uri");
+        String resourceUri = env.getProperty("oauth2.kakao.resource-uri");
+
+        // 확인을 위한 log
+        log.info("clientId = {}", clientId);
+        log.info("redirectUri = {}", redirectUri);
+        log.info("resourceUri = {}", resourceUri);
+
+        // HttpHeader와 HttpBody를 하나의 obejct에 담기
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+
+        HttpEntity<MultiValueMap<String, String>> userInfoRequest = new HttpEntity<>(params, headers);
+
+        ResponseEntity response = restTemplate.exchange(
+                resourceUri,
+                HttpMethod.POST,
+                userInfoRequest,
+                String.class
+        );
     }
 }
