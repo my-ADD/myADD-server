@@ -1,6 +1,6 @@
 package com.myadd.myadd.user.sigunup.email.controller;
 
-import com.myadd.myadd.user.SessionConst;
+import com.myadd.myadd.user.AppConstants;
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.dto.UserDto;
@@ -13,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -51,7 +50,7 @@ public class EmailController {
         // 세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
         HttpSession session = request.getSession();
         // 세션에 로그인 회원 정보 보관
-        session.setAttribute(SessionConst.LOGIN_MEMBER, loginUser);
+        session.setAttribute(AppConstants.LOGIN_MEMBER, loginUser);
 
         return "login success! go to individual page";
     }
@@ -65,7 +64,7 @@ public class EmailController {
             return "home";
         }
 
-        UserEntity userEntity = (UserEntity)session.getAttribute(SessionConst.LOGIN_MEMBER);
+        UserEntity userEntity = (UserEntity)session.getAttribute(AppConstants.LOGIN_MEMBER);
         // 세션에 회원 데이터가 없으면 home
         if (userEntity == null){
             return "home";
