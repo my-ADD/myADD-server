@@ -7,9 +7,8 @@ import lombok.Getter;
 @Getter
 public enum UserTypeEnum {
     EMAIL("이메일 회원"), // 0
-    NAVER("네이버 회원"), // 1
-    KAKAO("카카오 회원"), // 2
-    GOOGLE("구글 회원"); // 3
+    KAKAO("카카오 회원"), // 1
+    GOOGLE("구글 회원"); // 2
 
     private final String key;
 
