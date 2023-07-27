@@ -26,7 +26,7 @@ public class KakaoLoginService {
     private final UserRepository userRepository;
     private final Environment env;
 
-    public String getAccessTokenResponse(String code) throws JsonProcessingException {
+    public String getAccessTokenResponse(String code) {
 
         RestTemplate restTemplate = new RestTemplate();
 
