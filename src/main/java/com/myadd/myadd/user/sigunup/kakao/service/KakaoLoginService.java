@@ -1,6 +1,9 @@
 package com.myadd.myadd.user.sigunup.kakao.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myadd.myadd.user.repository.UserRepository;
+import com.myadd.myadd.user.sigunup.kakao.OAuthToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -21,7 +24,7 @@ public class KakaoLoginService {
     private final UserRepository userRepository;
     private final Environment env;
 
-    public String getAccessToken(String code){
+    public String getAccessToken(String code) throws JsonProcessingException {
 
         HttpHeaders headers = new HttpHeaders();;
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -48,6 +51,10 @@ public class KakaoLoginService {
                 String.class
         );
 
-        return response.toString();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        OAuthToken oAuthToken = objectMapper.readValue(response.getBody().toString(), OAuthToken.class);
+
+        return response.getBody().toString();
     }
 }
