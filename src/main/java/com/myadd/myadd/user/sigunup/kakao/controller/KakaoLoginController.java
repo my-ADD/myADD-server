@@ -14,9 +14,8 @@ public class KakaoLoginController {
     private final KakaoLoginService kakaoLoginService;
 
     @GetMapping("/code/kakao/kakao")
-    public @ResponseBody String kakaoCallback(@RequestParam String code) throws JsonProcessingException {
+    public void kakaoCallback(@RequestParam String code) throws JsonProcessingException {
 
-        String accessToken = kakaoLoginService.getUserInfoByAccessToken(code);
-        return accessToken;
+        kakaoLoginService.parshingUserInfo(code);
     }
 }
