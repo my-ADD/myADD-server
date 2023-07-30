@@ -84,5 +84,25 @@ public class EmailAuthService {
         return authNum; //인증 코드 반환
     }
 
+    public String verifyCode(String email, String code) {
+        EmailSignupEntity emailSignupEntity = emailSignupRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email: " + email));
 
+        if (code.equals(emailSignupEntity.getAuthNum())) {
+            LocalDateTime now = LocalDateTime.now();
+            Duration duration = Duration.between(emailSignupEntity.getAuthNumTimestamp(), now);
+            log.info("duration = {}", duration);
+            log.info("duration.toMinutes = {}", duration.toMinutes());
+            if (duration.toMinutes() < 5) { // 5분 이하로 인증 코드를 맞춘 경우
+                emailSignupRepository.delete(emailSignupEntity);
+                return "true";
+            }
+            else{
+                emailSignupRepository.delete(emailSignupEntity);
+                return "false: over 1 minute";
+            }
+        }
+        // 인증 코드가 틀린 경우
+        return "false: not correct auth code";
+    }
 }
