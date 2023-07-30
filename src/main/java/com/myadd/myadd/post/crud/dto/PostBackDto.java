@@ -10,7 +10,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Data
 public class PostBackDto {
     private Long postId;
