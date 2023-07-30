@@ -21,5 +21,9 @@ public class EmailAuthController {
         return authCode;
     }
 
+    @PostMapping("/check-code")
+    public String checkCode(@RequestParam String email, @RequestParam String code){
 
+        return emailService.verifyCode(email, code);
+    }
 }
