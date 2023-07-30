@@ -18,6 +18,7 @@ public class EmailAuthController {
     @PostMapping("/send-code") // /users/join/email/send-code
     public String sendEmail(@RequestBody EmailAuthRequestDto emailAuthRequestDto) throws MessagingException, UnsupportedEncodingException {
         String authCode = emailService.sendEmail(emailAuthRequestDto.getEmail());
+
         return authCode;
     }
 

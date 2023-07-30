@@ -1,5 +1,7 @@
 package com.myadd.myadd.user.sigunup.email.auth.service;
 
+import com.myadd.myadd.user.repository.EmailSignupRepository;
+import com.myadd.myadd.user.sigunup.email.auth.domain.EmailSignupEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -35,6 +37,15 @@ public class EmailAuthService {
         //    key.append(random.nextInt(10));
         //}
         //authNum = key.toString();
+
+        authNum = String.valueOf(random.nextInt(8888)+1000); // 범위 : 1000 ~ 9999
+
+        EmailSignupEntity emailSignupEntity = new EmailSignupEntity();
+        emailSignupEntity.setEmail(email);
+        emailSignupEntity.setAuthNum(authNum);
+        emailSignupEntity.setAuthNumTimestamp(LocalDateTime.now());
+
+        emailSignupRepository.save(emailSignupEntity);
 
     }
 
