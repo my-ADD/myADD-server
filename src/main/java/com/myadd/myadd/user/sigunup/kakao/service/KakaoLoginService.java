@@ -111,6 +111,7 @@ public class KakaoLoginService {
                 return userEntity;
             }
                 // 이미 있는 구글 이메일 계정
+            return userRepository.findByEmail(email).get();
         }
         // 검증된 이메일이 아니므로 예외처리
 
@@ -141,5 +142,21 @@ public class KakaoLoginService {
         );
 
         return responseId.getBody();
+    }
+
+    public String kakaoWithdrawal(Long deleteUserId, String deleteUserEmail) {
+        try {
+            if (userRepository.findById(deleteUserId).equals(userRepository.findByEmail(deleteUserEmail))) {
+                userRepository.deleteById(deleteUserId);
+                return "Withdrawal Success"; // 삭제 성공
+            } else {
+                log.error("UserEntity not found");
+                return "Withdrawal Failed"; // 삭제 실패 - 유저 엔티티를 찾을 수 없음
+            }
+        } catch (Exception e) {
+            log.error("Error occurred during user deletion: {}", e.getMessage());
+            return "Withdrawal Failed"; // 삭제 실패
+        }
+
     }
 }

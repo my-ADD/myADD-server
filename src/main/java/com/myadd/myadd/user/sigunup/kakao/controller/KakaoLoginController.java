@@ -7,6 +7,7 @@ import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.sigunup.kakao.service.KakaoLoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -28,12 +29,15 @@ public class KakaoLoginController {
         JsonNode userInfoResponse = kakaoLoginService.getUserInfoByAccessTokenResponse(accessTokenResponse); // access token을 통해 얻은 response(유저 정보 존재)
 
         HttpSession session = request.getSession();
-        session.setAttribute("accessToken", accessToken);
 
         UserEntity userEntity = kakaoLoginService.parshingUserInfo(userInfoResponse);
+        session.setAttribute("accessToken", accessToken);
+        session.setAttribute("id", userEntity.getUserId());
+        session.setAttribute("email", userEntity.getEmail());
 
-        if (userEntity!=null)
-             kakaoLoginService.save(userEntity);
+        if (userEntity!=null){
+            kakaoLoginService.save(userEntity);
+        }
 
         return "index";
     }
@@ -50,5 +54,25 @@ public class KakaoLoginController {
             }
         }
         return responseId;
+    }
+
+    @PostMapping("/users/withdrawal/kakao")
+    public @ResponseBody String kakaoWithdrawal(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String response = null;
+
+        log.info("respone = {}", response);
+
+        if (session != null) {
+            log.info("session = {}", session);
+            Long deleteUserId = (Long) session.getAttribute("id");
+            String deleteUserEmail = (String) session.getAttribute("email");
+            response = kakaoLoginService.kakaoWithdrawal(deleteUserId, deleteUserEmail);
+            if (response.equals("Withdrawal Success")) {
+                session.invalidate();
+            }
+        }
+
+        return response;
     }
 }
