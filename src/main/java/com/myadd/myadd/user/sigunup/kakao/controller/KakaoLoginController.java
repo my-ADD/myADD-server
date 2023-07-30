@@ -26,7 +26,11 @@ public class KakaoLoginController {
     }
 
     @PostMapping("/users/logout/kakao")
-    public void kakaoLogout(){
-
+    public void kakaoLogout(HttpSession session) {
+        String accessToken = (String) session.getAttribute("accessToken");
+        if (accessToken != null) {
+            kakaoLoginService.kakaoLogout(accessToken);
+            session.removeAttribute("accessToken");
+        }
     }
 }
