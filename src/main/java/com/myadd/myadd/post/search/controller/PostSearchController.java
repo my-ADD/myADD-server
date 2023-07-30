@@ -1,7 +1,6 @@
 package com.myadd.myadd.post.search.controller;
 
 import com.myadd.myadd.post.search.dto.PostSearchBackDto;
-import com.myadd.myadd.post.search.dto.PostSearchDto;
 import com.myadd.myadd.post.search.dto.PostSearchFrontDto;
 import com.myadd.myadd.post.search.service.PostSearchService;
 import org.springframework.stereotype.Controller;

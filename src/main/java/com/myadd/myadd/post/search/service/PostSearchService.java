@@ -1,9 +1,9 @@
 package com.myadd.myadd.post.search.service;
 
+import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.post.domain.PostEntity;
 import com.myadd.myadd.post.repository.PostRepository;
 import com.myadd.myadd.post.search.dto.PostSearchBackDto;
-import com.myadd.myadd.post.search.dto.PostSearchDto;
 import com.myadd.myadd.post.search.dto.PostSearchFrontDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,17 +27,17 @@ public class PostSearchService {
     //특정 사용자의 포토카드 전체 목록 조회(기록순,이름순)
     //flag 0: 기록순, 1:이름순
     @Transactional
-    public List<PostSearchDto> getPostList(Long userId, int flag, int page) {
+    public List<PostBackDto> getPostList(Long userId, int flag, int page) {
         Page<PostEntity> posts;
         if (flag == 0) // 기록순
             posts = postRepository.findAll(PageRequest.of(page, 2, Sort.by(Sort.Direction.DESC, "createdAt")));
         else // 이름순
             posts = postRepository.findAll(PageRequest.of(page, 2, Sort.by(Sort.Direction.DESC, "title")));
-        List<PostSearchDto> postSearchDtoList = new ArrayList<>();
+        List<PostBackDto> postSearchDtoList = new ArrayList<>();
 
         for (PostEntity post : posts) {
             if (post.getUser().getUserId() == userId) {
-                PostSearchDto postSearchDto = post.toPostSearchDto(post);
+                PostBackDto postSearchDto = post.toPostBackDto(post);
                 postSearchDtoList.add(postSearchDto);
             }
         }
@@ -47,7 +47,7 @@ public class PostSearchService {
     //특정 사용자의 포토카드 플랫폼 목록 조회(기록순,이름순)
     //flag 0: 기록순, 1:이름순
     @Transactional
-    public List<PostSearchDto> getPostListByPlatform(Long userId, int flag, String category,int platform, int page) {
+    public List<PostBackDto> getPostListByPlatform(Long userId, int flag, String category,int platform, int page) {
         Page<PostEntity> posts;
         Pageable pagingByCreatedAt = PageRequest.of(page, 2, Sort.by(Sort.Direction.DESC, "createdAt"));
         Pageable pagingByTitle = PageRequest.of(page, 2, Sort.by(Sort.Direction.DESC, "title"));
@@ -56,11 +56,11 @@ public class PostSearchService {
             posts = postRepository.findByPlatformAndCategoryOrderByCreatedAtDesc(platform,category,pagingByCreatedAt);
         else
             posts = postRepository.findByPlatformAndCategoryOrderByTitle(platform,category,pagingByTitle);
-        List<PostSearchDto> postSearchDtoList = new ArrayList<>();
+        List<PostBackDto> postSearchDtoList = new ArrayList<>();
 
         for (PostEntity post : posts) {
             if (post.getUser().getUserId() == userId) {
-                PostSearchDto postSearchDto = post.toPostSearchDto(post);
+                PostBackDto postSearchDto = post.toPostBackDto(post);
                 postSearchDtoList.add(postSearchDto);
             }
         }

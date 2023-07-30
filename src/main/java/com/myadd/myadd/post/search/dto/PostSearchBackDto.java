@@ -15,8 +15,8 @@ public class PostSearchBackDto {
     private int platform;
     private String genre;
     private LocalDateTime createdAt;
-    private LocalDateTime startedAt;
-    private LocalDateTime endedAt;
+    private String startedAt;
+    private String endedAt;
     private Long views;
     private String memo; // 필수여부?
 
