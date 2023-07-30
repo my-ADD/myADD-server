@@ -1,9 +1,10 @@
 package com.myadd.myadd.post.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.myadd.myadd.post.search.dto.PostSearchDto;
 import com.myadd.myadd.user.domain.UserEntity;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,36 +15,61 @@ import java.time.LocalDateTime;
 @Table(name="Post")
 public class PostEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="post_id")
+    private Long postId;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
+    @JsonIgnore //이걸 붙이면 에러 해결할 수 있는데 일단 DTO로 해결..
+    @ManyToOne @JoinColumn(name="user_id")
     private UserEntity user;
 
-    @NonNull
-    private LocalDateTime created_at;
-    private LocalDateTime modified_at;
-    @NonNull
-    private LocalDateTime started_at;
-    @NonNull
-    private LocalDateTime ended_at;
-    @NonNull
-    private String comment; // 필수여부?
-    @NonNull
+    @Column(name="created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name="modified_at")
+    private LocalDateTime modifiedAt;
+
+    @Column(name="started_at")
+    private String startedAt;
+
+    @Column(name="ended_at")
+    private String endedAt;
+
+    private String comment;
+
     private String title;
-    @NonNull
-    private String memo; // 필수여부?
-    private String image; // null이면 기본 이미지 보여지게끔
-    @NonNull
+
+    private String memo;
+
+    private String image;
+
     private String category;
-    @NonNull
+
+    @ColumnDefault("0")
     private Long views;
-    @NonNull
+
     private String genre;
-    @NonNull
+
     private int platform;
-    @NonNull
+
     private int emoji;
+
+    public PostSearchDto toPostSearchDto(PostEntity post){
+        PostSearchDto postSearchDto = new PostSearchDto();
+        postSearchDto.setPostId(post.getPostId());
+        postSearchDto.setCreatedAt(post.getCreatedAt());
+        postSearchDto.setModifiedAt(post.getModifiedAt());
+        postSearchDto.setStartedAt(post.getStartedAt());
+        postSearchDto.setEndedAt(post.getEndedAt());
+        postSearchDto.setComment(post.getComment());
+        postSearchDto.setTitle(post.getTitle());
+        postSearchDto.setMemo(post.getMemo());
+        postSearchDto.setImage(post.getImage());
+        postSearchDto.setCategory(post.getCategory());
+        postSearchDto.setViews(post.getViews());
+        postSearchDto.setGenre(post.getGenre());
+        postSearchDto.setPlatform(post.getPlatform());
+        postSearchDto.setEmoji(post.getEmoji());
+        return postSearchDto;
+    }
 }
