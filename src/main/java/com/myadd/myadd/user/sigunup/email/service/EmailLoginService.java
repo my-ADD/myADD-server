@@ -4,10 +4,12 @@ import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.dto.UserDto;
 import com.myadd.myadd.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmailLoginService {
 
     private final UserRepository userRepository;
@@ -30,5 +32,12 @@ public class EmailLoginService {
 
     public UserEntity findById(Long id){
         return userRepository.findById(id).get();
+    }
+
+    public UserEntity findByEmail(String email){
+        if(userRepository.findByEmail(email).isPresent())
+            return userRepository.findByEmail(email).get();
+        else
+            return null;
     }
 }

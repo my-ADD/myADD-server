@@ -32,6 +32,15 @@ public class EmailLoginController {
         return "success";
     }
 
+    @PostMapping("/join/email/check-duplicate")
+    public String emailDuplicateCheck(@RequestParam String email){
+        UserEntity userEntity = emailLoginService.findByEmail(email);
+        if(userEntity != null)
+            return "Duplicate Email!";
+        else
+            return "Non-Duplicate Email!";
+    }
+
     @PostMapping("/login") // 로그인을 하기 위해 입력하는 창에서의 로직(실제 로그인)
     public String login(@Valid @ModelAttribute EmailLoginForm emailLoginForm, BindingResult bindingResult, HttpServletRequest request){
         if (bindingResult.hasErrors()){
