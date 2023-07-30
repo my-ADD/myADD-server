@@ -25,13 +25,12 @@ public class EmailAuthService {
     // 랜덤 인증 코드 생성
     public void createCode() {
         Random random = new Random();
-        StringBuffer key = new StringBuffer();
-
-        for(int i=0;i<6;i++) {
-            key.append(random.nextInt(10));
-        }
-
-        authNum = key.toString();
+        //StringBuffer key = new StringBuffer();
+        //for(int i=0;i<6;i++) {
+        //    key.append(random.nextInt(10));
+        //}
+        //authNum = key.toString();
+        authNum = String.valueOf(random.nextInt(8888)+1000); // 범위 : 1000 ~ 9999
     }
 
     // 메일 양식 작성
