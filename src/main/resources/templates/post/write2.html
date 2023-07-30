@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form  action="/posts/add-backPost" th:object="${postBackDto}" method="post">
+    <input type="hidden" name="image" th:value="${image}"/>
+    <input type="hidden" name="comment" th:value="${comment}"/>
+    title : <input type="text" name="title"><br>
+    category : <input type="text" name="category"> <br>
+    genre : <input type="text" name="genre"> <br>
+    started_at : <input type="text" name="startedAt"> <br>
+    ended_at : <input type="text" name="endedAt"> <br>
+    platform : <input type="text" name="platform"> <br>
+    emoji : <input type="text" name="emoji"> <br>
+    memo : <textarea name="memo"></textarea><br>
+
+    <input type="submit" value="등록">
+</form>
+</body>
+</html>

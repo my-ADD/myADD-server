@@ -58,6 +58,7 @@ public class PostCrudService {
         PostBackDto.setPlatform(postEntity.getPlatform());
         PostBackDto.setStartedAt(postEntity.getStartedAt());
         PostBackDto.setTitle(postEntity.getTitle());
+        PostBackDto.setViews(postEntity.getViews());
 
         return PostBackDto;
     }

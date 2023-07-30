@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,23 +21,8 @@ public class PostCrudController {
 
     private final PostCrudService postCrudService;
 
-    //포토카드 전체 조회(for test)
-    @GetMapping("/home")
-    public String list(Model model) {
-        List<PostBackDto> postList = postCrudService.getPostList();
 
-        model.addAttribute("PostList", postList);
-        return "home";
-    }
-
-    //포토카드 작성화면으로 이동(for test)
-    @GetMapping(value = "/posts/add-post")
-    public String create(Model model) {
-        model.addAttribute("postFrontDto", new PostFrontDto());
-        return "post/write";
-    }
-
-    //포토카드 글작성
+    //포토카드 글작성1
     @PostMapping(value = "/posts/add-post")
     public ModelAndView create(@ModelAttribute("postFrontDto") PostFrontDto postFrontDto, Model model) {
         ModelAndView mv = new ModelAndView();
@@ -65,32 +48,23 @@ public class PostCrudController {
         return "redirect:/home";
     }
 
+    //작성2
+    @PostMapping(value = "/posts/add")
+    @ResponseBody
+    public String create(@RequestBody PostBackDto post) {
+        postCrudService.savePost(post);
+        return post.toString();
+    }
 
     //포토카드 삭제
+    @ResponseBody
     @DeleteMapping(value = "/posts/delete-post/{postId}")
     public String delete(@PathVariable("postId") Long id) {
        postCrudService.deletePost(id);
 
-       return "redirect:/home";
+       return "삭제";
     }
 
-    //포토카드 글 조회(for test)
-    @GetMapping("/posts/{postId}")
-    public String detail(@PathVariable("postId") Long id, Model model) {
-        PostBackDto postBackDto = postCrudService.findOne(id);
-
-        model.addAttribute("postCrudDto", postBackDto);
-        return "post/detail";
-    }
-
-    //포토카드 수정 폼 화면(for test)
-    @GetMapping("/posts/update-post/{postId}")
-    public String edit(@PathVariable("postId") Long id, Model model) {
-        PostBackDto postBackDto = postCrudService.findOne(id);
-
-        model.addAttribute("postCrudDto", postBackDto);
-        return "post/update";
-    }
 
     //포토카드 수정
     @PutMapping("/posts/update-post/{postId}")

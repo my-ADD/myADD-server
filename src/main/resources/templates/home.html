@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <title>Hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron">
+        <p class="lead">포토카드 기능</p>
+        <p>
+            <a class="btn btn-lg btn-secondary" href="/posts/add-post">포토카드 등록</a>
+            <a class="btn btn-lg btn-secondary" href="/posts/get-post/{postId}/front">포토카드 목록</a>
+        <table>
+            <thead>
+            <tr>
+                <th class="one wide">번호</th>
+                <th class="ten wide">글제목</th>
+                <th class="two wide">작성자</th>
+                <th class="three wide">작성일</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <!-- CONTENTS !-->
+            <tr th:each="Post : ${PostList}">
+                <td>
+                    <span th:text="${Post.postId}"></span>
+                </td>
+                <td>
+                    <a th:href="@{'/posts/' + ${Post.postId}}">
+                        <span th:text="${Post.title}"></span>
+                    </a>
+                </td>
+                <td>
+                    <span th:text="${Post.category}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </p>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>

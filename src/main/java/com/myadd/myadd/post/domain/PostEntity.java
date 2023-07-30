@@ -1,6 +1,7 @@
 package com.myadd.myadd.post.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.user.domain.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -54,4 +55,22 @@ public class PostEntity {
 
     private int emoji;
 
+    public PostBackDto toPostBackDto(PostEntity post){
+        PostBackDto postBackDto = new PostBackDto();
+        postBackDto.setPostId(post.getPostId());
+        postBackDto.setCreatedAt(post.getCreatedAt());
+        postBackDto.setModifiedAt(post.getModifiedAt());
+        postBackDto.setStartedAt(post.getStartedAt());
+        postBackDto.setEndedAt(post.getEndedAt());
+        postBackDto.setComment(post.getComment());
+        postBackDto.setTitle(post.getTitle());
+        postBackDto.setMemo(post.getMemo());
+        postBackDto.setImage(post.getImage());
+        postBackDto.setCategory(post.getCategory());
+        postBackDto.setViews(post.getViews());
+        postBackDto.setGenre(post.getGenre());
+        postBackDto.setPlatform(post.getPlatform());
+        postBackDto.setEmoji(post.getEmoji());
+        return postBackDto;
+    }
 }
