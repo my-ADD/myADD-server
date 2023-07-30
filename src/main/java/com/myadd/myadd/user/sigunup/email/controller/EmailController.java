@@ -5,7 +5,7 @@ import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.dto.UserDto;
 import com.myadd.myadd.user.service.UserService;
-import com.myadd.myadd.user.sigunup.email.EmailLoginForm;
+import com.myadd.myadd.user.sigunup.email.auth.domain.EmailLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
@@ -56,15 +56,9 @@ public class EmailController {
     }
 
     @GetMapping("/") // 로그인되어 있는지 확인하고, 그에 따라 적절한 페이지로 이동
-    public String homeLogin(HttpServletRequest request, Model model){
+    public String homeLogin(
+            @SessionAttribute(name = AppConstants.LOGIN_MEMBER, required = false) UserEntity userEntity, Model model){
 
-        // 세션이 없으면 로그인 화면
-        HttpSession session = request.getSession(false);
-        if (session == null){
-            return "home";
-        }
-
-        UserEntity userEntity = (UserEntity)session.getAttribute(AppConstants.LOGIN_MEMBER);
         // 세션에 회원 데이터가 없으면 home
         if (userEntity == null){
             return "home";

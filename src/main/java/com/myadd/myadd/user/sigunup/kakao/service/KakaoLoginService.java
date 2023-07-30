@@ -109,13 +109,9 @@ public class KakaoLoginService {
 
                 return userEntity;
             }
-            else{
                 // 이미 있는 구글 이메일 계정
-            }
         }
-        else{
-            // 검증된 이메일이 아니므로 예외처리
-        }
+        // 검증된 이메일이 아니므로 예외처리
 
         return null;
     }
