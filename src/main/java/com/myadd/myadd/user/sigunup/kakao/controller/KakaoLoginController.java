@@ -2,35 +2,53 @@ package com.myadd.myadd.user.sigunup.kakao.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.myadd.myadd.user.AppConstants;
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.sigunup.kakao.service.KakaoLoginService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-@RestController
+@Slf4j
+@Controller
 @RequiredArgsConstructor
 public class KakaoLoginController {
 
     private final KakaoLoginService kakaoLoginService;
 
     @GetMapping("/login/oauth2/code/kakao/kakao")
-    public void kakaoCallback(@RequestParam String code, HttpSession session) throws JsonProcessingException {
-        String accessToken = kakaoLoginService.getAccessTokenResponse(code);
+    public String kakaoCallback(@RequestParam String code, HttpServletRequest request) throws JsonProcessingException {
+        JsonNode accessTokenResponse = kakaoLoginService.getAccessTokenResponse(code); // code를 통해 얻은 response(access token과 여러 key들 존재)
+        String accessToken = kakaoLoginService.parshingAccessToken(accessTokenResponse);
+        JsonNode userInfoResponse = kakaoLoginService.getUserInfoByAccessTokenResponse(accessTokenResponse); // access token을 통해 얻은 response(유저 정보 존재)
+
+        HttpSession session = request.getSession();
         session.setAttribute("accessToken", accessToken);
-        JsonNode jsonNode = kakaoLoginService.getUserInfoByAccessTokenResponse(accessToken);
-        UserEntity userEntity = kakaoLoginService.parshingUserInfo(jsonNode);
-        kakaoLoginService.save(userEntity);
+
+        UserEntity userEntity = kakaoLoginService.parshingUserInfo(userInfoResponse);
+
+        if (userEntity!=null)
+             kakaoLoginService.save(userEntity);
+
+        return "index";
     }
 
     @PostMapping("/users/logout/kakao")
-    public void kakaoLogout(HttpSession session) {
-        String accessToken = (String) session.getAttribute("accessToken");
-        if (accessToken != null) {
-            kakaoLoginService.kakaoLogout(accessToken);
-            session.removeAttribute("accessToken");
+    public @ResponseBody String kakaoLogout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String responseId = "";
+        if (session != null) {
+            String accessToken = (String) session.getAttribute("accessToken");
+            if (accessToken != null) {
+                responseId = kakaoLoginService.kakaoLogout(accessToken);
+                session.invalidate();
+            }
         }
+        return responseId;
     }
 }
