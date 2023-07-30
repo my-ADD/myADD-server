@@ -1,4 +1,4 @@
-package com.myadd.myadd.user.service;
+package com.myadd.myadd.user.sigunup.email.service;
 
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.dto.UserDto;
@@ -6,11 +6,9 @@ import com.myadd.myadd.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class EmailLoginService {
 
     private final UserRepository userRepository;
 

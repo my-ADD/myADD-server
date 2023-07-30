@@ -4,7 +4,7 @@ import com.myadd.myadd.user.AppConstants;
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.dto.UserDto;
-import com.myadd.myadd.user.service.UserService;
+import com.myadd.myadd.user.sigunup.email.service.EmailLoginService;
 import com.myadd.myadd.user.sigunup.email.auth.domain.EmailLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +20,14 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping(value = "/users")
 @RestController
-public class EmailController {
+public class EmailLoginController {
 
-    private final UserService userService;
+    private final EmailLoginService emailLoginService;
 
     @PostMapping("/join") // 이메일 회원가입
     public String emailJoin(@ModelAttribute UserDto userDto){
         userDto.setUserType(UserTypeEnum.EMAIL);
-        userService.save(userDto);
+        emailLoginService.save(userDto);
 
         return "success";
     }
@@ -38,7 +38,7 @@ public class EmailController {
             return "login hasErrors";
         }
 
-        UserEntity loginUser = userService.emailLogin(emailLoginForm.getLoginEmail(), emailLoginForm.getLoginPassWord());
+        UserEntity loginUser = emailLoginService.emailLogin(emailLoginForm.getLoginEmail(), emailLoginForm.getLoginPassWord());
         log.info("login? {}", loginUser);
 
         if (loginUser == null){

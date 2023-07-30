@@ -154,6 +154,8 @@ public class KakaoLoginService {
                 return "Withdrawal Failed"; // 삭제 실패 - 유저 엔티티를 찾을 수 없음
             }
         } catch (Exception e) {
+            log.info("check1={}", userRepository.findById(deleteUserId));
+            log.info("check2={}",userRepository.findByEmail(deleteUserEmail));
             log.error("Error occurred during user deletion: {}", e.getMessage());
             return "Withdrawal Failed"; // 삭제 실패
         }

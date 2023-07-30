@@ -59,9 +59,7 @@ public class KakaoLoginController {
     @PostMapping("/users/withdrawal/kakao")
     public @ResponseBody String kakaoWithdrawal(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        String response = null;
-
-        log.info("respone = {}", response);
+        String response = "null";
 
         if (session != null) {
             log.info("session = {}", session);
@@ -72,6 +70,11 @@ public class KakaoLoginController {
                 session.invalidate();
             }
         }
+        else
+            response = "Session is Null";
+
+
+        log.info("respone = {}", response);
 
         return response;
     }
