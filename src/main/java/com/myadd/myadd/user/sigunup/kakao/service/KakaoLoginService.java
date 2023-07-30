@@ -63,12 +63,11 @@ public class KakaoLoginService {
         return response.getBody().toString();
     }
 
-    public JsonNode getUserInfoByAccessTokenResponse(String code) throws JsonProcessingException {
-        String accessTokenResponse = getAccessTokenResponse(code);
+    public JsonNode getUserInfoByAccessTokenResponse(String accessToken) throws JsonProcessingException {
 
         // json object를 자바에서 처리하기 위한 변환 과정
         ObjectMapper objectMapper = new ObjectMapper();
-        OAuthToken oAuthToken = objectMapper.readValue(accessTokenResponse, OAuthToken.class);
+        OAuthToken oAuthToken = objectMapper.readValue(accessToken, OAuthToken.class);
         log.info("accesstoken = {}", oAuthToken.getAccess_token());
 
         RestTemplate restTemplate = new RestTemplate();
@@ -86,8 +85,7 @@ public class KakaoLoginService {
     }
 
 
-    public UserEntity parshingUserInfo(String code) throws JsonProcessingException {
-        JsonNode userResourceNode = getUserInfoByAccessTokenResponse(code);
+    public UserEntity parshingUserInfo(JsonNode userResourceNode) throws JsonProcessingException {
         log.info("userResorceNode = {}", userResourceNode);
 
 
@@ -116,8 +114,7 @@ public class KakaoLoginService {
         return null;
     }
 
-    public void save(String code) throws JsonProcessingException {
-        UserEntity userEntity = parshingUserInfo(code);
+    public void save(UserEntity userEntity) throws JsonProcessingException {
         userRepository.save(userEntity);
     }
 }
