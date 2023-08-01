@@ -1,6 +1,8 @@
 package com.myadd.myadd.user.sigunup.email.auth.service;
 
+import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.repository.EmailSignupRepository;
+import com.myadd.myadd.user.repository.UserRepository;
 import com.myadd.myadd.user.sigunup.email.auth.domain.EmailSignupEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ public class EmailAuthService {
     // 타임리프를 사용하기 위한 객체를 의존성 주입으로 가져옴
     private final SpringTemplateEngine templateEngine;
     private final EmailSignupRepository emailSignupRepository;
+    private final UserRepository userRepository;
     // 랜덤 인증 코드
     private String authNum;
 
@@ -120,5 +123,14 @@ public class EmailAuthService {
                 emailSignupRepository.delete(emailSignupEntity);
             }
         }
+    }
+
+    public String changePassword(String email, String password){
+        UserEntity userEntity = userRepository.findByEmail(email).get();
+        userEntity.setPassword(password);
+
+        userRepository.save(userEntity);
+
+        return "password change success!";
     }
 }
