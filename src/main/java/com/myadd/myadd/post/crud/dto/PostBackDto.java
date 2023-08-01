@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @Data
 @Slf4j
 public class PostBackDto {
