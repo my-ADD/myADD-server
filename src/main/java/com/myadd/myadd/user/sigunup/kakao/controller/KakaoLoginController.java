@@ -23,7 +23,7 @@ public class KakaoLoginController {
     private final KakaoLoginService kakaoLoginService;
 
     @GetMapping("/users/login/oauth2/code/kakao/kakao")
-    public void kakaoCallback(@RequestParam String code, HttpServletRequest request) throws JsonProcessingException {
+    public String kakaoCallback(@RequestParam String code, HttpServletRequest request) throws JsonProcessingException {
         JsonNode accessTokenResponse = kakaoLoginService.getAccessTokenResponse(code); // code를 통해 얻은 response(access token과 여러 key들 존재)
         String accessToken = kakaoLoginService.parshingAccessToken(accessTokenResponse);
         JsonNode userInfoResponse = kakaoLoginService.getUserInfoByAccessTokenResponse(accessTokenResponse); // access token을 통해 얻은 response(유저 정보 존재)
@@ -39,7 +39,7 @@ public class KakaoLoginController {
             kakaoLoginService.save(userEntity);
         }
 
-        // return "index";
+        return "index";
     }
 
     @PostMapping("/users/my-info/logout/kakao")
@@ -59,7 +59,7 @@ public class KakaoLoginController {
     @PostMapping("/users/my-info/delete/kakao-user")
     public @ResponseBody String kakaoWithdrawal(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        String response = "null";
+        String response = "";
 
         if (session != null) {
             log.info("session = {}", session);

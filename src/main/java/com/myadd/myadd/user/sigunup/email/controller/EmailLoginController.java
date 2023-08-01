@@ -8,6 +8,7 @@ import com.myadd.myadd.user.sigunup.email.service.EmailLoginService;
 import com.myadd.myadd.user.sigunup.email.auth.domain.EmailLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,15 @@ import javax.validation.Valid;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping(value = "/users")
-@RestController
+@Controller
 public class EmailLoginController {
 
     private final EmailLoginService emailLoginService;
+
+    @GetMapping("/home")
+    public String first(){
+        return "home";
+    }
 
     @PostMapping("/join") // 회원가입(아이디, 비밀번호 방식)
     public String emailJoin(@ModelAttribute UserDto userDto){

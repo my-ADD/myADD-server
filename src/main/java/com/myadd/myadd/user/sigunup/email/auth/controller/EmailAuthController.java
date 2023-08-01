@@ -27,7 +27,7 @@ public class EmailAuthController {
     public String sendEmail(@RequestBody EmailAuthRequestDto emailAuthRequestDto) throws MessagingException, UnsupportedEncodingException {
         String authCode="";
 
-        
+        log.info("first = {}", emailAuthRequestDto.getEmail());
         // 이메일로 회원가입한 유저가 아닌 경우 예외
         if(emailService.isUserTypeEmail(emailAuthRequestDto.getEmail())){
             authCode = emailService.sendEmail(emailAuthRequestDto.getEmail());

@@ -19,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -135,17 +136,12 @@ public class EmailAuthService {
         return "password change success!";
     }
 
-    public Boolean isUserTypeEmail(String email){
-        UserEntity userEntity;
+    public Boolean isUserTypeEmail(String email) {
 
-        if(userRepository.findByEmail(email).isPresent()){
-            userEntity = userRepository.findByEmail(email).get();
+        UserEntity userEntity = userRepository.findByEmail(email).get();
 
-            if(userEntity.getUserType().equals(UserTypeEnum.EMAIL))
-                return true;
-            else
-                return false;
-        }
+        if(userEntity.getUserType().equals(UserTypeEnum.EMAIL))
+            return true;
         else
             return false;
     }
