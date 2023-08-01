@@ -3,15 +3,20 @@ package com.myadd.myadd.post.crud.controller;
 import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.post.crud.dto.PostFrontDto;
 import com.myadd.myadd.post.crud.service.PostCrudService;
+import com.myadd.myadd.post.domain.PostEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -32,29 +37,32 @@ public class PostCrudController {
         return mv;
     }
 
-    @PostMapping(value = "/posts/add-backPost")
-    public String backCreate(@Valid @ModelAttribute("postBackDto") PostBackDto postBackDto, BindingResult bindingResult, Model model) {
-        //오류시 입력값 다 지워지는 부분 수정 필요
-        if(bindingResult.hasErrors()) {
-            model.addAttribute("image", postBackDto.getImage());
-            model.addAttribute("comment", postBackDto.getComment());
-            model.addAttribute("postBackDto", postBackDto);
-            log.info("errors = {}", bindingResult);
-            return "post/write2";
-        }
-
-        log.info(postBackDto.getTitle());
-        postCrudService.savePost(postBackDto);
-        return "redirect:/home";
-    }
+//    @PostMapping(value = "/posts/add-backPost")
+//    public String backCreate(@Valid @ModelAttribute("postBackDto") PostBackDto postBackDto, BindingResult bindingResult, Model model) {
+//        //오류시 입력값 다 지워지는 부분 수정 필요
+//        if(bindingResult.hasErrors()) {
+//            model.addAttribute("image", postBackDto.getImage());
+//            model.addAttribute("comment", postBackDto.getComment());
+//            model.addAttribute("postBackDto", postBackDto);
+//            log.info("errors = {}", bindingResult);
+//            return "post/write2";
+//        }
+//
+//        log.info(postBackDto.getTitle());
+//        postCrudService.savePost(postBackDto);
+//        return "redirect:/home";
+//    }
 
     //작성2
-    @PostMapping(value = "/posts/add")
-    @ResponseBody
-    public String create(@RequestBody PostBackDto post) {
-        postCrudService.savePost(post);
-        return post.toString();
+    @PostMapping(value = "/posts/add",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody // 대신 @RequestPart 로 적기
+    public String create(@RequestPart PostBackDto post, @RequestPart(value = "imageURL", required = false)MultipartFile imageURL) throws IOException {
+        log.info(String.valueOf(imageURL));
+        postCrudService.savePost(post, imageURL);
+        log.info("입력완료");
+        return "저장완료";
     }
+
 
     //포토카드 삭제
     @ResponseBody
@@ -67,10 +75,10 @@ public class PostCrudController {
 
 
     //포토카드 수정
-    @PutMapping("/posts/update-post/{postId}")
-    public String update(PostBackDto postBackDto) {
-        log.info(String.valueOf(postBackDto.getPostId()));
-        postCrudService.savePost(postBackDto);
-        return "redirect:/home";
-    }
+//    @PutMapping("/posts/update-post/{postId}")
+//    public String update(PostBackDto postBackDto) {
+//        log.info(String.valueOf(postBackDto.getPostId()));
+//        postCrudService.savePost(postBackDto);
+//        return "redirect:/home";
+//    }
 }

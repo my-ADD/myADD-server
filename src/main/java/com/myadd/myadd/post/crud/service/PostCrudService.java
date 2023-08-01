@@ -1,12 +1,15 @@
 package com.myadd.myadd.post.crud.service;
 
+import com.myadd.myadd.fileUpload.service.FileUploadService;
 import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.post.crud.repository.PostCrudRepository;
 import com.myadd.myadd.post.domain.PostEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +19,7 @@ import java.util.List;
 public class PostCrudService {
 
     private final PostCrudRepository postCrudRepository;
-
+    private final FileUploadService fileUploadService;
     public List<PostBackDto> getPostList() {
         List<PostEntity> postEntities = postCrudRepository.findAll();
         List<PostBackDto> postBackDtoList = new ArrayList<>();
@@ -33,9 +36,12 @@ public class PostCrudService {
     }
 
     @Transactional
-    public void savePost(PostBackDto postDto) {
+    public void savePost(PostBackDto postDto, MultipartFile imageURL) throws IOException {
+        String storedFileName = fileUploadService.upload(imageURL);
+        postDto.setImage(storedFileName);
         postCrudRepository.save(postDto.toPostEntity(postDto));
     }
+
 
     @Transactional
     public void deletePost(Long id) {
