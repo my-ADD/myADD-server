@@ -36,6 +36,8 @@ dependencies {
 	testImplementation 'org.assertj:assertj-core:3.23.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // S3
+	implementation 'org.springframework.boot:spring-boot-start-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
