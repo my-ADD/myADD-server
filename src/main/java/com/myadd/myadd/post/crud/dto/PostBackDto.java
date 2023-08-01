@@ -6,12 +6,14 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Data
+@Slf4j
 public class PostBackDto {
     private Long postId;
 

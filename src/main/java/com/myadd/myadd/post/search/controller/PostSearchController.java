@@ -1,5 +1,6 @@
 package com.myadd.myadd.post.search.controller;
 
+import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchFrontDto;
 import com.myadd.myadd.post.search.service.PostSearchService;
@@ -24,8 +25,8 @@ public class PostSearchController {
      */
     @GetMapping("/posts/get-post-list/createdAt")
     @ResponseBody
-    public List<PostSearchDto> postListByCreatedAt(@RequestParam(required = false) Long userId,@RequestParam(required = false, defaultValue = "0") int page, Model model){
-        List<PostSearchDto> postSearchDtoList = postSearchService.getPostList(userId,0,page);
+    public List<PostBackDto> postListByCreatedAt(@RequestParam(required = false) Long userId, @RequestParam(required = false, defaultValue = "0") int page, Model model){
+        List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId,0,page);
         model.addAttribute("postList",postSearchDtoList);
 
         return postSearchDtoList;
@@ -37,8 +38,8 @@ public class PostSearchController {
     //PathVariable
     @GetMapping("/posts/get-post-list/title")
     @ResponseBody
-    public List<PostSearchDto> postListByTitle(@RequestParam(required = false) Long userId,@RequestParam(required = false, defaultValue = "0") int page, Model model){
-        List<PostSearchDto> postSearchDtoList = postSearchService.getPostList(userId,1,page);
+    public List<PostBackDto> postListByTitle(@RequestParam(required = false) Long userId,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+        List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId,1,page);
         model.addAttribute("postList",postSearchDtoList);
 
         return postSearchDtoList;
@@ -75,8 +76,8 @@ public class PostSearchController {
      */
     @GetMapping("/posts/get-post-list/{category}/{platform}/createdAt")
     @ResponseBody
-    public List<PostSearchDto> postListByPlatformByCreatedAt(@PathVariable String category,@PathVariable int platform,@RequestParam(required = false) Long userId,@RequestParam(required = false, defaultValue = "0") int page, Model model){
-        List<PostSearchDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,0,category,platform,page);
+    public List<PostBackDto> postListByPlatformByCreatedAt(@PathVariable String category,@PathVariable int platform,@RequestParam(required = false) Long userId,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+        List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,0,category,platform,page);
         model.addAttribute("postList",postSearchDtoList);
 
         return postSearchDtoList;
@@ -88,8 +89,8 @@ public class PostSearchController {
     //PathVariable
     @GetMapping("/posts/get-post-list/{category}/{platform}/title")
     @ResponseBody
-    public List<PostSearchDto> postListByPlatformByTile(@PathVariable String category,@PathVariable int platform,@RequestParam(required = false) Long userId,@RequestParam(required = false, defaultValue = "0") int page, Model model){
-        List<PostSearchDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,1,category,platform,page);
+    public List<PostBackDto> postListByPlatformByTile(@PathVariable String category,@PathVariable int platform,@RequestParam(required = false) Long userId,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+        List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,1,category,platform,page);
         model.addAttribute("postList",postSearchDtoList);
 
         return postSearchDtoList;
