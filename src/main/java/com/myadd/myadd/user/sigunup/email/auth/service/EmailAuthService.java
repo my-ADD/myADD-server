@@ -5,6 +5,7 @@ import com.myadd.myadd.user.sigunup.email.auth.domain.EmailSignupEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -14,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Random;
 
 @Slf4j
@@ -91,18 +93,32 @@ public class EmailAuthService {
         if (code.equals(emailSignupEntity.getAuthNum())) {
             LocalDateTime now = LocalDateTime.now();
             Duration duration = Duration.between(emailSignupEntity.getAuthNumTimestamp(), now);
-            log.info("duration = {}", duration);
-            log.info("duration.toMinutes = {}", duration.toMinutes());
+            //log.info("duration = {}", duration);
+            //log.info("duration.toMinutes = {}", duration.toMinutes());
             if (duration.toMinutes() < 5) { // 5분 이하로 인증 코드를 맞춘 경우
                 emailSignupRepository.delete(emailSignupEntity);
                 return "true";
             }
             else{
                 emailSignupRepository.delete(emailSignupEntity);
-                return "false: over 1 minute";
+                return "false: over 5 minute";
             }
         }
         // 인증 코드가 틀린 경우
         return "false: not correct auth code";
+    }
+
+    public void deleteExpiredAuthNum(){
+        List<EmailSignupEntity> emailSignupEntityList = emailSignupRepository.findAll();
+
+        LocalDateTime now = LocalDateTime.now();
+
+        for(EmailSignupEntity emailSignupEntity : emailSignupEntityList){
+            Duration duration = Duration.between(emailSignupEntity.getAuthNumTimestamp(), now);
+
+            if(duration.toMinutes() >= 5){
+                emailSignupRepository.delete(emailSignupEntity);
+            }
+        }
     }
 }
