@@ -17,14 +17,13 @@ import java.util.concurrent.TimeUnit;
 // 비밀번호 찾기를 위해 사용하는 이메일 인증
 @Slf4j
 @RestController
-@RequestMapping(value = "/users/change-password")
+@RequestMapping(value = "/users/my-info/change-password")
 @RequiredArgsConstructor
 public class EmailAuthController {
     private final EmailAuthService emailService;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-    // 이메일 인증 코드 전송
-    @PostMapping("/email/send-code") // /users/join/email/send-code
+    @PostMapping("/send-code") // 이메일 인증 번호 전송
     public String sendEmail(@RequestBody EmailAuthRequestDto emailAuthRequestDto) throws MessagingException, UnsupportedEncodingException {
         String authCode="";
 
@@ -43,13 +42,13 @@ public class EmailAuthController {
     }
 
     // 사용자가 입력한 인증 코드와 db의 인증 정보 비교
-    @PostMapping("/email/check-code")
+    @PostMapping("/check-code") // 이메일 인증번호 확인
     public String verifyCode(@RequestParam String email, @RequestParam String code){
 
         return emailService.verifyCode(email, code);
     }
 
-    @PutMapping("/")
+    @PutMapping("") // 비밀번호 변경
     public String changePassword(@RequestParam String email, @RequestParam String password){
         return emailService.changePassword(email, password);
     }

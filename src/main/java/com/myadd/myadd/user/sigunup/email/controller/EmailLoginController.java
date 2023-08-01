@@ -24,7 +24,7 @@ public class EmailLoginController {
 
     private final EmailLoginService emailLoginService;
 
-    @PostMapping("/join") // 이메일 회원가입
+    @PostMapping("/join") // 회원가입(아이디, 비밀번호 방식)
     public String emailJoin(@ModelAttribute UserDto userDto){
         userDto.setUserType(UserTypeEnum.EMAIL);
         emailLoginService.save(userDto);
@@ -32,7 +32,7 @@ public class EmailLoginController {
         return "success";
     }
 
-    @PostMapping("/join/email/check-duplicate")
+    @PostMapping("/join/email/check-duplicate") // 회원가입 중 이메일 중복 확인
     public String emailDuplicateCheck(@RequestParam String email){
         UserEntity userEntity = emailLoginService.findByEmail(email);
         if(userEntity != null)
@@ -41,7 +41,7 @@ public class EmailLoginController {
             return "Non-Duplicate Email!";
     }
 
-    @PostMapping("/login") // 로그인을 하기 위해 입력하는 창에서의 로직(실제 로그인)
+    @PostMapping("/login/email") // 로그인(아이디, 비밀번호)  (로그인을 하기 위해 입력하는 창에서의 로직(실제 로그인))
     public String login(@Valid @ModelAttribute EmailLoginForm emailLoginForm, BindingResult bindingResult, HttpServletRequest request){
         if (bindingResult.hasErrors()){
             return "login hasErrors";
@@ -78,7 +78,7 @@ public class EmailLoginController {
         return "login status continue!! go to individual page";
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/my-info/logout")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false); // true면 없을 시 생성되므로 false로 함. true가 default임
         if (session != null){

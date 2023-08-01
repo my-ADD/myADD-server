@@ -22,7 +22,7 @@ public class KakaoLoginController {
 
     private final KakaoLoginService kakaoLoginService;
 
-    @GetMapping("/login/oauth2/code/kakao/kakao")
+    @GetMapping("/users/login/oauth2/code/kakao/kakao")
     public void kakaoCallback(@RequestParam String code, HttpServletRequest request) throws JsonProcessingException {
         JsonNode accessTokenResponse = kakaoLoginService.getAccessTokenResponse(code); // code를 통해 얻은 response(access token과 여러 key들 존재)
         String accessToken = kakaoLoginService.parshingAccessToken(accessTokenResponse);
@@ -42,7 +42,7 @@ public class KakaoLoginController {
         // return "index";
     }
 
-    @PostMapping("/users/logout/kakao")
+    @PostMapping("/users/my-info/logout/kakao")
     public @ResponseBody String kakaoLogout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         String responseId = "";
@@ -56,7 +56,7 @@ public class KakaoLoginController {
         return responseId;
     }
 
-    @PostMapping("/users/withdrawal/kakao")
+    @PostMapping("/users/my-info/delete/kakao-user")
     public @ResponseBody String kakaoWithdrawal(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         String response = "null";
