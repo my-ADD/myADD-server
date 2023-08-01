@@ -5,7 +5,7 @@ import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.dto.UserDto;
 import com.myadd.myadd.user.sigunup.email.service.EmailLoginService;
-import com.myadd.myadd.user.sigunup.email.auth.domain.EmailLoginForm;
+import com.myadd.myadd.user.sigunup.email.domain.EmailLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

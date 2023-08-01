@@ -1,14 +1,13 @@
-package com.myadd.myadd.user.sigunup.email.auth.service;
+package com.myadd.myadd.user.sigunup.email.authcode.service;
 
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.repository.EmailSignupRepository;
 import com.myadd.myadd.user.repository.UserRepository;
-import com.myadd.myadd.user.sigunup.email.auth.domain.EmailSignupEntity;
+import com.myadd.myadd.user.sigunup.email.authcode.domain.EmailAuthEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -19,7 +18,6 @@ import java.io.UnsupportedEncodingException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -47,12 +45,12 @@ public class EmailAuthService {
 
         authNum = String.valueOf(random.nextInt(8888)+1000); // 범위 : 1000 ~ 9999
 
-        EmailSignupEntity emailSignupEntity = new EmailSignupEntity();
-        emailSignupEntity.setEmail(email);
-        emailSignupEntity.setAuthNum(authNum);
-        emailSignupEntity.setAuthNumTimestamp(LocalDateTime.now());
+        EmailAuthEntity emailAuthEntity = new EmailAuthEntity();
+        emailAuthEntity.setEmail(email);
+        emailAuthEntity.setAuthNum(authNum);
+        emailAuthEntity.setAuthNumTimestamp(LocalDateTime.now());
 
-        emailSignupRepository.save(emailSignupEntity);
+        emailSignupRepository.save(emailAuthEntity);
 
     }
 
@@ -92,20 +90,20 @@ public class EmailAuthService {
     }
 
     public String verifyCode(String email, String code) {
-        EmailSignupEntity emailSignupEntity = emailSignupRepository.findByEmail(email)
+        EmailAuthEntity emailAuthEntity = emailSignupRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email: " + email));
 
-        if (code.equals(emailSignupEntity.getAuthNum())) {
+        if (code.equals(emailAuthEntity.getAuthNum())) {
             LocalDateTime now = LocalDateTime.now();
-            Duration duration = Duration.between(emailSignupEntity.getAuthNumTimestamp(), now);
+            Duration duration = Duration.between(emailAuthEntity.getAuthNumTimestamp(), now);
             //log.info("duration = {}", duration);
             //log.info("duration.toMinutes = {}", duration.toMinutes());
             if (duration.toMinutes() < 5) { // 5분 이하로 인증 코드를 맞춘 경우
-                emailSignupRepository.delete(emailSignupEntity);
+                emailSignupRepository.delete(emailAuthEntity);
                 return "true";
             }
             else{
-                emailSignupRepository.delete(emailSignupEntity);
+                emailSignupRepository.delete(emailAuthEntity);
                 return "false: over 5 minute";
             }
         }
@@ -114,15 +112,15 @@ public class EmailAuthService {
     }
 
     public void deleteExpiredAuthNum(){
-        List<EmailSignupEntity> emailSignupEntityList = emailSignupRepository.findAll();
+        List<EmailAuthEntity> emailAuthEntityList = emailSignupRepository.findAll();
 
         LocalDateTime now = LocalDateTime.now();
 
-        for(EmailSignupEntity emailSignupEntity : emailSignupEntityList){
-            Duration duration = Duration.between(emailSignupEntity.getAuthNumTimestamp(), now);
+        for(EmailAuthEntity emailAuthEntity : emailAuthEntityList){
+            Duration duration = Duration.between(emailAuthEntity.getAuthNumTimestamp(), now);
 
             if(duration.toMinutes() >= 5){
-                emailSignupRepository.delete(emailSignupEntity);
+                emailSignupRepository.delete(emailAuthEntity);
             }
         }
     }

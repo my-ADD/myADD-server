@@ -1,4 +1,4 @@
-package com.myadd.myadd.user.sigunup.email.auth.domain;
+package com.myadd.myadd.user.sigunup.email.authcode.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @Table(name = "EmailAuth")
 @Entity
-public class EmailSignupEntity {
+public class EmailAuthEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
