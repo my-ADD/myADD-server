@@ -26,11 +26,20 @@ public class EmailAuthController {
     // 이메일 인증 코드 전송
     @PostMapping("/email/send-code") // /users/join/email/send-code
     public String sendEmail(@RequestBody EmailAuthRequestDto emailAuthRequestDto) throws MessagingException, UnsupportedEncodingException {
-        String authCode = emailService.sendEmail(emailAuthRequestDto.getEmail());
+        String authCode="";
 
-        executorService.schedule(emailService::deleteExpiredAuthNum, 5, TimeUnit.MINUTES);
+        
+        // 이메일로 회원가입한 유저가 아닌 경우 예외
+        if(emailService.isUserTypeEmail(emailAuthRequestDto.getEmail())){
+            authCode = emailService.sendEmail(emailAuthRequestDto.getEmail());
 
-        return authCode;
+            executorService.schedule(emailService::deleteExpiredAuthNum, 5, TimeUnit.MINUTES);
+
+            return authCode;
+        }
+        else{
+            return "not email user";
+        }
     }
 
     // 사용자가 입력한 인증 코드와 db의 인증 정보 비교

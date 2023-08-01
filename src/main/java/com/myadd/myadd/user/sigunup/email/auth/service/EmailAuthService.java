@@ -1,6 +1,7 @@
 package com.myadd.myadd.user.sigunup.email.auth.service;
 
 import com.myadd.myadd.user.domain.UserEntity;
+import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.repository.EmailSignupRepository;
 import com.myadd.myadd.user.repository.UserRepository;
 import com.myadd.myadd.user.sigunup.email.auth.domain.EmailSignupEntity;
@@ -132,5 +133,20 @@ public class EmailAuthService {
         userRepository.save(userEntity);
 
         return "password change success!";
+    }
+
+    public Boolean isUserTypeEmail(String email){
+        UserEntity userEntity;
+
+        if(userRepository.findByEmail(email).isPresent()){
+            userEntity = userRepository.findByEmail(email).get();
+
+            if(userEntity.getUserType().equals(UserTypeEnum.EMAIL))
+                return true;
+            else
+                return false;
+        }
+        else
+            return false;
     }
 }
