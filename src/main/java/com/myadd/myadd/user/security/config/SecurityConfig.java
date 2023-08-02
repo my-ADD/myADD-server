@@ -37,8 +37,9 @@ public class SecurityConfig {
                 .loginProcessingUrl("/users/login/email") // 시큐리티가 /login 경로로 로직을 만들어서 시큐리티 로그인을 처리함
                 .successHandler(new CustomAuthenticationSuccessHandler())
                 .failureHandler(new CustomAuthenticationFailureHandler())
-                .usernameParameter("email");
-        httpSecurity.logout()
+                .usernameParameter("email")
+                .and()
+                .logout()
                 .logoutUrl("/users/my-info/logout")
                 .logoutSuccessHandler(new LogoutSuccessHandler() {
                     @Override
