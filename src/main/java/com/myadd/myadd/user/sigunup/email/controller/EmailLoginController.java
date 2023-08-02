@@ -8,6 +8,7 @@ import com.myadd.myadd.user.sigunup.email.service.EmailLoginService;
 import com.myadd.myadd.user.sigunup.email.domain.EmailLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 public class EmailLoginController {
 
     private final EmailLoginService emailLoginService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/home")
     public String first(){
@@ -31,8 +33,9 @@ public class EmailLoginController {
     }
 
     @PostMapping("/join") // 회원가입(아이디, 비밀번호 방식)
-    public String emailJoin(@ModelAttribute UserDto userDto){
+    public @ResponseBody String emailJoin(@ModelAttribute UserDto userDto){
         userDto.setUserType(UserTypeEnum.EMAIL);
+        userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         emailLoginService.save(userDto);
 
         return "success";
@@ -48,18 +51,10 @@ public class EmailLoginController {
     }
 
     @PostMapping("/login/email") // 로그인(아이디, 비밀번호)  (로그인을 하기 위해 입력하는 창에서의 로직(실제 로그인))
-    public String login(@Valid @ModelAttribute EmailLoginForm emailLoginForm, BindingResult bindingResult, HttpServletRequest request){
-        if (bindingResult.hasErrors()){
-            return "login hasErrors";
-        }
+    public String login(@ModelAttribute EmailLoginForm emailLoginForm, HttpServletRequest request){
 
         UserEntity loginUser = emailLoginService.emailLogin(emailLoginForm.getLoginEmail(), emailLoginForm.getLoginPassWord());
         log.info("login? {}", loginUser);
-
-        if (loginUser == null){
-            bindingResult.reject("loginFail", "이메일 또는 비밀번호가 맞지 않습니다.");
-            return "login Error";
-        }
 
         // 로그인 성공 처리
         // 세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
@@ -85,11 +80,16 @@ public class EmailLoginController {
     }
 
     @PostMapping("/my-info/logout")
-    public String logout(HttpServletRequest request) {
+    public @ResponseBody String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false); // true면 없을 시 생성되므로 false로 함. true가 default임
         if (session != null){
             session.invalidate();
         }
         return "logout success!";
+    }
+
+    @GetMapping("/loginForm")
+    public String loginForm(){
+        return "loginForm";
     }
 }
