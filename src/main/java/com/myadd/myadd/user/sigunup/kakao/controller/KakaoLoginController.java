@@ -4,10 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.myadd.myadd.user.AppConstants;
 import com.myadd.myadd.user.domain.UserEntity;
+import com.myadd.myadd.user.security.PrincipalDetails;
 import com.myadd.myadd.user.sigunup.kakao.service.KakaoLoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -57,25 +60,13 @@ public class KakaoLoginController {
     }
 
     @PostMapping("/users/my-info/delete/kakao-user")
-    public @ResponseBody String kakaoWithdrawal(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        String response = "";
-
-        if (session != null) {
-            log.info("session = {}", session);
-            Long deleteUserId = (Long) session.getAttribute("id");
-            String deleteUserEmail = (String) session.getAttribute("email");
-            response = kakaoLoginService.kakaoWithdrawal(deleteUserId, deleteUserEmail);
-            if (response.equals("Withdrawal Success")) {
-                session.invalidate();
-            }
-        }
-        else
-            response = "Session is Null";
-
-
-        log.info("respone = {}", response);
-
-        return response;
+    public @ResponseBody String kakaoWithdrawal() {
+        log.info("이거 왜 안됨?");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = ((PrincipalDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
+        Long id = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        log.info("email = {}", email);
+        log.info("id = {}", id);
+        return kakaoLoginService.kakaoWithdrawal(id, email);
     }
 }

@@ -159,6 +159,5 @@ public class KakaoLoginService {
             log.error("Error occurred during user deletion: {}", e.getMessage());
             return "Withdrawal Failed"; // 삭제 실패
         }
-
     }
 }
