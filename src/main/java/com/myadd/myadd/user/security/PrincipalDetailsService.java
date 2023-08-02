@@ -1,8 +1,7 @@
-package com.myadd.myadd.user.config;
+package com.myadd.myadd.user.security;
 
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.repository.UserRepository;
-import com.myadd.myadd.user.security.PrincipalDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

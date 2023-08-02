@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .loginProcessingUrl("/login")
+                .loginProcessingUrl("/login") // 시큐리티가 /login 경로로 로직을 만들어서 시큐리티 로그인을 처리함
                 .usernameParameter("email");
 
 
