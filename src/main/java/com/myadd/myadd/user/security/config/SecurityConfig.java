@@ -1,5 +1,7 @@
 package com.myadd.myadd.user.security.config;
 
+import com.myadd.myadd.user.security.handler.CustomAuthenticationFailureHandler;
+import com.myadd.myadd.user.security.handler.CustomAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,6 +28,8 @@ public class SecurityConfig {
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login") // 시큐리티가 /login 경로로 로직을 만들어서 시큐리티 로그인을 처리함
+                .successHandler(new CustomAuthenticationSuccessHandler())
+                .failureHandler(new CustomAuthenticationFailureHandler())
                 .usernameParameter("email");
 
 
