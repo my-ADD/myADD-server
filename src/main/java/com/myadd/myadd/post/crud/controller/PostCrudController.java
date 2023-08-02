@@ -28,7 +28,7 @@ public class PostCrudController {
 
 
     //포토카드 글작성1
-    @PostMapping(value = "/posts/add-post")
+    @PostMapping(value = "/posts/add")
     public ModelAndView create(@ModelAttribute("postFrontDto") PostFrontDto postFrontDto, Model model) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("post/write2");
@@ -54,7 +54,7 @@ public class PostCrudController {
 //    }
 
     //작성2
-    @PostMapping(value = "/posts/add",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/posts/add-post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody // 대신 @RequestPart 로 적기
     public String create(@RequestPart PostBackDto post, @RequestPart(value = "imageURL", required = false)MultipartFile imageURL) throws IOException {
         log.info(String.valueOf(imageURL));
@@ -75,10 +75,11 @@ public class PostCrudController {
 
 
     //포토카드 수정
-//    @PutMapping("/posts/update-post/{postId}")
-//    public String update(PostBackDto postBackDto) {
-//        log.info(String.valueOf(postBackDto.getPostId()));
-//        postCrudService.savePost(postBackDto);
-//        return "redirect:/home";
-//    }
+    @PutMapping(value = "/posts/update-post/{postId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody // 대신 @RequestPart 로 적기
+    public String update(@PathVariable("postId") Long postId, @RequestPart PostBackDto post, @RequestPart(value = "imageURL", required = false)MultipartFile imageURL) throws IOException {
+        log.info(post.toString());
+        postCrudService.modifyPost(postId, post, imageURL);
+        return "수정 완료";
+    }
 }

@@ -70,4 +70,25 @@ public class PostBackDto {
         post.setImage(postBackDto.getImage());
         return post;
     }
+
+    public PostEntity toModPostEntity(PostBackDto postBackDto){
+        PostEntity post = new PostEntity();
+
+        post.setPostId(postBackDto.getPostId());
+        post.setCreatedAt(postBackDto.getCreatedAt());
+        post.setModifiedAt(LocalDateTime.now());
+        post.setStartedAt(postBackDto.getStartedAt());
+        post.setEndedAt(postBackDto.getEndedAt());
+        post.setTitle(postBackDto.getTitle());
+        post.setMemo(postBackDto.getMemo());
+        post.setCategory(postBackDto.getCategory());
+        post.setViews(postBackDto.getViews());
+        post.setGenre(postBackDto.getGenre());
+        post.setPlatform(postBackDto.getPlatform());
+        post.setEmoji(postBackDto.getEmoji());
+        post.setComment(postBackDto.getComment());
+        post.setImage(postBackDto.getImage());
+        return post;
+    }
+
 }
