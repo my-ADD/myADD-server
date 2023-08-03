@@ -8,6 +8,7 @@ import com.myadd.myadd.user.sigunup.email.authcode.domain.EmailAuthEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -31,6 +32,7 @@ public class EmailAuthService {
     private final SpringTemplateEngine templateEngine;
     private final EmailSignupRepository emailSignupRepository;
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     // 랜덤 인증 코드
     private String authNum;
 
@@ -127,7 +129,7 @@ public class EmailAuthService {
 
     public String changePassword(String email, String password){
         UserEntity userEntity = userRepository.findByEmail(email).get();
-        userEntity.setPassword(password);
+        userEntity.setPassword(bCryptPasswordEncoder.encode(password));
 
         userRepository.save(userEntity);
 

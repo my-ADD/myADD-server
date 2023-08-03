@@ -4,6 +4,8 @@ import com.myadd.myadd.user.sigunup.email.authcode.domain.EmailAuthRequestDto;
 import com.myadd.myadd.user.sigunup.email.authcode.service.EmailAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PreDestroy;
