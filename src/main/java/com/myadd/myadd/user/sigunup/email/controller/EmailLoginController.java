@@ -1,12 +1,10 @@
 package com.myadd.myadd.user.sigunup.email.controller;
 
-import com.myadd.myadd.user.AppConstants;
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.dto.UserDto;
 import com.myadd.myadd.user.security.PrincipalDetails;
 import com.myadd.myadd.user.sigunup.email.service.EmailLoginService;
-import com.myadd.myadd.user.sigunup.email.domain.EmailLoginForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -14,14 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import java.util.Enumeration;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -50,7 +41,7 @@ public class EmailLoginController {
             return "Non-Duplicate Email!";
     }
 
-    @PostMapping("/my-info/delete/user")
+    @DeleteMapping("/my-info/delete/user") // 모든 방식 로그인 유저에 대해서 사용 가능
     public @ResponseBody String deleteUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = ((PrincipalDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명

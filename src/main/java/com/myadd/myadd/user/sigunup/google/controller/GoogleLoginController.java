@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/login/oauth2", produces = "application/json")
+@RequestMapping(value = "/login/oauth2", produces = "application/json") // 스프링 시큐리티를 적용하지 않은 구글 로그인 컨트롤러(현재 프로젝트에서 사용 x)
 public class GoogleLoginController {
 
     private final GoogleLoginService googleLoginService;

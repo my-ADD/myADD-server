@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class GoogleLoginService {
+public class GoogleLoginService { // 스프링 시큐리티를 적용하지 않은 구글 로그인 서비스(현재 프로젝트에서 사용 x)
     private final Environment env;
     private final RestTemplate restTemplate = new RestTemplate();
     private final UserRepository userRepository;

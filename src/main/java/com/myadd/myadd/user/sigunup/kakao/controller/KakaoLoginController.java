@@ -2,18 +2,15 @@ package com.myadd.myadd.user.sigunup.kakao.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.myadd.myadd.user.AppConstants;
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.security.PrincipalDetails;
 import com.myadd.myadd.user.sigunup.kakao.service.KakaoLoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,7 +18,7 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class KakaoLoginController {
+public class KakaoLoginController {  // 스프링 시큐리티를 적용하지 않은 카카오 로그인 컨트롤러(현재 프로젝트에서 사용 x)
 
     private final KakaoLoginService kakaoLoginService;
 
