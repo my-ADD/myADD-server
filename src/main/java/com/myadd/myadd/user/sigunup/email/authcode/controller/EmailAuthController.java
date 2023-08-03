@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 // 비밀번호 찾기를 위해 사용하는 이메일 인증
 @Slf4j
 @RestController
-@RequestMapping(value = "/users/my-info/change-password")
+@RequestMapping(value = "/change-password")
 @RequiredArgsConstructor
 public class EmailAuthController {
     private final EmailAuthService emailService;
