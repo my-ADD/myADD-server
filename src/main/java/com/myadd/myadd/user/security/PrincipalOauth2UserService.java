@@ -42,6 +42,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String nickName = oAuth2User.getAttribute("name"); // 강병준
         String profile = oAuth2User.getAttribute("picture"); // https://lh3.googleusercontent.com/a/AAcHTtczGvv086yOdzmf0UuQxF0cdYVIRVDooGQ3qWOIeLUv3Q=s96-c
         UserTypeEnum userTypeEnum = UserTypeEnum.GOOGLE; // 2
+        String email = oAuth2User.getAttribute("email"); // bjkang402@gamil.com
 
         return super.loadUser(userRequest);
     }
