@@ -49,7 +49,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String profile = oAuth2User.getAttribute("picture"); // https://lh3.googleusercontent.com/a/AAcHTtczGvv086yOdzmf0UuQxF0cdYVIRVDooGQ3qWOIeLUv3Q=s96-c
         UserTypeEnum userTypeEnum = UserTypeEnum.GOOGLE; // 2
         String email = oAuth2User.getAttribute("email"); // bjkang402@gamil.com
-        String password = UUID.randomUUID().toString();
+        String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
 
         return super.loadUser(userRequest);
     }
