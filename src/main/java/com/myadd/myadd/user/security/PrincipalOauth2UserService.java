@@ -12,11 +12,12 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
 @Service
-public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
+public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oauth2 로그인
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -42,15 +43,24 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String email = oAuth2User.getAttribute("email"); // bjkang402@gamil.com
         String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
 
-        UserEntity userEntity = userRepository.findByEmail(email).get();
+        Optional<UserEntity> userEntityOptional= userRepository.findByEmail(email);
+        UserEntity userEntity;
 
-        if(userEntity == null){
-
+        if(!userEntityOptional.isPresent()){
+            userEntity = UserEntity.builder()
+                    .nickname(nickName)
+                    .profile(profile)
+                    .userType(userTypeEnum)
+                    .email(email)
+                    .password(password)
+                    .build();
+            userRepository.save(userEntity);
         }
         else{
-
+            userEntity = userEntityOptional.get();
+            log.info("이미 존재하는 OAuth2 구글 회원입니다.");
         }
 
-        return super.loadUser(userRequest);
+        return new PrincipalDetails(userEntity, oAuth2User.getAttributes()); // Authentication 객체 안에 들어감
     }
 }
