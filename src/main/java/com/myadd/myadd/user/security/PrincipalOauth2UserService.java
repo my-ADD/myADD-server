@@ -23,6 +23,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         log.info("getAttributes = {}", oAuth2User.getAttributes());
 
         String provider = userRequest.getClientRegistration().getClientId(); // google
+        String providerId = oAuth2User.getAttribute("sub"); // 104717591461978030161
 
         return super.loadUser(userRequest);
     }
