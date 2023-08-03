@@ -20,13 +20,26 @@ import java.util.Map;
 public class PrincipalDetails implements UserDetails, OAuth2User { // PrincipalDetails가 UserDetails 타입이 됨.
 
     private UserEntity user; // 콤포지션
+    private Map<String, Object> attributes;
 
+    // 이메일 회원이 로그인할 때의 생성자
     public PrincipalDetails(UserEntity user){
         this.user = user;
     }
 
-    @Override
+    // Oauth2 회원이 로그인할 때의 생성자
+    public PrincipalDetails(UserEntity user, Map<String, Object> attributes){
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+    @Override // OAuth2User
     public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    @Override // OAuth2User 사용하지는 않는 메서드
+    public String getName() {
         return null;
     }
 
@@ -75,10 +88,5 @@ public class PrincipalDetails implements UserDetails, OAuth2User { // PrincipalD
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String getName() {
-        return null;
     }
 }
