@@ -2,11 +2,15 @@ package com.myadd.myadd.user.security;
 
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -22,7 +26,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         // userRequest 정보를 통해서 loadUser() 함수를 호출하여 회원프로필을 구글로부터 받음
         // {sub=104717591461978030161, name=강병준, given_name=병준, family_name=강, picture=https://lh3.googleusercontent.com/a/AAcHTtczGvv086yOdzmf0UuQxF0cdYVIRVDooGQ3qWOIeLUv3Q=s96-c, email=bjkang402@gmail.com, email_verified=true, locale=ko}
         log.info("getAttributes = {}", oAuth2User.getAttributes());
-
 
         // @Column(nullable = false)
         //    private String email;
@@ -43,6 +46,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String profile = oAuth2User.getAttribute("picture"); // https://lh3.googleusercontent.com/a/AAcHTtczGvv086yOdzmf0UuQxF0cdYVIRVDooGQ3qWOIeLUv3Q=s96-c
         UserTypeEnum userTypeEnum = UserTypeEnum.GOOGLE; // 2
         String email = oAuth2User.getAttribute("email"); // bjkang402@gamil.com
+        String password = UUID.randomUUID().toString();
 
         return super.loadUser(userRequest);
     }
