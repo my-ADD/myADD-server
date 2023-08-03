@@ -3,16 +3,17 @@ package com.myadd.myadd.user.domain;
 
 import com.myadd.myadd.post.domain.PostEntity;
 import com.myadd.myadd.user.dto.UserDto;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 @Table(name = "UserInfo")
 public class UserEntity{
 
@@ -48,5 +49,15 @@ public class UserEntity{
         userEntity.setUserType(userDto.getUserType());
 
         return userEntity;
+    }
+
+    @Builder
+    public UserEntity(String email, String password, String nickname, String profile, UserTypeEnum userType, List<PostEntity> postEntityList) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.profile = profile;
+        this.userType = userType;
+        this.postEntityList = postEntityList;
     }
 }

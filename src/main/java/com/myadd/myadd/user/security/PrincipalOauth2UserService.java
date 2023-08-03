@@ -1,5 +1,6 @@
 package com.myadd.myadd.user.security;
 
+import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,15 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         UserTypeEnum userTypeEnum = UserTypeEnum.GOOGLE; // 2
         String email = oAuth2User.getAttribute("email"); // bjkang402@gamil.com
         String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
+
+        UserEntity userEntity = userRepository.findByEmail(email).get();
+
+        if(userEntity == null){
+
+        }
+        else{
+
+        }
 
         return super.loadUser(userRequest);
     }
