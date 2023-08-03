@@ -1,7 +1,9 @@
 package com.myadd.myadd.user.security.config;
 
+import com.myadd.myadd.user.security.PrincipalOauth2UserService;
 import com.myadd.myadd.user.security.handler.CustomAuthenticationFailureHandler;
 import com.myadd.myadd.user.security.handler.CustomAuthenticationSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +19,9 @@ import java.io.IOException;
 
 @Configuration
 public class SecurityConfig {
+
+    @Autowired
+    private PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
     public BCryptPasswordEncoder encodePwd(){
@@ -50,9 +55,9 @@ public class SecurityConfig {
                 })
                 .and()
                 .oauth2Login()
-                .loginPage("/home") // 구글 로그인 완료 후 후처리가 필요함.
+                .loginPage("/home") // 구글 로그인 완료 후 후처리가 필요함. 후처리는 PrincipalOauth2UserService에서 진행
                 .userInfoEndpoint()
-                .userService(null);
+                .userService(principalOauth2UserService);
         return httpSecurity.build();
     }
 }

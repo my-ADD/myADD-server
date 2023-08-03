@@ -29,6 +29,7 @@ public class EmailAuthController {
         log.info("first = {}", emailAuthRequestDto.getEmail());
         // 이메일로 회원가입한 유저가 아닌 경우 예외
         if(emailService.isUserTypeEmail(emailAuthRequestDto.getEmail())){
+            emailService.deleteExistCode(emailAuthRequestDto.getEmail());
             authCode = emailService.sendEmail(emailAuthRequestDto.getEmail());
 
             executorService.schedule(emailService::deleteExpiredAuthNum, 5, TimeUnit.MINUTES);
