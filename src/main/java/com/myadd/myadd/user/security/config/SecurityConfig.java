@@ -47,9 +47,12 @@ public class SecurityConfig {
                         response.setStatus(HttpServletResponse.SC_OK);
                         response.getWriter().write("{\"message\": \"Logout success!\"}");
                     }
-                });
-
-
+                })
+                .and()
+                .oauth2Login()
+                .loginPage("/home") // 구글 로그인 완료 후 후처리가 필요함.
+                .userInfoEndpoint()
+                .userService(null);
         return httpSecurity.build();
     }
 }

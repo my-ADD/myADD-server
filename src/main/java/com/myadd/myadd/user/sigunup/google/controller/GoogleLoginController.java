@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 public class GoogleLoginController {
 
     private final GoogleLoginService googleLoginService;
-
-    @GetMapping("/code/google/{registrationId}")
-    public void googleLogin(@RequestParam String code, @PathVariable String registrationId) {
-        googleLoginService.socialLogin(code, registrationId);
-    }
+//
+//    @GetMapping("/code/google/{registrationId}")
+//    public void googleLogin(@RequestParam String code, @PathVariable String registrationId) {
+//        googleLoginService.socialLogin(code, registrationId);
+//    }
 }
