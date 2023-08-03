@@ -50,16 +50,22 @@ public class EmailLoginController {
             return "Non-Duplicate Email!";
     }
 
-    @PostMapping("/my-info/delete/email-user")
-    public @ResponseBody String emailWithdrawal() {
+    @PostMapping("/my-info/delete/user")
+    public @ResponseBody String deleteUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = ((PrincipalDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
         Long id = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
-        return emailLoginService.emailWithdrawal(id, email);
+        return emailLoginService.deleteUser(id, email);
     }
 
     @GetMapping("/home")
     public String home(){
+        return "home";
+    }
+
+    @GetMapping("/test") // 카카오에도 시큐리티 적용하고 이메일 잘 나오는지 확인해볼것!
+    public @ResponseBody String test(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        log.info("principalDetails = {}", principalDetails.getUser().getEmail());
         return "home";
     }
 }

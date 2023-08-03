@@ -41,7 +41,7 @@ public class EmailLoginService {
             return null;
     }
 
-    public String emailWithdrawal(Long deleteUserId, String deleteUserEmail) {
+    public String deleteUser(Long deleteUserId, String deleteUserEmail) {
         try {
             if (userRepository.findById(deleteUserId).equals(userRepository.findByEmail(deleteUserEmail))) {
                 userRepository.deleteById(deleteUserId);

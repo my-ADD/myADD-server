@@ -43,8 +43,13 @@ public class SecurityConfig {
                 .logoutSuccessHandler(new LogoutSuccessHandler() {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        response.setStatus(HttpServletResponse.SC_OK);
-                        response.getWriter().write("{\"message\": \"Logout success!\"}");
+                        if (authentication == null) {
+                            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                            response.getWriter().write("{\"message\": \"Logout Fail!\"}");
+                        } else {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.getWriter().write("{\"message\": \"Logout success!\"}");
+                        }
                     }
                 })
                 .and()
