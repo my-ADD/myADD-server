@@ -22,9 +22,24 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         // {sub=104717591461978030161, name=강병준, given_name=병준, family_name=강, picture=https://lh3.googleusercontent.com/a/AAcHTtczGvv086yOdzmf0UuQxF0cdYVIRVDooGQ3qWOIeLUv3Q=s96-c, email=bjkang402@gmail.com, email_verified=true, locale=ko}
         log.info("getAttributes = {}", oAuth2User.getAttributes());
 
+
+        // @Column(nullable = false)
+        //    private String email;
+        //
+        //    @Column(nullable = true)
+        //    private String password;
+        //
+        //    @Column(nullable = false)
+        //    private String nickname;
+        //
+        //    private String profile;
+        //
+        //    @Column(name = "user_type")
+        //    private UserTypeEnum userType;
         String provider = userRequest.getClientRegistration().getClientId(); // google
         String providerId = oAuth2User.getAttribute("sub"); // 104717591461978030161
         String nickName = oAuth2User.getAttribute("name"); // 강병준
+        String profile = oAuth2User.getAttribute("picture"); // https://lh3.googleusercontent.com/a/AAcHTtczGvv086yOdzmf0UuQxF0cdYVIRVDooGQ3qWOIeLUv3Q=s96-c
 
         return super.loadUser(userRequest);
     }
