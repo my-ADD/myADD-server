@@ -1,6 +1,7 @@
 package com.myadd.myadd.user.security;
 
 import com.myadd.myadd.user.domain.UserTypeEnum;
+import com.myadd.myadd.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +20,9 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override // 구글로부터 받은 userRequest 데이터에 대한 후처리를 하는 메서드
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         log.info("userRequest = {}", userRequest);
@@ -30,21 +34,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         // {sub=104717591461978030161, name=강병준, given_name=병준, family_name=강, picture=https://lh3.googleusercontent.com/a/AAcHTtczGvv086yOdzmf0UuQxF0cdYVIRVDooGQ3qWOIeLUv3Q=s96-c, email=bjkang402@gmail.com, email_verified=true, locale=ko}
         log.info("getAttributes = {}", oAuth2User.getAttributes());
 
-        // @Column(nullable = false)
-        //    private String email;
-        //
-        //    @Column(nullable = true)
-        //    private String password;
-        //
-        //    @Column(nullable = false)
-        //    private String nickname;
-        //
-        //    private String profile;
-        //
-        //    @Column(name = "user_type")
-        //    private UserTypeEnum userType;
         String provider = userRequest.getClientRegistration().getClientId(); // google
-        String providerId = oAuth2User.getAttribute("sub"); // 104717591461978030161
         String nickName = oAuth2User.getAttribute("name"); // 강병준
         String profile = oAuth2User.getAttribute("picture"); // https://lh3.googleusercontent.com/a/AAcHTtczGvv086yOdzmf0UuQxF0cdYVIRVDooGQ3qWOIeLUv3Q=s96-c
         UserTypeEnum userTypeEnum = UserTypeEnum.GOOGLE; // 2
