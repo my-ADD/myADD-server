@@ -16,6 +16,9 @@ import java.util.UUID;
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override // 구글로부터 받은 userRequest 데이터에 대한 후처리를 하는 메서드
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         log.info("userRequest = {}", userRequest);
