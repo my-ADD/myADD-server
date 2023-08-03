@@ -1,5 +1,6 @@
 package com.myadd.myadd.user.security;
 
+import com.myadd.myadd.user.domain.UserTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -40,6 +41,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String providerId = oAuth2User.getAttribute("sub"); // 104717591461978030161
         String nickName = oAuth2User.getAttribute("name"); // 강병준
         String profile = oAuth2User.getAttribute("picture"); // https://lh3.googleusercontent.com/a/AAcHTtczGvv086yOdzmf0UuQxF0cdYVIRVDooGQ3qWOIeLUv3Q=s96-c
+        UserTypeEnum userTypeEnum = UserTypeEnum.GOOGLE; // 2
 
         return super.loadUser(userRequest);
     }
