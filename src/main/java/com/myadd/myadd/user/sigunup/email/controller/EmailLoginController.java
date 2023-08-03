@@ -33,12 +33,12 @@ public class EmailLoginController {
     }
 
     @PostMapping("/join/email/check-duplicate") // 회원가입 중 이메일 중복 확인
-    public String emailDuplicateCheck(@RequestParam String email){
+    public @ResponseBody String emailDuplicateCheck(@RequestParam String email){
         UserEntity userEntity = emailLoginService.findByEmail(email);
         if(userEntity != null)
             return "Duplicate Email!";
         else
-            return "Non-Duplicate Email!";
+            return "Not Duplicate Email!";
     }
 
     @DeleteMapping("/my-info/delete/user") // 모든 방식 로그인 유저에 대해서 사용 가능

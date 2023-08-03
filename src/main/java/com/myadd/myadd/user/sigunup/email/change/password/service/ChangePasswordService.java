@@ -1,10 +1,10 @@
-package com.myadd.myadd.user.sigunup.email.authcode.service;
+package com.myadd.myadd.user.sigunup.email.change.password.service;
 
 import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.repository.EmailSignupRepository;
 import com.myadd.myadd.user.repository.UserRepository;
-import com.myadd.myadd.user.sigunup.email.authcode.domain.EmailAuthEntity;
+import com.myadd.myadd.user.sigunup.email.change.password.domain.EmailAuthEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,7 +24,7 @@ import java.util.Random;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EmailAuthService {
+public class ChangePasswordService {
 
     // 의존성 주입을 통해 필요한 객체를 가져옴
     private final JavaMailSender emailSender;

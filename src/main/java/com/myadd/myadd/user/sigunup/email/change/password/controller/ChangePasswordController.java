@@ -1,11 +1,9 @@
-package com.myadd.myadd.user.sigunup.email.authcode.controller;
+package com.myadd.myadd.user.sigunup.email.change.password.controller;
 
-import com.myadd.myadd.user.sigunup.email.authcode.domain.EmailAuthRequestDto;
-import com.myadd.myadd.user.sigunup.email.authcode.service.EmailAuthService;
+import com.myadd.myadd.user.sigunup.email.change.password.domain.EmailAuthRequestDto;
+import com.myadd.myadd.user.sigunup.email.change.password.service.ChangePasswordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PreDestroy;
@@ -20,8 +18,8 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping(value = "/change-password")
 @RequiredArgsConstructor
-public class EmailAuthController {
-    private final EmailAuthService emailService;
+public class ChangePasswordController {
+    private final ChangePasswordService emailService;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @PostMapping("/send-code") // 이메일 인증 번호 전송
