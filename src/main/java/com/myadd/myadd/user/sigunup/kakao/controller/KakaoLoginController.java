@@ -22,7 +22,7 @@ public class KakaoLoginController {  // 스프링 시큐리티를 적용하지 �
 
     private final KakaoLoginService kakaoLoginService;
 
-    @GetMapping("/users/login/oauth2/code/kakao/kakao")
+    @GetMapping("/login/oauth2/code/kakao")
     public String kakaoCallback(@RequestParam String code, HttpServletRequest request) throws JsonProcessingException {
         JsonNode accessTokenResponse = kakaoLoginService.getAccessTokenResponse(code); // code를 통해 얻은 response(access token과 여러 key들 존재)
         String accessToken = kakaoLoginService.parshingAccessToken(accessTokenResponse);

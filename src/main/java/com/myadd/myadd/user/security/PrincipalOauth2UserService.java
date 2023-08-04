@@ -45,7 +45,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
         }
         else if(userRequest.getClientRegistration().getRegistrationId().equals("kakao")){
             log.info("카카오 유저");
-            // oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
         }
 
 //        String provider = userRequest.getClientRegistration().getRegistrationId(); // google
@@ -55,11 +55,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
 //        String email = oAuth2User.getAttribute("email"); // bjkang402@gamil.com
 //        String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
 
-        String provider = userRequest.getClientRegistration().getRegistrationId(); // google
-        String nickName = oAuth2UserInfo.getNickname(); // 강병준
-        String profile = oAuth2UserInfo.getProfile(); // https://lh3.googleusercontent.com/a/AAcHTtczGvv086yOdzmf0UuQxF0cdYVIRVDooGQ3qWOIeLUv3Q=s96-c
-        UserTypeEnum userTypeEnum = oAuth2UserInfo.getUsertype(); // 2
-        String email = oAuth2UserInfo.getEmail(); // bjkang402@gamil.com
+        String provider = userRequest.getClientRegistration().getRegistrationId();
+        String nickName = oAuth2UserInfo.getNickname();
+        String profile = oAuth2UserInfo.getProfile();
+        UserTypeEnum userTypeEnum = oAuth2UserInfo.getUsertype();
+        String email = oAuth2UserInfo.getEmail();
         String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
 
         Optional<UserEntity> userEntityOptional= userRepository.findByEmail(email);
