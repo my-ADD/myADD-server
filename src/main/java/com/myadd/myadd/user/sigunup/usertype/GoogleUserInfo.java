@@ -1,4 +1,4 @@
-package com.myadd.myadd.user.sigunup.provider;
+package com.myadd.myadd.user.sigunup.usertype;
 
 import com.myadd.myadd.user.domain.UserTypeEnum;
 
@@ -23,8 +23,8 @@ public class GoogleUserInfo implements OAuth2UserInfo{
     }
 
     @Override
-    public String getUsertype() {
-        return UserTypeEnum.GOOGLE.toString();
+    public UserTypeEnum getUsertype() {
+        return UserTypeEnum.GOOGLE;
     }
 
     @Override
