@@ -4,6 +4,7 @@ import com.myadd.myadd.user.domain.UserEntity;
 import com.myadd.myadd.user.domain.UserTypeEnum;
 import com.myadd.myadd.user.repository.UserRepository;
 import com.myadd.myadd.user.sigunup.usertype.GoogleUserInfo;
+import com.myadd.myadd.user.sigunup.usertype.KakaoUserInfo;
 import com.myadd.myadd.user.sigunup.usertype.OAuth2UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -45,7 +47,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
         }
         else if(userRequest.getClientRegistration().getRegistrationId().equals("kakao")){
             log.info("카카오 유저");
-            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+            oAuth2UserInfo = new KakaoUserInfo((Map)oAuth2User.getAttributes().get("kakao_account"));
         }
 
 //        String provider = userRequest.getClientRegistration().getRegistrationId(); // google
@@ -62,6 +64,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
         String email = oAuth2UserInfo.getEmail();
         String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
 
+        log.info("userInfo = {}", provider + " " + nickName + " " + profile + " " +userTypeEnum + " " + email + " "+password);
+
         Optional<UserEntity> userEntityOptional= userRepository.findByEmail(email);
         UserEntity userEntity;
 
@@ -77,7 +81,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
         }
         else{
             userEntity = userEntityOptional.get();
-            log.info("이미 존재하는 OAuth2 구글 회원입니다.");
+            log.info("이미 존재하는 OAuth2 회원입니다.");
         }
 
         return new PrincipalDetails(userEntity, oAuth2User.getAttributes()); // Authentication 객체 안에 들어감

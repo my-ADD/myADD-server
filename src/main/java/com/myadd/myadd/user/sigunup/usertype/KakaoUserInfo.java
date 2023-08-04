@@ -7,9 +7,11 @@ import java.util.Map;
 public class KakaoUserInfo implements OAuth2UserInfo{
 
     private Map<String, Object> attributes; // oauth2User.getAttributes()
+    private Map<String, Object> profile;
 
     public KakaoUserInfo(Map<String, Object> attributes){
         this.attributes = attributes;
+        this.profile = (Map)attributes.get("profile");
     }
 
     @Override
@@ -19,7 +21,7 @@ public class KakaoUserInfo implements OAuth2UserInfo{
 
     @Override
     public String getNickname() {
-        return (String)attributes.get("nickname");
+        return (String)profile.get("nickname");
     }
 
     @Override
@@ -29,6 +31,6 @@ public class KakaoUserInfo implements OAuth2UserInfo{
 
     @Override
     public String getProfile() {
-        return (String)attributes.get("profile_image");
+        return (String)profile.get("profile_image_url");
     }
 }
