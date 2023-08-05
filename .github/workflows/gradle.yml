@@ -54,7 +54,7 @@ jobs:
       shell: bash
 
     #2
-  	# AWS 계정 설정
+    # AWS 계정 설정
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -66,7 +66,7 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
 
     #3
-	  # 만들어 놓은 S3에 해당 zip 파일 저장
+    # 만들어 놓은 S3에 해당 zip 파일 저장
     - name: Upload to S3
       run: aws s3 cp --region ${{ secrets.AWS_REGION }} ./MYADD_SERVER.zip s3://myadd-github-actions-s3-bucket/MYADD_SERVER.zip
 
