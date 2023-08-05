@@ -4,6 +4,7 @@ import com.myadd.myadd.fileUpload.service.FileUploadService;
 import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.post.crud.repository.PostCrudRepository;
 import com.myadd.myadd.post.domain.PostEntity;
+import com.myadd.myadd.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,12 @@ public class PostCrudService {
 
     private final PostCrudRepository postCrudRepository;
     private final FileUploadService fileUploadService;
-
+    private final UserRepository userRepository;
     @Transactional
-    public void savePost(PostBackDto postDto, MultipartFile imageURL) throws IOException {
+    public void savePost(PostBackDto postDto, MultipartFile imageURL, Long id) throws IOException {
         String storedFileName = fileUploadService.upload(imageURL);
         postDto.setImage(storedFileName);
+        postDto.setUserId(id);
         postCrudRepository.save(postDto.toPostEntity(postDto));
     }
 
@@ -32,27 +34,35 @@ public class PostCrudService {
     @Transactional
     public void deletePost(Long postId) {
         PostEntity postEntity = postCrudRepository.findByPostId(postId);
-        String url = postEntity.getImage();
-        fileUploadService.fileDelete(url.split("/")[3]);
+        if(postEntity.getImage() != null) {
+            String url = postEntity.getImage();
+            fileUploadService.fileDelete(url.split("/")[3]);
+        }
         postCrudRepository.deleteById(postId);
     }
 
 
     @Transactional
-    public void modifyPost(Long postId, PostBackDto postDto, MultipartFile imageURL) throws IOException {
+    public void modifyPost(Long postId, PostBackDto postDto, MultipartFile imageURL, Long id) throws IOException {
         PostEntity postEntity = postCrudRepository.findByPostId(postId);
-        String deleteUrl = postEntity.getImage();
-        fileUploadService.fileDelete(deleteUrl.split("/")[3]);
 
-        if (imageURL.isEmpty()) {
-            postCrudRepository.save(postDto.toPostEntity(postDto));
+        if(postEntity.getImage() != null) {
+            String deleteUrl = postEntity.getImage();
+            fileUploadService.fileDelete(deleteUrl.split("/")[3]);
         }
-        else {
+        if (imageURL.isEmpty()) {
+            postDto.setPostId(postId);
+            postDto.setUserId(id);
+            postDto.setCreatedAt(postEntity.getCreatedAt());
+            postCrudRepository.save(postDto.toPostEntity(postDto));
+        } else {
             String storedFileName = fileUploadService.upload(imageURL);
             postDto.setImage(storedFileName);
             postDto.setPostId(postId);
+            postDto.setUserId(id);
             postDto.setCreatedAt(postEntity.getCreatedAt());
             postCrudRepository.save(postDto.toModPostEntity(postDto));
         }
+
     }
 }
