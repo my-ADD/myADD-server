@@ -4,6 +4,10 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
+jar { // 배포 과정에서 빌드 시 plain jar 파일은 만들어지지 않도록 설정
+	enabled = false
+}
+
 group = 'com.myadd'
 version = '0.0.1-SNAPSHOT'
 
