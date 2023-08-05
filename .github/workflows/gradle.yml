@@ -65,6 +65,15 @@ jobs:
       # 깃허브 Secret에 넣어둔 Region
         aws-region: ${{ secrets.AWS_REGION }}
 
+    # MYSQL 설정
+    - name: Setup MySQL
+      uses: samin/mysql-action@v1
+      with:
+        character set server: utf8mb4
+        mysql database: myadddb
+        mysql user: myadd_Admin
+        mysql password: myadd2023
+
     #3
     # 만들어 놓은 S3에 해당 zip 파일 저장
     - name: Upload to S3
