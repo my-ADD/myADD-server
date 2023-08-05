@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class GoogleLoginController {
 
     private final GoogleLoginService googleLoginService;
-//
+// oauth2 client 라이브러리 사용 안 했을 때 사용
 //    @GetMapping("/code/google/{registrationId}")
 //    public void googleLogin(@RequestParam String code, @PathVariable String registrationId) {
 //        googleLoginService.socialLogin(code, registrationId);
