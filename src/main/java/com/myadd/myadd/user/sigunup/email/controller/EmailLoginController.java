@@ -49,14 +49,15 @@ public class EmailLoginController {
         return emailLoginService.deleteUser(id, email);
     }
 
-    @GetMapping("/home")
-    public String home(){
-        return "home";
-    }
+    // 테스트 용
+//    @GetMapping("/home")
+//    public String home(){
+//        return "home";
+//    }
 
-    @GetMapping("/test") // 카카오에도 시큐리티 적용하고 이메일 잘 나오는지 확인해볼것!
-    public @ResponseBody String test(@AuthenticationPrincipal PrincipalDetails principalDetails){
-        log.info("principalDetails = {}", principalDetails.getUser().getEmail());
-        return "home";
-    }
+//    @GetMapping("/test") // 카카오에도 시큐리티 적용하고 이메일 잘 나오는지 확인해볼것!
+//    public @ResponseBody String test(@AuthenticationPrincipal PrincipalDetails principalDetails){
+//        log.info("principalDetails = {}", principalDetails.getUser().getEmail());
+//        return "home";
+//    }
 }

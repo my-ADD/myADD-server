@@ -39,7 +39,7 @@ public class KakaoLoginController {  // 스프링 시큐리티를 적용하지 �
             kakaoLoginService.save(userEntity);
         }
 
-        return "index";
+        return "kakao login success";
     }
 
     @PostMapping("/users/my-info/logout/kakao")
