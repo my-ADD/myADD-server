@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class KakaoLoginService {
+public class KakaoLoginService { // 스프링 시큐리티를 적용하지 않은 카카오 로그인 서비스(현재 프로젝트에서 사용 x)
     private final UserRepository userRepository;
     private final Environment env;
 
@@ -159,6 +159,5 @@ public class KakaoLoginService {
             log.error("Error occurred during user deletion: {}", e.getMessage());
             return "Withdrawal Failed"; // 삭제 실패
         }
-
     }
 }

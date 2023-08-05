@@ -1,4 +1,4 @@
-package com.myadd.myadd.user.sigunup.email.auth.domain;
+package com.myadd.myadd.user.sigunup.email.domain;
 
 import lombok.Data;
 

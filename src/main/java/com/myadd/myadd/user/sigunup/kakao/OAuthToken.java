@@ -3,7 +3,7 @@ package com.myadd.myadd.user.sigunup.kakao;
 import lombok.Data;
 
 @Data
-public class OAuthToken {
+public class OAuthToken {  // 스프링 시큐리티를 적용하지 않은 Oauth2 데이터 파싱을 위한 클래스 (현재 프로젝트에서 사용 x)
 
     private String access_token;
     private String token_type;
