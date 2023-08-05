@@ -1,6 +1,7 @@
 package com.myadd.myadd.post.crud.dto;
 
 import com.myadd.myadd.post.domain.PostEntity;
+import com.myadd.myadd.user.domain.UserEntity;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.Getter;
@@ -16,6 +17,8 @@ import java.time.LocalDateTime;
 @Slf4j
 public class PostBackDto {
     private Long postId;
+
+    private Long userId;
 
     private LocalDateTime createdAt;
 
@@ -54,6 +57,7 @@ public class PostBackDto {
     public PostEntity toPostEntity(PostBackDto postBackDto){
         PostEntity post = new PostEntity();
 
+        post.setUserId(postBackDto.getUserId());
         post.setPostId(postBackDto.getPostId());
         post.setCreatedAt(LocalDateTime.now());
         post.setModifiedAt(LocalDateTime.now());
