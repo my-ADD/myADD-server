@@ -33,7 +33,6 @@ public class PostSearchController {
         Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
         List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId,0,page);
         model.addAttribute("postList",postSearchDtoList);
-
         return postSearchDtoList;
     }
     /**
