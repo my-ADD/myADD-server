@@ -4,6 +4,9 @@ import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchFrontDto;
 import com.myadd.myadd.post.search.service.PostSearchService;
+import com.myadd.myadd.user.security.PrincipalDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +24,13 @@ public class PostSearchController {
     }
     /**
     특정 유저의 포토카드 전체 목록 조회 API(기록순)
-     [GET] /posts/get-post-list/createdAt?userId={userId}&page={page}
+     [GET] /posts/get-post-list-all/createdAt?page={page}
      */
-    @GetMapping("/posts/get-post-list/createdAt")
+    @GetMapping("/posts/get-post-listAll/createdAt")
     @ResponseBody
-    public List<PostBackDto> postListByCreatedAt(@RequestParam(required = false) Long userId, @RequestParam(required = false, defaultValue = "0") int page, Model model){
+    public List<PostBackDto> postListByCreatedAt(@RequestParam(required = false, defaultValue = "0") int page, Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
         List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId,0,page);
         model.addAttribute("postList",postSearchDtoList);
 
@@ -33,12 +38,14 @@ public class PostSearchController {
     }
     /**
      특정 유저의 포토카드 전체 목록 조회 API(이름순)
-     [GET] /posts/get-post-list/title?userId={userId}&page={page}
+     [GET] /posts/get-post-list-all/title?page={page}
      */
     //PathVariable
-    @GetMapping("/posts/get-post-list/title")
+    @GetMapping("/posts/get-post-listAll/title")
     @ResponseBody
-    public List<PostBackDto> postListByTitle(@RequestParam(required = false) Long userId,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+    public List<PostBackDto> postListByTitle(@RequestParam(required = false, defaultValue = "0") int page, Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
         List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId,1,page);
         model.addAttribute("postList",postSearchDtoList);
 
@@ -47,12 +54,12 @@ public class PostSearchController {
 
     /**
      포토 카드 하나의 앞장 상세 정보 조회
-     [GET] /posts/get-post/:post_id/front
+     [GET] /posts/get-post/front?postId={postId}
      */
     //PathVariable
-    @GetMapping("/posts/get-post/{post_id}/front")
+    @GetMapping("/posts/get-post/front")
     @ResponseBody
-    public PostSearchFrontDto frontPage(@PathVariable("post_id") Long postId,Model model){
+    public PostSearchFrontDto frontPage(@RequestParam("postId") Long postId,Model model){
         PostSearchFrontDto postSearchFrontDto = postSearchService.getFrontPage(postId);
 
         return postSearchFrontDto;
@@ -60,23 +67,25 @@ public class PostSearchController {
 
     /**
      포토 카드 하나의 뒷장 상세 정보 조회
-     [GET] /posts/get-post/:post_id/back
+     [GET] /posts/get-post/back?postId={postId}
      */
     //PathVariable
-    @GetMapping("/posts/get-post/{post_id}/back")
+    @GetMapping("/posts/get-post/back")
     @ResponseBody
-    public PostSearchBackDto backPage(@PathVariable("post_id") Long postId,Model model){
+    public PostSearchBackDto backPage(@RequestParam("postId") Long postId,Model model){
         PostSearchBackDto postSearchBackDto = postSearchService.getBackPage(postId);
 
         return postSearchBackDto;
     }
     /**
      특정 유저의 포토카드 플랫폼에 따른 목록 조회 API(기록순)
-     [GET] /posts/get-post-list/:category/:platform/createdAt?userId={userId}&page={page}
+     [GET] /posts/get-post-list/createdAt?category={category}&platform={platform}&page={page}
      */
-    @GetMapping("/posts/get-post-list/{category}/{platform}/createdAt")
+    @GetMapping("/posts/get-post-list/createdAt")
     @ResponseBody
-    public List<PostBackDto> postListByPlatformByCreatedAt(@PathVariable String category,@PathVariable int platform,@RequestParam(required = false) Long userId,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+    public List<PostBackDto> postListByPlatformByCreatedAt(@RequestParam String category,@RequestParam int platform,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
         List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,0,category,platform,page);
         model.addAttribute("postList",postSearchDtoList);
 
@@ -84,12 +93,14 @@ public class PostSearchController {
     }
     /**
      특정 유저의 포토카드 플랫폼에 따른 목록 조회 API(이름순)
-     [GET] /posts/get-post-list/:category/:platform/title?userId={userId}&page={page}
+     [GET] /posts/get-post-list/title?category={category}&platform={platform}&page={page}
      */
     //PathVariable
-    @GetMapping("/posts/get-post-list/{category}/{platform}/title")
+    @GetMapping("/posts/get-post-list/title")
     @ResponseBody
-    public List<PostBackDto> postListByPlatformByTile(@PathVariable String category,@PathVariable int platform,@RequestParam(required = false) Long userId,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+    public List<PostBackDto> postListByPlatformByTile(@RequestParam String category,@RequestParam int platform,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
         List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,1,category,platform,page);
         model.addAttribute("postList",postSearchDtoList);
 
