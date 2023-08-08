@@ -2,6 +2,7 @@ package com.myadd.myadd.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.myadd.myadd.user.domain.dto.ProfileChangeRequestDto;
 import com.myadd.myadd.user.domain.entity.UserEntity;
 import com.myadd.myadd.user.security.service.PrincipalDetails;
 import com.myadd.myadd.user.service.ChangeProfileService;
@@ -23,8 +24,8 @@ public class ChangeProfileController {
     private final ChangeProfileService changeProfileService;
 
     @ResponseBody
-    @PatchMapping("/change/my-profile") // 프로필 수정(닉네임, 프로필 사진)
-    public String changeProfile(@RequestParam String nickname, @RequestParam String profile) {
+    @PatchMapping("/change/my-profile") // 모든 방식 - 프로필 수정
+    public String changeProfile(@RequestBody ProfileChangeRequestDto profileChangeRequestDto) {
 
         String response = "";
         UserEntity user = null;
@@ -34,7 +35,7 @@ public class ChangeProfileController {
 
         user = changeProfileService.findUser(id, email);
 
-        response = changeProfileService.changeProfile(user, nickname, profile);
+        response = changeProfileService.changeProfile(user, profileChangeRequestDto.getNickname(), profileChangeRequestDto.getProfile());
 
         return response;
     }
