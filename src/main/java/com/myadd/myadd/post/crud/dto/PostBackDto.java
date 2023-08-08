@@ -1,12 +1,9 @@
 package com.myadd.myadd.post.crud.dto;
 
 import com.myadd.myadd.post.domain.PostEntity;
-import com.myadd.myadd.user.domain.UserEntity;
 import com.sun.istack.NotNull;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
@@ -45,10 +42,10 @@ public class PostBackDto {
     private String genre;
 
     @NotNull
-    private int platform;
+    private String platform;
 
     @NotNull
-    private int emoji;
+    private String emoji;
 
     private String comment;
 
@@ -78,6 +75,7 @@ public class PostBackDto {
     public PostEntity toModPostEntity(PostBackDto postBackDto){
         PostEntity post = new PostEntity();
 
+        post.setUserId(postBackDto.getUserId());
         post.setPostId(postBackDto.getPostId());
         post.setCreatedAt(postBackDto.getCreatedAt());
         post.setModifiedAt(LocalDateTime.now());

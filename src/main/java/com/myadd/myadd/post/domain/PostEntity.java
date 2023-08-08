@@ -53,12 +53,14 @@ public class PostEntity {
 
     private String genre;
 
-    private int platform;
+    private String platform;
 
-    private int emoji;
+    private String emoji;
 
     public PostBackDto toPostBackDto(PostEntity post){
         PostBackDto postBackDto = new PostBackDto();
+
+        postBackDto.setUserId(post.getUserId());
         postBackDto.setPostId(post.getPostId());
         postBackDto.setCreatedAt(post.getCreatedAt());
         postBackDto.setModifiedAt(post.getModifiedAt());
