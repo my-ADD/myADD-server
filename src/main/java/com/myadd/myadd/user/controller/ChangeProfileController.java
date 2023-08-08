@@ -22,8 +22,9 @@ public class ChangeProfileController {
     @Autowired
     private final ChangeProfileService changeProfileService;
 
+    @ResponseBody
     @PatchMapping("/change/my-profile") // 프로필 수정(닉네임, 프로필 사진)
-    public @ResponseBody String changeProfile(@RequestParam String nickname, @RequestParam String profile) {
+    public String changeProfile(@RequestParam String nickname, @RequestParam String profile) {
 
         String response = "";
         UserEntity user = null;
@@ -38,8 +39,9 @@ public class ChangeProfileController {
         return response;
     }
 
+    @ResponseBody
     @GetMapping("/get/my-profile")
-    public @ResponseBody String getMyProfile(){
+    public String getMyProfile(){
 
         UserEntity user = null;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

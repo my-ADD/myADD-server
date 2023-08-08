@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class EmailLoginService {
+public class UserService {
 
     private final UserRepository userRepository;
 

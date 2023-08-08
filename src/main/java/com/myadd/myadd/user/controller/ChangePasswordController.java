@@ -1,6 +1,6 @@
 package com.myadd.myadd.user.controller;
 
-import com.myadd.myadd.user.domain.dto.EmailAuthRequestDto;
+import com.myadd.myadd.user.domain.dto.EmailRequestDto;
 import com.myadd.myadd.user.service.ChangePasswordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,14 +23,14 @@ public class ChangePasswordController {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @PostMapping("/send-code") // 이메일 회원 - 회원가입 이메일 중복 확인
-    public String sendCode(@RequestBody EmailAuthRequestDto emailAuthRequestDto) throws MessagingException, UnsupportedEncodingException {
+    public String sendCode(@RequestBody EmailRequestDto emailRequestDto) throws MessagingException, UnsupportedEncodingException {
         String authCode="";
 
-        log.info("first = {}", emailAuthRequestDto.getEmail());
+        log.info("first = {}", emailRequestDto.getEmail());
             // 이메일로 회원가입한 유저가 아닌 경우 예외 처리
-            if(emailService.isUserTypeEmail(emailAuthRequestDto.getEmail())){
-                emailService.deleteExistCode(emailAuthRequestDto.getEmail());
-                authCode = emailService.sendEmail(emailAuthRequestDto.getEmail());
+            if(emailService.isUserTypeEmail(emailRequestDto.getEmail())){
+                emailService.deleteExistCode(emailRequestDto.getEmail());
+                authCode = emailService.sendEmail(emailRequestDto.getEmail());
 
                 executorService.schedule(emailService::deleteExpiredAuthNum, 5, TimeUnit.MINUTES);
 
