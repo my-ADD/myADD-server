@@ -22,7 +22,7 @@ public class ChangePasswordController {
     private final ChangePasswordService emailService;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-    @PostMapping("/send-code") // 이메일 회원 - 회원가입 이메일 중복 확인
+    @PostMapping("/send-code") // 이메일 회원 - 비밀번호 변경 중 인증번호 전송
     public String sendCode(@RequestBody EmailRequestDto emailRequestDto) throws MessagingException, UnsupportedEncodingException {
         String authCode="";
 
@@ -42,10 +42,10 @@ public class ChangePasswordController {
     }
 
     // 사용자가 입력한 인증 코드와 db의 인증 정보 비교
-    @PostMapping("/check-code") // 이메일 인증번호 확인
-    public String verifyCode(@RequestParam String email, @RequestParam String code){
-        if(emailService.isUserTypeEmail(email)) {
-            return emailService.verifyCode(email, code);
+    @PostMapping("/check-code") // 이메일 회원 - 비밀번호 변경 중 인증번호 확인
+    public String checkCode(@RequestBody EmailRequestDto emailRequestDto){
+        if(emailService.isUserTypeEmail(emailRequestDto.email)) {
+            return emailService.verifyCode(emailRequestDto.email, emailRequestDto.code);
         }
         else{
             return "not email user";
