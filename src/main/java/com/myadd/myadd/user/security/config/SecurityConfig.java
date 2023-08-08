@@ -1,6 +1,6 @@
 package com.myadd.myadd.user.security.config;
 
-import com.myadd.myadd.user.security.PrincipalOauth2UserService;
+import com.myadd.myadd.user.security.service.PrincipalOauth2UserService;
 import com.myadd.myadd.user.security.handler.CustomAuthenticationFailureHandler;
 import com.myadd.myadd.user.security.handler.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;

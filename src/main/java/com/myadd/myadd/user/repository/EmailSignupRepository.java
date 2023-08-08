@@ -1,6 +1,6 @@
 package com.myadd.myadd.user.repository;
 
-import com.myadd.myadd.user.sigunup.email.change.password.domain.EmailAuthEntity;
+import com.myadd.myadd.user.domain.entity.EmailAuthEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -2,7 +2,7 @@ package com.myadd.myadd.post.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.myadd.myadd.post.crud.dto.PostBackDto;
-import com.myadd.myadd.user.domain.UserEntity;
+import com.myadd.myadd.user.domain.entity.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
