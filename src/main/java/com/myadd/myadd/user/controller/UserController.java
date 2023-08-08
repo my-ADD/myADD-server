@@ -17,13 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping(value = "/users")
-@Controller
+@RestController
 public class UserController {
 
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @ResponseBody
     @PostMapping("/join") // 이메일 회원 - 회원가입
     public String joinUser(@RequestBody UserDto userDto){
         userDto.setUserType(UserTypeEnum.EMAIL);
@@ -33,7 +32,6 @@ public class UserController {
         return "success";
     }
 
-    @ResponseBody
     @PostMapping("/join/email/check-duplicate") // 이메일 회원 - 회원가입 이메일 중복 확인
     public String emailCheckDuplicate(@RequestBody EmailRequestDto emailRequestDto){
         UserEntity userEntity = userService.findByEmail(emailRequestDto.email);
@@ -44,7 +42,6 @@ public class UserController {
         return "Not Duplicate Email!";
     }
 
-    @ResponseBody
     @DeleteMapping("/my-info/delete/user") // 모든 방식 로그인 유저에 대해서 사용 가능
     public String deleteUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
