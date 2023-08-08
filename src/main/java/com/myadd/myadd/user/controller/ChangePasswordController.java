@@ -1,6 +1,7 @@
 package com.myadd.myadd.user.controller;
 
 import com.myadd.myadd.user.domain.dto.EmailRequestDto;
+import com.myadd.myadd.user.domain.dto.PasswordChangeRequestDto;
 import com.myadd.myadd.user.service.ChangePasswordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,9 +54,9 @@ public class ChangePasswordController {
     }
 
     @PutMapping("") // 이메일 회원 - 비번변경 비밀번호 변경
-    public String changePassword(@RequestParam String email, @RequestParam String password){
-        if(emailService.isUserTypeEmail(email)) {
-            return emailService.changePassword(email, password);
+    public String changePassword(@RequestBody PasswordChangeRequestDto passwordChangeRequestDto){
+        if(emailService.isUserTypeEmail(passwordChangeRequestDto.getEmail())) {
+            return emailService.changePassword(passwordChangeRequestDto.getEmail(), passwordChangeRequestDto.getPassword());
         }
 
         return "not email user";
