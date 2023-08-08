@@ -5,11 +5,11 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class EmailRequestDto {
+public class PasswordChangeRequestDto {
 
-    @NotEmpty(message = "이메일을 입력해주세요")
+    @NotEmpty
     private String email;
 
     @NotEmpty
-    private String code;
+    private String password;
 }

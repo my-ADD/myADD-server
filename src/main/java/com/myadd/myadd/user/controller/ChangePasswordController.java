@@ -44,27 +44,25 @@ public class ChangePasswordController {
     // 사용자가 입력한 인증 코드와 db의 인증 정보 비교
     @PostMapping("/check-code") // 이메일 회원 - 비밀번호 변경 중 인증번호 확인
     public String checkCode(@RequestBody EmailRequestDto emailRequestDto){
-        if(emailService.isUserTypeEmail(emailRequestDto.email)) {
-            return emailService.verifyCode(emailRequestDto.email, emailRequestDto.code);
+        if(emailService.isUserTypeEmail(emailRequestDto.getEmail())) {
+            return emailService.verifyCode(emailRequestDto.getEmail(), emailRequestDto.getCode());
         }
         else{
             return "not email user";
         }
     }
 
-    @PutMapping("") // 비밀번호 변경
+    @PutMapping("") // 이메일 회원 - 비번변경 비밀번호 변경
     public String changePassword(@RequestParam String email, @RequestParam String password){
         if(emailService.isUserTypeEmail(email)) {
             return emailService.changePassword(email, password);
         }
-        else{
-            return "not email user";
-        }
 
+        return "not email user";
     }
 
-    @PreDestroy
-    public void destroy() {
+    @PreDestroy // 스케줄러 소멸
+    public void scheduledExecutorDestroy() {
         executorService.shutdown();
     }
 }

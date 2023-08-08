@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+// 로그인은 spring security에서 처리해주므로 별도로 controller를 구현할 필요 없음
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping(value = "/users")
@@ -22,6 +23,16 @@ public class UserController {
 
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @PostMapping("/join/email/check-duplicate") // 이메일 회원 - 회원가입 이메일 중복 확인
+    public String emailCheckDuplicate(@RequestBody EmailRequestDto emailRequestDto){
+        UserEntity userEntity = userService.findByEmail(emailRequestDto.getEmail());
+
+        if(userEntity != null)
+            return "Duplicate Email!";
+
+        return "Not Duplicate Email!";
+    }
 
     @PostMapping("/join") // 이메일 회원 - 회원가입
     public String joinUser(@RequestBody UserDto userDto){
@@ -32,16 +43,6 @@ public class UserController {
         return "success";
     }
 
-    @PostMapping("/join/email/check-duplicate") // 이메일 회원 - 회원가입 이메일 중복 확인
-    public String emailCheckDuplicate(@RequestBody EmailRequestDto emailRequestDto){
-        UserEntity userEntity = userService.findByEmail(emailRequestDto.email);
-
-        if(userEntity != null)
-            return "Duplicate Email!";
-
-        return "Not Duplicate Email!";
-    }
-
     @DeleteMapping("/my-info/delete/user") // 모든 방식 로그인 유저에 대해서 사용 가능
     public String deleteUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -49,12 +50,6 @@ public class UserController {
         Long id = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
         return userService.deleteUser(id, email);
     }
-
-    // 테스트 용
-//    @GetMapping("/home")
-//    public String home(){
-//        return "home";
-//    }
 
 //    @GetMapping("/test") // 카카오에도 시큐리티 적용하고 이메일 잘 나오는지 확인해볼것!
 //    public @ResponseBody String test(@AuthenticationPrincipal PrincipalDetails principalDetails){
