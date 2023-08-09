@@ -1,23 +1,18 @@
 package com.myadd.myadd.post.crud.controller;
 
 import com.myadd.myadd.post.crud.dto.PostBackDto;
-import com.myadd.myadd.post.crud.dto.PostFrontDto;
 import com.myadd.myadd.post.crud.service.PostCrudService;
-import com.myadd.myadd.post.domain.PostEntity;
+import com.myadd.myadd.user.security.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,59 +21,36 @@ public class PostCrudController {
 
     private final PostCrudService postCrudService;
 
-
-    //포토카드 글작성1
-    @PostMapping(value = "/posts/add-post")
-    public ModelAndView create(@ModelAttribute("postFrontDto") PostFrontDto postFrontDto, Model model) {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("post/write2");
-        mv.addObject("image", postFrontDto.getImage());
-        mv.addObject("comment", postFrontDto.getComment());
-        return mv;
-    }
-
-//    @PostMapping(value = "/posts/add-backPost")
-//    public String backCreate(@Valid @ModelAttribute("postBackDto") PostBackDto postBackDto, BindingResult bindingResult, Model model) {
-//        //오류시 입력값 다 지워지는 부분 수정 필요
-//        if(bindingResult.hasErrors()) {
-//            model.addAttribute("image", postBackDto.getImage());
-//            model.addAttribute("comment", postBackDto.getComment());
-//            model.addAttribute("postBackDto", postBackDto);
-//            log.info("errors = {}", bindingResult);
-//            return "post/write2";
-//        }
-//
-//        log.info(postBackDto.getTitle());
-//        postCrudService.savePost(postBackDto);
-//        return "redirect:/home";
-//    }
-
-    //작성2
-    @PostMapping(value = "/posts/add",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    //포토카드 작성 multipartFile 사용시 RequestPart 사용해야함.
+    @PostMapping(value = "/posts/add-post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody // 대신 @RequestPart 로 적기
-    public String create(@RequestPart PostBackDto post, @RequestPart(value = "imageURL", required = false)MultipartFile imageURL) throws IOException {
+    public PostBackDto create(@RequestPart PostBackDto post, @RequestPart(value = "imageURL", required = false)MultipartFile imageURL) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = ((PrincipalDetails) authentication.getPrincipal()).getId();
         log.info(String.valueOf(imageURL));
-        postCrudService.savePost(post, imageURL);
-        log.info("입력완료");
-        return "저장완료";
+        postCrudService.savePost(post, imageURL, id);
+        return post;
     }
 
 
     //포토카드 삭제
     @ResponseBody
-    @DeleteMapping(value = "/posts/delete-post/{postId}")
-    public String delete(@PathVariable("postId") Long id) {
+    @DeleteMapping(value = "/posts/delete-post")
+    public String delete(@RequestParam("postId") Long id) {
        postCrudService.deletePost(id);
 
-       return "삭제";
+       return id + "번 삭제 완료";
     }
 
 
     //포토카드 수정
-//    @PutMapping("/posts/update-post/{postId}")
-//    public String update(PostBackDto postBackDto) {
-//        log.info(String.valueOf(postBackDto.getPostId()));
-//        postCrudService.savePost(postBackDto);
-//        return "redirect:/home";
-//    }
+    @PutMapping(value = "/posts/update-post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody // 대신 @RequestPart 로 적기
+    public String update(@RequestParam("postId") Long postId, @RequestPart PostBackDto post, @RequestPart(value = "imageURL", required = false)MultipartFile imageURL) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long id = ((PrincipalDetails) authentication.getPrincipal()).getId();
+        log.info(String.valueOf(id));
+        postCrudService.modifyPost(postId, post, imageURL, id);
+        return "수정 완료";
+    }
 }

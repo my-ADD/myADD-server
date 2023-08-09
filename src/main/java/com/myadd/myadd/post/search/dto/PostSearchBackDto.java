@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 public class PostSearchBackDto {
     private String title;
-    private int emoji;
-    private int platform;
+    private String emoji;
+    private String platform;
     private String genre;
     private LocalDateTime createdAt;
     private String startedAt;

@@ -3,9 +3,7 @@ package com.myadd.myadd.post.crud.dto;
 import com.myadd.myadd.post.domain.PostEntity;
 import com.sun.istack.NotNull;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
@@ -16,6 +14,8 @@ import java.time.LocalDateTime;
 @Slf4j
 public class PostBackDto {
     private Long postId;
+
+    private Long userId;
 
     private LocalDateTime createdAt;
 
@@ -42,10 +42,10 @@ public class PostBackDto {
     private String genre;
 
     @NotNull
-    private int platform;
+    private String platform;
 
     @NotNull
-    private int emoji;
+    private String emoji;
 
     private String comment;
 
@@ -54,6 +54,7 @@ public class PostBackDto {
     public PostEntity toPostEntity(PostBackDto postBackDto){
         PostEntity post = new PostEntity();
 
+        post.setUserId(postBackDto.getUserId());
         post.setPostId(postBackDto.getPostId());
         post.setCreatedAt(LocalDateTime.now());
         post.setModifiedAt(LocalDateTime.now());
@@ -70,4 +71,26 @@ public class PostBackDto {
         post.setImage(postBackDto.getImage());
         return post;
     }
+
+    public PostEntity toModPostEntity(PostBackDto postBackDto){
+        PostEntity post = new PostEntity();
+
+        post.setUserId(postBackDto.getUserId());
+        post.setPostId(postBackDto.getPostId());
+        post.setCreatedAt(postBackDto.getCreatedAt());
+        post.setModifiedAt(LocalDateTime.now());
+        post.setStartedAt(postBackDto.getStartedAt());
+        post.setEndedAt(postBackDto.getEndedAt());
+        post.setTitle(postBackDto.getTitle());
+        post.setMemo(postBackDto.getMemo());
+        post.setCategory(postBackDto.getCategory());
+        post.setViews(postBackDto.getViews());
+        post.setGenre(postBackDto.getGenre());
+        post.setPlatform(postBackDto.getPlatform());
+        post.setEmoji(postBackDto.getEmoji());
+        post.setComment(postBackDto.getComment());
+        post.setImage(postBackDto.getImage());
+        return post;
+    }
+
 }

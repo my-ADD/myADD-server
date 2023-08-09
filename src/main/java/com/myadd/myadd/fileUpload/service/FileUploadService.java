@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -40,5 +41,10 @@ public class FileUploadService {
 
         // Url 가져와서 반환
         return amazonS3.getUrl(bucket, s3FileName).toString();
+    }
+
+    public void fileDelete(String fileName) {
+        log.info(fileName);
+        amazonS3.deleteObject(bucket, fileName);
     }
 }

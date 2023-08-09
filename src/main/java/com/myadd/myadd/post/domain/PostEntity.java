@@ -20,8 +20,11 @@ public class PostEntity {
     private Long postId;
 
     @JsonIgnore //이걸 붙이면 에러 해결할 수 있는데 일단 DTO로 해결..
-    @ManyToOne @JoinColumn(name="user_id")
+    @ManyToOne @JoinColumn(name="user_id", insertable = false, updatable = false)
     private UserEntity user;
+
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name="created_at")
     private LocalDateTime createdAt;
@@ -50,12 +53,14 @@ public class PostEntity {
 
     private String genre;
 
-    private int platform;
+    private String platform;
 
-    private int emoji;
+    private String emoji;
 
     public PostBackDto toPostBackDto(PostEntity post){
         PostBackDto postBackDto = new PostBackDto();
+
+        postBackDto.setUserId(post.getUserId());
         postBackDto.setPostId(post.getPostId());
         postBackDto.setCreatedAt(post.getCreatedAt());
         postBackDto.setModifiedAt(post.getModifiedAt());
