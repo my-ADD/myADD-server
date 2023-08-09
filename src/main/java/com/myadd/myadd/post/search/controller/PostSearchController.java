@@ -4,7 +4,7 @@ import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchFrontDto;
 import com.myadd.myadd.post.search.service.PostSearchService;
-import com.myadd.myadd.user.security.PrincipalDetails;
+import com.myadd.myadd.user.security.service.PrincipalDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
