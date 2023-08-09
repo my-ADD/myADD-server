@@ -5,7 +5,7 @@ import com.myadd.myadd.post.domain.PostEntity;
 import com.myadd.myadd.post.repository.PostRepository;
 import com.myadd.myadd.post.search.dto.PostSearchBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchFrontDto;
-import com.myadd.myadd.user.domain.UserEntity;
+import com.myadd.myadd.user.domain.entity.UserEntity;
 import com.myadd.myadd.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

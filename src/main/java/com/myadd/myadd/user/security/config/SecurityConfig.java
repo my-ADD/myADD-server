@@ -1,6 +1,6 @@
 package com.myadd.myadd.user.security.config;
 
-import com.myadd.myadd.user.security.PrincipalOauth2UserService;
+import com.myadd.myadd.user.security.service.PrincipalOauth2UserService;
 import com.myadd.myadd.user.security.handler.CustomAuthenticationFailureHandler;
 import com.myadd.myadd.user.security.handler.CustomAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class SecurityConfig {
                 })
                 .and()
                 .oauth2Login()
-                .loginPage("/home") // 구글 로그인 완료 후 후처리가 필요함. 후처리는 PrincipalOauth2UserService에서 진행
+                .loginPage("/afterLogin") // 구글 로그인 완료 후 후처리가 필요함. 후처리는 PrincipalOauth2UserService에서 진행
                 .userInfoEndpoint()
                 .userService(principalOauth2UserService); // 로그인한 사용자에게 받은 정보가 principalOauth2UserService의 매개변수인 userRequest로 return
         return httpSecurity.build();

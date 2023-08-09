@@ -1,12 +1,10 @@
 package com.myadd.myadd.post.repository;
 
 import com.myadd.myadd.post.domain.PostEntity;
-import com.myadd.myadd.user.domain.UserEntity;
-import org.apache.catalina.User;
+import com.myadd.myadd.user.domain.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 

@@ -1,7 +1,6 @@
 package com.myadd.myadd.user.repository;
 
-import com.myadd.myadd.user.domain.UserEntity;
-import org.apache.catalina.User;
+import com.myadd.myadd.user.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
