@@ -16,9 +16,9 @@ public interface PostRepository extends JpaRepository<PostEntity,Long> {
     // 사용자의 포토카드 전체 리스트 조회
     Page<PostEntity> findByUser(UserEntity user, Pageable pageable);
     // 포토카드 플랫폼에 따른 목록 조회(기록순)
-    Page<PostEntity> findByPlatformAndCategoryAndUserOrderByCreatedAtDesc(int platform, String category, UserEntity user, Pageable pageable);
+    Page<PostEntity> findByPlatformAndCategoryAndUserOrderByCreatedAtDesc(String platform, String category, UserEntity user, Pageable pageable);
     // 포토카드 플랫폼에 따른 목록 조회(이름순)
-    Page<PostEntity> findByPlatformAndCategoryAndUserOrderByTitle(int platform,String category,UserEntity user,Pageable pageable);
+    Page<PostEntity> findByPlatformAndCategoryAndUserOrderByTitle(String platform,String category,UserEntity user,Pageable pageable);
     // 포토카드 하나 조회
     PostEntity findByPostId(Long postId);
 }

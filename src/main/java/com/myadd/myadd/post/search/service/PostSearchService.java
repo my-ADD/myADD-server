@@ -49,7 +49,7 @@ public class PostSearchService {
     //특정 사용자의 포토카드 플랫폼 목록 조회(기록순,이름순)
     //flag 0: 기록순, 1:이름순
     @Transactional
-    public List<PostBackDto> getPostListByPlatform(Long userId, int flag, String category,int platform, int page) {
+    public List<PostBackDto> getPostListByPlatform(Long userId, int flag, String category,String platform, int page) {
         Page<PostEntity> posts;
         UserEntity user = userRepository.findByUserId(userId);
         Pageable pagingByCreatedAt = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "createdAt"));

@@ -82,7 +82,7 @@ public class PostSearchController {
      */
     @GetMapping("/posts/get-post-list/createdAt")
     @ResponseBody
-    public List<PostBackDto> postListByPlatformByCreatedAt(@RequestParam String category,@RequestParam int platform,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+    public List<PostBackDto> postListByPlatformByCreatedAt(@RequestParam String category,@RequestParam String platform,@RequestParam(required = false, defaultValue = "0") int page, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
         List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,0,category,platform,page);
@@ -97,7 +97,7 @@ public class PostSearchController {
     //PathVariable
     @GetMapping("/posts/get-post-list/title")
     @ResponseBody
-    public List<PostBackDto> postListByPlatformByTile(@RequestParam String category,@RequestParam int platform,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+    public List<PostBackDto> postListByPlatformByTile(@RequestParam String category,@RequestParam String platform,@RequestParam(required = false, defaultValue = "0") int page, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
         List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,1,category,platform,page);
