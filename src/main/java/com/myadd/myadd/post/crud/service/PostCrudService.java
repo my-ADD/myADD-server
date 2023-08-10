@@ -21,9 +21,9 @@ public class PostCrudService {
     private final PostCrudRepository postCrudRepository;
     private final FileUploadService fileUploadService;
     @Transactional
-    public void savePost(PostBackDto postDto, MultipartFile imageURL, Long id) throws IOException {
-        if(!imageURL.isEmpty()) {
-            String storedFileName = fileUploadService.upload(imageURL);
+    public void savePost(PostBackDto postDto, MultipartFile image, Long id) throws IOException {
+        if(!image.isEmpty()) {
+            String storedFileName = fileUploadService.upload(image);
             postDto.setImage(storedFileName);
         }
         postDto.setUserId(id);
@@ -43,15 +43,15 @@ public class PostCrudService {
 
 
     @Transactional
-    public void modifyPost(Long postId, PostBackDto postDto, MultipartFile imageURL, Long id) throws IOException {
+    public void modifyPost(Long postId, PostBackDto postDto, MultipartFile image, Long id) throws IOException {
         PostEntity postEntity = postCrudRepository.findByPostId(postId);
 
         if(postEntity.getImage() != null) {
             String deleteUrl = postEntity.getImage();
             fileUploadService.fileDelete(deleteUrl.split("/")[3]);
         }
-        if (!imageURL.isEmpty()) {
-            String storedFileName = fileUploadService.upload(imageURL);
+        if (!image.isEmpty()) {
+            String storedFileName = fileUploadService.upload(image);
             postDto.setImage(storedFileName);
         }
 
