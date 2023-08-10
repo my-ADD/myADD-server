@@ -9,7 +9,8 @@ public enum BaseResponseStatus {
     SUCCESS_EMAIL_SIGNUP(true, 1001, "이메일 회원가입을 성공하였습니다."),
     SUCCESS_EMAIL_LOGIN(true, 1002, "이메일 로그인에 성공하였습니다."),
     SUCCESS_KAKAO_LOGIN(true, 1003, "카카오 로그인에 성공하였습니다."),
-    SUCCESS_GOOGLE_LOGIN(true, 1004, "구글 로그인에 성공하였습니다."),
+    SUCCESS_GOOGLE_LOGIN(true, 1004, "구글 로그인에 성공하였습니다.");
+    //SUCCESS_
 
 
     private final boolean isSuccess;

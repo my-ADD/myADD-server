@@ -61,7 +61,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
         String nickName = oAuth2UserInfo.getNickname();
         String profile = oAuth2UserInfo.getProfile();
         UserTypeEnum userTypeEnum = oAuth2UserInfo.getUsertype();
-        String email = oAuth2UserInfo.getEmail();
+        String email = provider.toLowerCase() + "_" + oAuth2UserInfo.getEmail();
         String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
 
         log.info("userInfo = {}", provider + " " + nickName + " " + profile + " " +userTypeEnum + " " + email + " "+password);
