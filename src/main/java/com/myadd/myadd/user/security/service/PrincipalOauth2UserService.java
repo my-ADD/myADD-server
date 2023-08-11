@@ -14,7 +14,11 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -82,6 +86,23 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
         else{
             userEntity = userEntityOptional.get();
             log.info("이미 존재하는 OAuth2 회원입니다.");
+        }
+
+        // 로그인 성공 메시지 생성
+        //String successMessage = "{\"message\": \"Oauth2 login success!\"}";
+        String successMessage = "{\"message\": \"" + provider + " login success!\"}";
+        // response 출력을 위한 응답 스트림 처리
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        response.setContentType("application/json;charset=UTF-8");
+        try {
+            response.getWriter().write(successMessage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            response.getWriter().flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return new PrincipalDetails(userEntity, oAuth2User.getAttributes()); // Authentication 객체 안에 들어감
