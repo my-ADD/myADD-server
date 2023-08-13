@@ -12,19 +12,29 @@ public enum BaseResponseStatus {
     SUCCESS_KAKAO_LOGIN(true, 1003, "카카오 로그인에 성공하였습니다."),
     SUCCESS_GOOGLE_LOGIN(true, 1004, "구글 로그인에 성공하였습니다."),
     SUCCESS_NOT_DUPLICATED_EMAIL(true, 1005, "중복된 이메일이 아닙니다."),
-    //SUCCESS_
-
-
+    SUCCESS_DELETE_USER(true, 1006, "회원 삭제를 성공하였습니다."),
 
 
 
 
     // 2000 : Request 오류(프론트엔드 측 오류) ex) 값을 넘기지 않았을 때
     FAILED_INVALID_INPUT(false, 2000, "입력하지 않은 정보가 존재합니다."),
+
+
+
+
     // 3000 : Response 오류(request는 정상적으로 수행됨)
     FAILED_NOT_FOUND_USER(false, 3000, "존재하지 않는 회원입니다."),
-    FAILED_DUPLICATED_EMAIL(false, 3001, "중복된 이메일입니다.");
-    // 4000 :
+    FAILED_DUPLICATED_EMAIL(false, 3001, "중복된 이메일입니다."),
+    FAILED_ALREADY_DELETE_USER(false, 3002, "이미 삭제된 회원입니다."),
+
+
+    // 4000 : 서버 측 오류
+    FAILED_NOT_AUTHENTICATION(false, 4001, "정상적으로 인증된 유저가 아닙니다.");
+
+
+
+
 
     private final boolean isSuccess;
     private final int code;

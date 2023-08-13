@@ -27,7 +27,7 @@ public class UserController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/join/email/check-duplicate") // 이메일 회원 - 회원가입 이메일 중복 확인
-    public BaseResponse<UserEntity> emailCheckDuplicate(@RequestBody EmailRequestDto emailRequestDto){
+    public BaseResponse<UserDto> emailCheckDuplicate(@RequestBody EmailRequestDto emailRequestDto){
         if(emailRequestDto.getEmail() == null)
             return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
 
@@ -43,20 +43,38 @@ public class UserController {
     }
 
     @PostMapping("/join") // 이메일 회원 - 회원가입
-    public String joinUser(@RequestBody UserDto userDto){
+    public BaseResponse<UserDto> joinUser(@RequestBody UserDto userDto){
+        if(userDto.getEmail() == null || userDto.getPassword() == null || userDto.getNickname() == null)
+            return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
+
         userDto.setUserType(UserTypeEnum.EMAIL);
         userDto.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+
+        UserEntity userEntity = userService.findByEmail(userDto.getEmail());
+
+        if(userEntity != null){
+            return new BaseResponse<>(BaseResponseStatus.FAILED_DUPLICATED_EMAIL);
+        }
+
         userService.save(userDto);
 
-        return "success";
+        return new BaseResponse<>(userDto, BaseResponseStatus.SUCCESS_EMAIL_SIGNUP);
     }
 
     @DeleteMapping("/my-info/delete/user") // 모든 방식 로그인 유저에 대해서 사용 가능
-    public String deleteUser() {
+    public BaseResponse<UserDto> deleteUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(authentication == null)
+            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
+
         String email = ((PrincipalDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
         Long id = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
-        return userService.deleteUser(id, email);
+
+        if(userService.findByEmail(email) == null || !userService.deleteUser(id, email))
+            return new BaseResponse<>(BaseResponseStatus.FAILED_ALREADY_DELETE_USER);
+
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS_DELETE_USER);
     }
 
 //    @GetMapping("/test") // 카카오에도 시큐리티 적용하고 이메일 잘 나오는지 확인해볼것!
