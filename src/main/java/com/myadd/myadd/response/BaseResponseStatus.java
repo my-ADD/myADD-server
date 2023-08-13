@@ -14,6 +14,7 @@ public enum BaseResponseStatus {
     SUCCESS_NOT_DUPLICATED_EMAIL(true, 1005, "중복된 이메일이 아닙니다."),
     SUCCESS_DELETE_USER(true, 1006, "회원 삭제를 성공하였습니다."),
     SUCCESS_LOGOUT(true, 1007, "로그아웃에 성공하였습니다."),
+    SUCCESS_SEND_AUTHCODE(true, 1008, "이메일 인증번호 전송을 성공하였습니다"),
 
 
 
@@ -28,6 +29,7 @@ public enum BaseResponseStatus {
     FAILED_NOT_FOUND_USER(false, 3000, "존재하지 않는 회원입니다."),
     FAILED_DUPLICATED_EMAIL(false, 3001, "중복된 이메일입니다."),
     FAILED_ALREADY_DELETE_USER(false, 3002, "이미 삭제된 회원입니다."),
+    FAILED_NOT_EMAIL_USER(false, 3003, "이메일 유저가 아닙니다."),
 
 
 

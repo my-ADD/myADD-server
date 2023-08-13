@@ -1,8 +1,13 @@
 package com.myadd.myadd.user.controller;
 
+import com.myadd.myadd.response.BaseResponse;
+import com.myadd.myadd.response.BaseResponseStatus;
+import com.myadd.myadd.user.domain.dto.EmailAuthCodeCheckDto;
+import com.myadd.myadd.user.domain.dto.EmailAuthCodeDto;
 import com.myadd.myadd.user.domain.dto.EmailRequestDto;
 import com.myadd.myadd.user.domain.dto.PasswordChangeRequestDto;
 import com.myadd.myadd.user.service.ChangePasswordService;
+import com.myadd.myadd.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -21,36 +26,44 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class ChangePasswordController {
     private final ChangePasswordService emailService;
+    private final UserService userService;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @PostMapping("/send-code") // 이메일 회원 - 비밀번호 변경 중 인증번호 전송
-    public String sendCode(@RequestBody EmailRequestDto emailRequestDto) throws MessagingException, UnsupportedEncodingException {
-        String authCode="";
+    public BaseResponse<EmailAuthCodeDto> sendCode(@RequestBody EmailRequestDto emailRequestDto) throws MessagingException, UnsupportedEncodingException {
+
+        EmailAuthCodeDto emailAuthCodeDto = new EmailAuthCodeDto();
 
         log.info("first = {}", emailRequestDto.getEmail());
-            // 이메일로 회원가입한 유저가 아닌 경우 예외 처리
-            if(emailService.isUserTypeEmail(emailRequestDto.getEmail())){
-                emailService.deleteExistCode(emailRequestDto.getEmail());
-                authCode = emailService.sendEmail(emailRequestDto.getEmail());
 
-                executorService.schedule(emailService::deleteExpiredAuthNum, 5, TimeUnit.MINUTES);
+        // 이메일을 입력하지 않은 경우
+        if(emailRequestDto.getEmail() == null)
+            return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
 
-            return authCode;
-        }
-        else{
-            return "not email user";
-        }
+        // 회원으로 등록되지 않은 이메일을 입력한 경우
+        if(userService.findByEmail(emailRequestDto.getEmail()) == null)
+            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_FOUND_USER);
+
+        // 이메일로 회원가입한 유저가 아닌 경우 예외 처리
+        if(!emailService.isUserTypeEmail(emailRequestDto.getEmail()))
+            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_EMAIL_USER);
+
+        emailService.deleteExistCode(emailRequestDto.getEmail());
+        emailAuthCodeDto.setAuthCode(emailService.sendEmail(emailRequestDto.getEmail()));
+
+        executorService.schedule(emailService::deleteExpiredAuthNum, 5, TimeUnit.MINUTES);
+
+        return new BaseResponse<>(emailAuthCodeDto, BaseResponseStatus.SUCCESS_SEND_AUTHCODE);
+
     }
 
     // 사용자가 입력한 인증 코드와 db의 인증 정보 비교
     @PostMapping("/check-code") // 이메일 회원 - 비밀번호 변경 중 인증번호 확인
-    public String checkCode(@RequestBody EmailRequestDto emailRequestDto){
-        if(emailService.isUserTypeEmail(emailRequestDto.getEmail())) {
-            return emailService.verifyCode(emailRequestDto.getEmail(), emailRequestDto.getCode());
-        }
-        else{
-            return "not email user";
-        }
+    public String checkCode(@RequestBody EmailAuthCodeCheckDto emailAuthCodeCheckDto){
+        if(emailService.isUserTypeEmail(emailAuthCodeCheckDto.getEmail()))
+            return emailService.verifyCode(emailAuthCodeCheckDto.getEmail(), emailAuthCodeCheckDto.getAuthCode());
+
+        return "not email user";
     }
 
     @PutMapping("") // 이메일 회원 - 비번변경 비밀번호 변경
