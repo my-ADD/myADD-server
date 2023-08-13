@@ -16,17 +16,15 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         AuthenticationSuccessHandler.super.onAuthenticationSuccess(request, response, chain, authentication);
-        BaseResponse<BaseResponseStatus> successResponse = new BaseResponse<>(BaseResponseStatus.SUCCESS_EMAIL_LOGIN);
-        String jsonResponse = new ObjectMapper().writeValueAsString(successResponse);
-
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(jsonResponse);
+        emailLoginSuccess(response);
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        emailLoginSuccess(response);
+    }
+
+    public void emailLoginSuccess(HttpServletResponse response) throws IOException {
         BaseResponse<BaseResponseStatus> successResponse = new BaseResponse<>(BaseResponseStatus.SUCCESS_EMAIL_LOGIN);
         String jsonResponse = new ObjectMapper().writeValueAsString(successResponse);
 
