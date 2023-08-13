@@ -58,7 +58,7 @@ public class UserController {
 
         userService.save(userDto);
 
-        return new BaseResponse<>(userDto, BaseResponseStatus.SUCCESS_EMAIL_SIGNUP);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS_EMAIL_SIGNUP);
     }
 
     @DeleteMapping("/my-info/delete/user") // 모든 방식 로그인 유저에 대해서 사용 가능
