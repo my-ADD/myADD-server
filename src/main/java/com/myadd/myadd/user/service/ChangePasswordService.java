@@ -26,7 +26,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class ChangePasswordService {
 
-    // 의존성 주입을 통해 필요한 객체를 가져옴
+    // 의존성 주입을 통해 필요한 객체를 가져옴0
     private final JavaMailSender emailSender;
     // 타임리프를 사용하기 위한 객체를 의존성 주입으로 가져옴
     private final SpringTemplateEngine templateEngine;

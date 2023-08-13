@@ -1,5 +1,7 @@
 package com.myadd.myadd.user.controller;
 
+import com.myadd.myadd.response.BaseResponse;
+import com.myadd.myadd.response.BaseResponseStatus;
 import com.myadd.myadd.user.domain.dto.EmailRequestDto;
 import com.myadd.myadd.user.domain.entity.UserEntity;
 import com.myadd.myadd.user.domain.usertype.UserTypeEnum;
@@ -25,13 +27,19 @@ public class UserController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/join/email/check-duplicate") // 이메일 회원 - 회원가입 이메일 중복 확인
-    public String emailCheckDuplicate(@RequestBody EmailRequestDto emailRequestDto){
+    public BaseResponse<UserEntity> emailCheckDuplicate(@RequestBody EmailRequestDto emailRequestDto){
+        if(emailRequestDto.getEmail() == null)
+            return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
+
         UserEntity userEntity = userService.findByEmail(emailRequestDto.getEmail());
 
-        if(userEntity != null)
-            return "Duplicate Email!";
+        if(userEntity == null)
+            return new BaseResponse<>(BaseResponseStatus.SUCCESS_NOT_DUPLICATED_EMAIL);
 
-        return "Not Duplicate Email!";
+        if(userEntity.getEmail().equals(emailRequestDto.getEmail()))
+            return new BaseResponse<>(BaseResponseStatus.FAILED_DUPLICATED_EMAIL);
+
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS_NOT_DUPLICATED_EMAIL);
     }
 
     @PostMapping("/join") // 이메일 회원 - 회원가입
