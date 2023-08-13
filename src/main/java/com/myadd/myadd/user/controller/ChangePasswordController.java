@@ -59,11 +59,24 @@ public class ChangePasswordController {
 
     // 사용자가 입력한 인증 코드와 db의 인증 정보 비교
     @PostMapping("/check-code") // 이메일 회원 - 비밀번호 변경 중 인증번호 확인
-    public String checkCode(@RequestBody EmailAuthCodeCheckDto emailAuthCodeCheckDto){
-        if(emailService.isUserTypeEmail(emailAuthCodeCheckDto.getEmail()))
-            return emailService.verifyCode(emailAuthCodeCheckDto.getEmail(), emailAuthCodeCheckDto.getAuthCode());
+    public BaseResponse<EmailAuthCodeCheckDto> checkCode(@RequestBody EmailAuthCodeCheckDto emailAuthCodeCheckDto){
 
-        return "not email user";
+        // 이메일을 입력하지 않은 경우
+        if(emailAuthCodeCheckDto.getAuthCode() == null)
+            return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
+
+        if(emailService.isUserTypeEmail(emailAuthCodeCheckDto.getEmail()))
+            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_EMAIL_USER);
+
+        String response = emailService.verifyCode(emailAuthCodeCheckDto.getEmail(), emailAuthCodeCheckDto.getAuthCode());
+
+        if(response.equals("failed: over 5 minute"))
+            return new BaseResponse<>(BaseResponseStatus.FAILED_OVERTIME_AUTHCODE);
+
+        if(response.equals("failed: not correct auth code"))
+            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_CORRECT_AUTHCODE);
+
+        return new BaseResponse<>(emailAuthCodeCheckDto, BaseResponseStatus.SUCCESS_CHECK_AUTHCODE);
     }
 
     @PutMapping("") // 이메일 회원 - 비번변경 비밀번호 변경

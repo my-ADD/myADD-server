@@ -102,15 +102,15 @@ public class ChangePasswordService {
             //log.info("duration.toMinutes = {}", duration.toMinutes());
             if (duration.toMinutes() < 5) { // 5분 이하로 인증 코드를 맞춘 경우
                 emailSignupRepository.delete(emailAuthEntity);
-                return "true";
+                return "success: correct auth code";
             }
             else{
                 emailSignupRepository.delete(emailAuthEntity);
-                return "false: over 5 minute";
+                return "failed: over 5 minute";
             }
         }
         // 인증 코드가 틀린 경우
-        return "false: not correct auth code";
+        return "failed: not correct auth code";
     }
 
     public void deleteExpiredAuthNum(){

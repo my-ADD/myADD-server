@@ -15,12 +15,14 @@ public enum BaseResponseStatus {
     SUCCESS_DELETE_USER(true, 1006, "회원 삭제를 성공하였습니다."),
     SUCCESS_LOGOUT(true, 1007, "로그아웃에 성공하였습니다."),
     SUCCESS_SEND_AUTHCODE(true, 1008, "이메일 인증번호 전송을 성공하였습니다"),
+    SUCCESS_CHECK_AUTHCODE(true, 1009, "입력하신 인증번호가 일치합니다."),
 
 
 
 
     // 2000 : Request 오류(프론트엔드 측 오류) ex) 값을 넘기지 않았을 때
     FAILED_INVALID_INPUT(false, 2000, "입력하지 않은 정보가 존재합니다."),
+    FAILED_NOT_CORRECT_AUTHCODE(false, 2001, "입력하신 인증번호가 일치하지 않습니다."),
 
 
 
@@ -30,6 +32,7 @@ public enum BaseResponseStatus {
     FAILED_DUPLICATED_EMAIL(false, 3001, "중복된 이메일입니다."),
     FAILED_ALREADY_DELETE_USER(false, 3002, "이미 삭제된 회원입니다."),
     FAILED_NOT_EMAIL_USER(false, 3003, "이메일 유저가 아닙니다."),
+    FAILED_OVERTIME_AUTHCODE(false, 3004, "인증번호 시간이 만료되었습니다."),
 
 
 
