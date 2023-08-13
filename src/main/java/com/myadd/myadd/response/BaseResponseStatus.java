@@ -16,6 +16,7 @@ public enum BaseResponseStatus {
     SUCCESS_LOGOUT(true, 1007, "로그아웃에 성공하였습니다."),
     SUCCESS_SEND_AUTHCODE(true, 1008, "이메일 인증번호 전송을 성공하였습니다"),
     SUCCESS_CHECK_AUTHCODE(true, 1009, "입력하신 인증번호가 일치합니다."),
+    SUCCESS_CHANGE_PASSWORD(true, 1010, "비밀번호 변경을 성공하였습니다."),
 
 
 
@@ -40,7 +41,8 @@ public enum BaseResponseStatus {
     // 4000 : 서버 측 오류
     FAILED_EMAIL_LOGIN(false, 4000, "이메일 로그인에 실패하였습니다."),
     FAILED_LOGOUT(false, 4001, "로그아웃에 실패하였습니다."),
-    FAILED_NOT_AUTHENTICATION(false, 4002, "정상적으로 인증된 유저가 아닙니다.");
+    FAILED_NOT_AUTHENTICATION(false, 4002, "정상적으로 인증된 유저가 아닙니다."),
+    FAILED_CHANGE_PASSWORD(false, 4003, "비밀번호 변경을 실패하였습니다.");
 
 
 

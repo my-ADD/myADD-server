@@ -133,7 +133,7 @@ public class ChangePasswordService {
 
         userRepository.save(userEntity);
 
-        return "password change success!";
+        return "success: change password";
     }
 
     public Boolean isUserTypeEmail(String email) {
