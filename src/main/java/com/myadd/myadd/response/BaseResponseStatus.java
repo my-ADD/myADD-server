@@ -27,6 +27,7 @@ public enum BaseResponseStatus {
     FAILED_NOT_FOUND_USER(false, 3000, "존재하지 않는 회원입니다."),
     FAILED_DUPLICATED_EMAIL(false, 3001, "중복된 이메일입니다."),
     FAILED_ALREADY_DELETE_USER(false, 3002, "이미 삭제된 회원입니다."),
+    FAILED_EMAIL_LOGIN(false, 3003, "이메일 로그인에 실패하였습니다."),
 
 
     // 4000 : 서버 측 오류
