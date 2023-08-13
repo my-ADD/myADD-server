@@ -28,7 +28,7 @@ public class UserController {
 
     @PostMapping("/join/email/check-duplicate") // 이메일 회원 - 회원가입 이메일 중복 확인
     public BaseResponse<UserDto> emailCheckDuplicate(@RequestBody EmailRequestDto emailRequestDto){
-        if(emailRequestDto.getEmail() == null)
+        if(emailRequestDto.getEmail() == null || emailRequestDto.getEmail().equals(""))
             return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
 
         UserEntity userEntity = userService.findByEmail(emailRequestDto.getEmail());
@@ -44,7 +44,8 @@ public class UserController {
 
     @PostMapping("/join") // 이메일 회원 - 회원가입
     public BaseResponse<UserDto> joinUser(@RequestBody UserDto userDto){
-        if(userDto.getEmail() == null || userDto.getPassword() == null || userDto.getNickname() == null)
+        if(userDto.getEmail() == null || userDto.getPassword() == null || userDto.getNickname() == null
+        || userDto.getEmail().equals("") || userDto.getPassword().equals("") || userDto.getNickname().equals(""))
             return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
 
         userDto.setUserType(UserTypeEnum.EMAIL);

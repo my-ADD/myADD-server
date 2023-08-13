@@ -90,11 +90,11 @@ public class ChangePasswordController {
             return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_FOUND_USER);
 
         // 이메일 유저가 아닌 경우
-        if(emailService.isUserTypeEmail(passwordChangeRequestDto.getEmail()))
+        if(!emailService.isUserTypeEmail(passwordChangeRequestDto.getEmail()))
             return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_EMAIL_USER);
 
         // 새로운 비밀번호를 입력하지 않은 경우
-        if(passwordChangeRequestDto.getPassword() == null)
+        if(passwordChangeRequestDto.getPassword() == null || passwordChangeRequestDto.getPassword().equals(""))
             return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
         
         String response = emailService.changePassword(passwordChangeRequestDto.getEmail(), passwordChangeRequestDto.getPassword());
