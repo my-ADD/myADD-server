@@ -2,6 +2,7 @@ package com.myadd.myadd.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.myadd.myadd.fileUpload.service.FileUploadService;
 import com.myadd.myadd.response.BaseResponse;
 import com.myadd.myadd.response.BaseResponseStatus;
 import com.myadd.myadd.user.domain.dto.ProfileChangeRequestDto;
@@ -12,10 +13,14 @@ import com.myadd.myadd.user.service.ChangeProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,10 +30,15 @@ public class ChangeProfileController {
 
     @Autowired
     private final ChangeProfileService changeProfileService;
+    @Autowired
+    private final FileUploadService fileUploadService;
 
     @ResponseBody
-    @PatchMapping("/change/my-profile") // 모든 방식 - 프로필 수정
-    public BaseResponse<UserProfileDto> changeProfile(@RequestBody ProfileChangeRequestDto profileChangeRequestDto) {
+    @PatchMapping(value = "/change/my-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public BaseResponse<UserProfileDto> changeProfile(
+            @RequestPart("nickname") String nickname,
+            @RequestPart("profile") MultipartFile multipartFile) throws IOException {
+
 
         String response = "";
         UserProfileDto userProfileDto = null;
@@ -45,8 +55,9 @@ public class ChangeProfileController {
         if(userProfileDto == null)
             return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_FOUND_USER);
 
-        // public String uploadFile(@RequestParam("image")MultipartFile multipartFile) throws IOException {
-        response = changeProfileService.changeProfile(userProfileDto, profileChangeRequestDto.getNickname(), profileChangeRequestDto.getProfile());
+        String S3FileName = fileUploadService.upload(multipartFile);
+
+        response = changeProfileService.changeProfile(userProfileDto, nickname, S3FileName);
 
         if(response.equals("Failed: Change Profile"))
             return new BaseResponse<>(BaseResponseStatus.FAILED_CHANGE_PROFILE);

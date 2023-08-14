@@ -11,6 +11,8 @@ public class ProfileChangeRequestDto {
     @NotEmpty
     private String nickname;
 
-    @NotEmpty
-    private MultipartFile multipartFile;
+    //@NotEmpty
+    //private MultipartFile multipartFile;
+
+    // private String profile;
 }

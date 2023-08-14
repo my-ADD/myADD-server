@@ -1,5 +1,6 @@
 package com.myadd.myadd.user.service;
 
+import com.myadd.myadd.fileUpload.service.FileUploadService;
 import com.myadd.myadd.user.domain.dto.UserProfileDto;
 import com.myadd.myadd.user.domain.entity.UserEntity;
 import com.myadd.myadd.user.repository.UserRepository;
