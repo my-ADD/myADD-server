@@ -1,5 +1,8 @@
 package com.myadd.myadd.user.security.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myadd.myadd.response.BaseResponse;
+import com.myadd.myadd.response.BaseResponseStatus;
 import com.myadd.myadd.user.domain.entity.UserEntity;
 import com.myadd.myadd.user.domain.usertype.UserTypeEnum;
 import com.myadd.myadd.user.repository.UserRepository;
@@ -88,12 +91,19 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
             log.info("이미 존재하는 OAuth2 회원입니다.");
         }
 
-        // 로그인 성공 메시지 생성
-        //String successMessage = "{\"message\": \"Oauth2 login success!\"}";
-        String successMessage = "{\"message\": \"" + provider + " login success!\"}";
         // response 출력을 위한 응답 스트림 처리
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+
+        // 로그인 성공 메시지 생성
+        String successMessage = null;
+        try {
+            successMessage = oauth2LoginSuccess(response, provider);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         response.setContentType("application/json;charset=UTF-8");
+
         try {
             response.getWriter().write(successMessage);
         } catch (IOException e) {
@@ -106,5 +116,23 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
         }
 
         return new PrincipalDetails(userEntity, oAuth2User.getAttributes()); // Authentication 객체 안에 들어감
+    }
+
+    public String oauth2LoginSuccess(HttpServletResponse response, String provider) throws IOException {
+        BaseResponse<BaseResponseStatus> successResponse = null;
+
+        if(provider.equals("google"))
+            successResponse = new BaseResponse<>(BaseResponseStatus.SUCCESS_GOOGLE_LOGIN);
+        else if(provider.equals("kakao"))
+            successResponse = new BaseResponse<>(BaseResponseStatus.SUCCESS_KAKAO_LOGIN);
+
+        String jsonResponse = new ObjectMapper().writeValueAsString(successResponse);
+
+        // response.setStatus(HttpServletResponse.SC_OK);
+        // response.setContentType("application/json");
+        // response.setCharacterEncoding("UTF-8");
+        // response.getWriter().write(jsonResponse);
+
+        return jsonResponse;
     }
 }
