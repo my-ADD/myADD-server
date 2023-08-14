@@ -17,7 +17,7 @@ public enum BaseResponseStatus {
     SUCCESS_SEND_AUTHCODE(true, 1008, "이메일 인증번호 전송을 성공하였습니다"),
     SUCCESS_CHECK_AUTHCODE(true, 1009, "입력하신 인증번호가 일치합니다."),
     SUCCESS_CHANGE_PASSWORD(true, 1010, "비밀번호 변경을 성공하였습니다."),
-    SUCCESS_GET_PROFILE(true, 1011, "프로필 정보 반환을 성공하였습니다. "),
+    SUCCESS_GET_PROFILE(true, 1011, "프로필 정보 반환을 성공하였습니다."),
     SUCCESS_CHANGE_PROFILE(true, 1012, "프로필 정보 변경을 성공하였습니다. "),
 
 
@@ -45,7 +45,7 @@ public enum BaseResponseStatus {
     FAILED_LOGOUT(false, 4001, "로그아웃에 실패하였습니다."),
     FAILED_NOT_AUTHENTICATION(false, 4002, "정상적으로 인증된 유저가 아닙니다."),
     FAILED_CHANGE_PASSWORD(false, 4003, "비밀번호 변경을 실패하였습니다."),
-    FAILED_GET_PROFILE(true, 4004, "프로필 정보 반환에 실패하였습니다. "),
+    FAILED_GET_PROFILE(true, 4004, "프로필 정보 반환에 실패하였습니다."),
     FAILED_CHANGE_PROFILE(false, 4005, "프로필 정보 변경을 실패하였습니다.");
 
 

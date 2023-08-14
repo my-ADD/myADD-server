@@ -45,6 +45,7 @@ public class ChangeProfileController {
         if(userProfileDto == null)
             return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_FOUND_USER);
 
+        // public String uploadFile(@RequestParam("image")MultipartFile multipartFile) throws IOException {
         response = changeProfileService.changeProfile(userProfileDto, profileChangeRequestDto.getNickname(), profileChangeRequestDto.getProfile());
 
         if(response.equals("Failed: Change Profile"))
