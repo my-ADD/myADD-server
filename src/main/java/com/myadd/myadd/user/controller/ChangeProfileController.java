@@ -55,6 +55,11 @@ public class ChangeProfileController {
         if(userProfileDto == null)
             return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_FOUND_USER);
 
+        if(userProfileDto.getProfile() != null && !userProfileDto.getProfile().equals("")){
+            log.info("delete file name = {}", userProfileDto.getProfile());
+            fileUploadService.fileDelete(userProfileDto.getProfile().split("/")[3]);
+        }
+
         String S3FileName = fileUploadService.upload(multipartFile);
 
         response = changeProfileService.changeProfile(userProfileDto, nickname, S3FileName);
