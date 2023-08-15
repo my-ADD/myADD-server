@@ -1,9 +1,12 @@
 package com.myadd.myadd.post.search.controller;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchFrontDto;
 import com.myadd.myadd.post.search.service.PostSearchService;
+import com.myadd.myadd.response.BaseResponse;
+import com.myadd.myadd.response.BaseResponseStatus;
 import com.myadd.myadd.user.security.service.PrincipalDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,12 +31,20 @@ public class PostSearchController {
      */
     @GetMapping("/posts/get-post-listAll/createdAt")
     @ResponseBody
-    public List<PostBackDto> postListByCreatedAt(@RequestParam(required = false, defaultValue = "0") int page, Model model){
+    public BaseResponse<List<PostBackDto>>  postListByCreatedAt(@RequestParam(defaultValue = "-1") int page, Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null)
+            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
         Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        if(page==-1) // 클라이언트가 입력하지 않은 경우
+            return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_PAGE);
+
         List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId,0,page);
+        if(page!=0 && postSearchDtoList.size()==0){ // 없는 페이지를 요청하는 경우(첫번째 페이지 제외)
+            return new BaseResponse<>(BaseResponseStatus.GET_PAGE_NOT_EXISTS);
+        }
         model.addAttribute("postList",postSearchDtoList);
-        return postSearchDtoList;
+        return new BaseResponse<>(postSearchDtoList,BaseResponseStatus.SUCCESS);
     }
     /**
      특정 유저의 포토카드 전체 목록 조회 API(이름순)
@@ -42,13 +53,20 @@ public class PostSearchController {
     //PathVariable
     @GetMapping("/posts/get-post-listAll/title")
     @ResponseBody
-    public List<PostBackDto> postListByTitle(@RequestParam(required = false, defaultValue = "0") int page, Model model){
+    public BaseResponse<List<PostBackDto>> postListByTitle(@RequestParam(defaultValue = "-1") int page, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null)
+            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
         Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
-        List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId,1,page);
-        model.addAttribute("postList",postSearchDtoList);
+        if (page == -1) // 클라이언트가 입력하지 않은 경우
+            return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_PAGE);
 
-        return postSearchDtoList;
+        List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId, 1, page);
+        if (page != 0 && postSearchDtoList.size()==0) // 없는 페이지를 요청하는 경우(첫번째 페이지 제외)
+            return new BaseResponse<>(BaseResponseStatus.GET_PAGE_NOT_EXISTS);
+
+        model.addAttribute("postList", postSearchDtoList);
+        return new BaseResponse<>(postSearchDtoList, BaseResponseStatus.SUCCESS);
     }
 
     /**
@@ -58,10 +76,15 @@ public class PostSearchController {
     //PathVariable
     @GetMapping("/posts/get-post/front")
     @ResponseBody
-    public PostSearchFrontDto frontPage(@RequestParam("postId") Long postId,Model model){
-        PostSearchFrontDto postSearchFrontDto = postSearchService.getFrontPage(postId);
+    public BaseResponse<PostSearchFrontDto> frontPage(@RequestParam(value = "postId", defaultValue = "-1") Long postId,Model model){
+        if(postId==-1) // 포토카드 아이디를 입력하지 않은 경우
+            return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_POSTID);
 
-        return postSearchFrontDto;
+        PostSearchFrontDto postSearchFrontDto = postSearchService.getFrontPage(postId);
+        if(postSearchFrontDto==null) // 없는 포토카드인 경우
+            return new BaseResponse<>(BaseResponseStatus.GET_POST_NOT_EXISTS);
+
+        return new BaseResponse<>(postSearchFrontDto,BaseResponseStatus.SUCCESS);
     }
 
     /**
@@ -71,10 +94,15 @@ public class PostSearchController {
     //PathVariable
     @GetMapping("/posts/get-post/back")
     @ResponseBody
-    public PostSearchBackDto backPage(@RequestParam("postId") Long postId,Model model){
-        PostSearchBackDto postSearchBackDto = postSearchService.getBackPage(postId);
+    public BaseResponse<PostSearchBackDto> backPage(@RequestParam(value = "postId",defaultValue = "-1") Long postId,Model model){
+        if(postId==-1) // 포토카드 아이디를 입력하지 않은 경우
+            return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_POSTID);
 
-        return postSearchBackDto;
+        PostSearchBackDto postSearchBackDto = postSearchService.getBackPage(postId);
+        if(postSearchBackDto==null) // 없는 포토카드인 경우
+            return new BaseResponse<>(BaseResponseStatus.GET_POST_NOT_EXISTS);
+
+        return new BaseResponse<>(postSearchBackDto,BaseResponseStatus.SUCCESS);
     }
     /**
      특정 유저의 포토카드 플랫폼에 따른 목록 조회 API(기록순)
@@ -82,13 +110,25 @@ public class PostSearchController {
      */
     @GetMapping("/posts/get-post-list/createdAt")
     @ResponseBody
-    public List<PostBackDto> postListByPlatformByCreatedAt(@RequestParam String category,@RequestParam String platform,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+    public BaseResponse<List<PostBackDto>> postListByPlatformByCreatedAt(@RequestParam(defaultValue = "null") String category,
+                                                                         @RequestParam(defaultValue = "null") String platform,
+                                                                         @RequestParam(defaultValue = "-1") int page,
+                                                                         Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null)
+            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
         Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        if(category.equals("null")||platform.equals("null")) // 카테고리나 플랫폼을 입력하지 않은 경우
+            return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
+        if (page == -1) // 클라이언트가 입력하지 않은 경우
+            return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_PAGE);
+
         List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,0,category,platform,page);
+        if (page != 0 && postSearchDtoList.size()==0) // 없는 페이지를 요청하는 경우(첫번째 페이지 제외)
+            return new BaseResponse<>(BaseResponseStatus.GET_PAGE_NOT_EXISTS);
         model.addAttribute("postList",postSearchDtoList);
 
-        return postSearchDtoList;
+        return new BaseResponse<>(postSearchDtoList,BaseResponseStatus.SUCCESS);
     }
     /**
      특정 유저의 포토카드 플랫폼에 따른 목록 조회 API(이름순)
@@ -97,13 +137,24 @@ public class PostSearchController {
     //PathVariable
     @GetMapping("/posts/get-post-list/title")
     @ResponseBody
-    public List<PostBackDto> postListByPlatformByTile(@RequestParam String category,@RequestParam String platform,@RequestParam(required = false, defaultValue = "0") int page, Model model){
+    public BaseResponse<List<PostBackDto>> postListByPlatformByTile(@RequestParam(defaultValue = "null") String category,
+                                                                    @RequestParam(defaultValue = "null") String platform,
+                                                                    @RequestParam(defaultValue = "-1") int page,
+                                                                    Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null)
+            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
         Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        if(category.equals("null")||platform.equals("null")) // 카테고리나 플랫폼을 입력하지 않은 경우
+            return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
+        if (page == -1) // 클라이언트가 입력하지 않은 경우
+            return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_PAGE);
+
         List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,1,category,platform,page);
+        if (page != 0 && postSearchDtoList.size()==0) // 없는 페이지를 요청하는 경우(첫번째 페이지 제외)
+            return new BaseResponse<>(BaseResponseStatus.GET_PAGE_NOT_EXISTS);
         model.addAttribute("postList",postSearchDtoList);
 
-        return postSearchDtoList;
+        return new BaseResponse<>(postSearchDtoList,BaseResponseStatus.SUCCESS);
     }
-
 }
