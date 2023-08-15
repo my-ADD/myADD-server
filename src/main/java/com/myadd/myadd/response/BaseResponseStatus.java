@@ -19,7 +19,10 @@ public enum BaseResponseStatus {
     SUCCESS_CHANGE_PASSWORD(true, 1010, "비밀번호 변경을 성공하였습니다."),
     SUCCESS_GET_PROFILE(true, 1011, "프로필 정보 반환을 성공하였습니다."),
     SUCCESS_CHANGE_PROFILE(true, 1012, "프로필 정보 변경을 성공하였습니다. "),
-
+    SUCCESS_CREATE_POST(true, 1013, "포토카드 등록에 성공하였습니다. "),
+    SUCCESS_DELETE_POST(true, 1014, "포토카드 삭제에 성공하였습니다. "),
+    SUCCESS_CHANGE_POST(true, 1015, "포토카드 수정에 성공하였습니다. "),
+    SUCCESS_CALENDAR_POST(true, 1016, "등록된 포토카드가 없습니다."),
 
 
 
@@ -36,6 +39,7 @@ public enum BaseResponseStatus {
     FAILED_ALREADY_DELETE_USER(false, 3002, "이미 삭제된 회원입니다."),
     FAILED_NOT_EMAIL_USER(false, 3003, "이메일 유저가 아닙니다."),
     FAILED_OVERTIME_AUTHCODE(false, 3004, "인증번호 시간이 만료되었습니다."),
+    FAILED_ALREADY_DELETE_POST(false, 3005, "이미 삭제된 포토카드입니다."),
 
 
 
@@ -46,7 +50,9 @@ public enum BaseResponseStatus {
     FAILED_NOT_AUTHENTICATION(false, 4002, "정상적으로 인증된 유저가 아닙니다."),
     FAILED_CHANGE_PASSWORD(false, 4003, "비밀번호 변경을 실패하였습니다."),
     FAILED_GET_PROFILE(true, 4004, "프로필 정보 반환에 실패하였습니다."),
-    FAILED_CHANGE_PROFILE(false, 4005, "프로필 정보 변경을 실패하였습니다.");
+    FAILED_CHANGE_PROFILE(false, 4005, "프로필 정보 변경을 실패하였습니다."),
+    FAILED_CREATE_POST(false, 4006, "포토카드 저장에 실패하였습니다."),
+    FAILED_CHANGE_POST(false, 4007, "포토카드 수정에 실패하였습니다.");
 
 
 
