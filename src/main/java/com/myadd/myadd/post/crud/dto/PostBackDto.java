@@ -1,12 +1,11 @@
 package com.myadd.myadd.post.crud.dto;
 
 import com.myadd.myadd.post.domain.PostEntity;
-import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(force = true)
@@ -21,32 +20,34 @@ public class PostBackDto {
 
     private LocalDateTime modifiedAt;
 
-    @NotBlank(message = "필수입력값입니다")
+    @NotNull(message = "시청한 시작일을 입력해주세요")
     private String startedAt;
 
-    @NotBlank(message = "필수입력값입니다")
+    @NotNull (message = "시청한 마지막날을 입력해주세요")
     private String endedAt;
 
-    @NotBlank(message = "필수입력값입니다")
+    @NotNull(message = "제목을 입력해주세요")
     private String title;
 
-    @NotBlank(message = "필수입력값입니다")
+    @NotNull(message = "메모를 입력해주세요")
     private String memo;
 
-    @NotBlank(message = "필수입력값입니다")
+    @NotNull(message = "카테고리를 입력해주세요")
     private String category;
 
+    @NotNull(message = "시청횟수를 입력해주세요")
     private Long views;
 
-    @NotBlank(message = "필수입력값입니다")
+    @NotNull(message = "장르를 입력해주세요")
     private String genre;
 
-    @NotNull
+    @NotNull(message = "플랫폼을 선택해주세요")
     private String platform;
 
-    @NotNull
+    @NotNull(message = "이모지를 입력해주세요")
     private String emoji;
 
+    @NotNull(message = "코멘트를 입력해주세요")
     private String comment;
 
     private String image; // null이면 기본 이미지 보여지게끔

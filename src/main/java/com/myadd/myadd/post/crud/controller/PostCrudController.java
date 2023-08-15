@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
@@ -24,7 +25,7 @@ public class PostCrudController {
     //포토카드 작성 multipartFile 사용시 RequestPart 사용해야함.
     @PostMapping(value = "/posts/add-post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody // 대신 @RequestPart 로 적기
-    public PostBackDto create(@RequestPart PostBackDto post, @RequestPart(value = "image", required = false)MultipartFile image) throws IOException {
+    public PostBackDto create(@Valid @RequestPart PostBackDto post, @RequestPart(value = "image", required = false)MultipartFile image) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long id = ((PrincipalDetails) authentication.getPrincipal()).getId();
         log.info(String.valueOf(image));
@@ -46,7 +47,7 @@ public class PostCrudController {
     //포토카드 수정
     @PutMapping(value = "/posts/update-post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody // 대신 @RequestPart 로 적기
-    public String update(@RequestParam("postId") Long postId, @RequestPart PostBackDto post, @RequestPart(value = "image", required = false)MultipartFile image) throws IOException {
+    public String update(@RequestParam("postId") Long postId,@Valid @RequestPart PostBackDto post, @RequestPart(value = "image", required = false)MultipartFile image) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long id = ((PrincipalDetails) authentication.getPrincipal()).getId();
         log.info(String.valueOf(id));
