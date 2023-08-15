@@ -19,6 +19,10 @@ public class CalService {
     public List<PostBackDto> findByCreatedAt(Long userId, String createdAt) {
         List<PostEntity> postEntities = calRepostitory.findByCreatedAt(userId, createdAt);
 
+        if (postEntities == null) {
+            return null;
+        }
+
         List<PostBackDto> postBackDtoList = new ArrayList<>();
         for (PostEntity post : postEntities) {
             if (post.getUser().getUserId() == userId) {
