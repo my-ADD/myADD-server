@@ -21,31 +21,41 @@ public class PostCrudService {
     private final PostCrudRepository postCrudRepository;
     private final FileUploadService fileUploadService;
     @Transactional
-    public void savePost(PostBackDto postDto, MultipartFile image, Long id) throws IOException {
+    public PostEntity savePost(PostBackDto postDto, MultipartFile image, Long id) throws IOException {
         if(!image.isEmpty()) {
             String storedFileName = fileUploadService.upload(image);
             postDto.setImage(storedFileName);
         }
         postDto.setUserId(id);
-        postCrudRepository.save(postDto.toPostEntity(postDto));
+        return postCrudRepository.save(postDto.toPostEntity(postDto));
     }
 
 
     @Transactional
-    public void deletePost(Long postId) {
+    public boolean deletePost(Long postId) {
         PostEntity postEntity = postCrudRepository.findByPostId(postId);
+
+        if (postEntity == null ) {
+            return false;
+        }
+
         if(postEntity.getImage() != null) {
             String url = postEntity.getImage();
             fileUploadService.fileDelete(url.split("/")[3]);
         }
         postCrudRepository.deleteById(postId);
+
+        return true;
     }
 
 
     @Transactional
-    public void modifyPost(Long postId, PostBackDto postDto, MultipartFile image, Long id) throws IOException {
+    public PostEntity modifyPost(Long postId, PostBackDto postDto, MultipartFile image, Long id) throws IOException {
         PostEntity postEntity = postCrudRepository.findByPostId(postId);
 
+        if (postEntity == null) {
+            return null;
+        }
         if(postEntity.getImage() != null) {
             String deleteUrl = postEntity.getImage();
             fileUploadService.fileDelete(deleteUrl.split("/")[3]);
@@ -58,7 +68,7 @@ public class PostCrudService {
         postDto.setPostId(postId);
         postDto.setUserId(id);
         postDto.setCreatedAt(postEntity.getCreatedAt());
-        postCrudRepository.save(postDto.toModPostEntity(postDto));
+        return postCrudRepository.save(postDto.toModPostEntity(postDto));
 
     }
 }
