@@ -1,5 +1,8 @@
 package com.myadd.myadd.user.security.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myadd.myadd.response.BaseResponse;
+import com.myadd.myadd.response.BaseResponseStatus;
 import com.myadd.myadd.user.domain.entity.UserEntity;
 import com.myadd.myadd.user.domain.usertype.UserTypeEnum;
 import com.myadd.myadd.user.repository.UserRepository;
@@ -14,7 +17,11 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -61,7 +68,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
         String nickName = oAuth2UserInfo.getNickname();
         String profile = oAuth2UserInfo.getProfile();
         UserTypeEnum userTypeEnum = oAuth2UserInfo.getUsertype();
-        String email = oAuth2UserInfo.getEmail();
+        String email = provider.toLowerCase() + "_" + oAuth2UserInfo.getEmail();
         String password = bCryptPasswordEncoder.encode(UUID.randomUUID().toString());
 
         log.info("userInfo = {}", provider + " " + nickName + " " + profile + " " +userTypeEnum + " " + email + " "+password);
@@ -84,6 +91,48 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService { // Oa
             log.info("이미 존재하는 OAuth2 회원입니다.");
         }
 
+        // response 출력을 위한 응답 스트림 처리
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+
+        // 로그인 성공 메시지 생성
+        String successMessage = null;
+        try {
+            successMessage = oauth2LoginSuccess(response, provider);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        response.setContentType("application/json;charset=UTF-8");
+
+        try {
+            response.getWriter().write(successMessage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            response.getWriter().flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         return new PrincipalDetails(userEntity, oAuth2User.getAttributes()); // Authentication 객체 안에 들어감
+    }
+
+    public String oauth2LoginSuccess(HttpServletResponse response, String provider) throws IOException {
+        BaseResponse<BaseResponseStatus> successResponse = null;
+
+        if(provider.equals("google"))
+            successResponse = new BaseResponse<>(BaseResponseStatus.SUCCESS_GOOGLE_LOGIN);
+        else if(provider.equals("kakao"))
+            successResponse = new BaseResponse<>(BaseResponseStatus.SUCCESS_KAKAO_LOGIN);
+
+        String jsonResponse = new ObjectMapper().writeValueAsString(successResponse);
+
+        // response.setStatus(HttpServletResponse.SC_OK);
+        // response.setContentType("application/json");
+        // response.setCharacterEncoding("UTF-8");
+        // response.getWriter().write(jsonResponse);
+
+        return jsonResponse;
     }
 }

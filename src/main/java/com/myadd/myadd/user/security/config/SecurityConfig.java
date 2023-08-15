@@ -1,5 +1,8 @@
 package com.myadd.myadd.user.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myadd.myadd.response.BaseResponse;
+import com.myadd.myadd.response.BaseResponseStatus;
 import com.myadd.myadd.user.security.service.PrincipalOauth2UserService;
 import com.myadd.myadd.user.security.handler.CustomAuthenticationFailureHandler;
 import com.myadd.myadd.user.security.handler.CustomAuthenticationSuccessHandler;
@@ -43,20 +46,34 @@ public class SecurityConfig {
                 .logoutSuccessHandler(new LogoutSuccessHandler() {
                     @Override
                     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        if (authentication == null) {
-                            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                            response.getWriter().write("{\"message\": \"Logout Fail!\"}");
-                        } else {
-                            response.setStatus(HttpServletResponse.SC_OK);
-                            response.getWriter().write("{\"message\": \"Logout success!\"}");
-                        }
+                        logoutResponse(response, authentication);
                     }
                 })
                 .and()
                 .oauth2Login()
-                .loginPage("/afterLogin") // 구글 로그인 완료 후 후처리가 필요함. 후처리는 PrincipalOauth2UserService에서 진행
+                //.loginPage("/afterLogin") // 구글 로그인 완료 후 후처리가 필요함. 후처리는 PrincipalOauth2UserService에서 진행
                 .userInfoEndpoint()
                 .userService(principalOauth2UserService); // 로그인한 사용자에게 받은 정보가 principalOauth2UserService의 매개변수인 userRequest로 return
         return httpSecurity.build();
+    }
+
+    public void logoutResponse(HttpServletResponse response, Authentication authentication) throws IOException {
+
+        BaseResponse<BaseResponseStatus> logoutResponseValue;
+        String jsonResponse;
+
+        if (authentication == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            logoutResponseValue = new BaseResponse<>(BaseResponseStatus.FAILED_LOGOUT);
+
+        } else {
+            response.setStatus(HttpServletResponse.SC_OK);
+            logoutResponseValue = new BaseResponse<>(BaseResponseStatus.SUCCESS_LOGOUT);
+        }
+        jsonResponse = new ObjectMapper().writeValueAsString(logoutResponseValue);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(jsonResponse);
     }
 }

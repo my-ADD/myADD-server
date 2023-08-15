@@ -1,6 +1,7 @@
 package com.myadd.myadd.user.domain.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -10,6 +11,8 @@ public class ProfileChangeRequestDto {
     @NotEmpty
     private String nickname;
 
-    @NotEmpty
-    private String profile;
+    //@NotEmpty
+    //private MultipartFile multipartFile;
+
+    // private String profile;
 }

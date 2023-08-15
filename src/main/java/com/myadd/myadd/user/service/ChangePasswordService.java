@@ -26,7 +26,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class ChangePasswordService {
 
-    // 의존성 주입을 통해 필요한 객체를 가져옴
+    // 의존성 주입을 통해 필요한 객체를 가져옴0
     private final JavaMailSender emailSender;
     // 타임리프를 사용하기 위한 객체를 의존성 주입으로 가져옴
     private final SpringTemplateEngine templateEngine;
@@ -102,15 +102,15 @@ public class ChangePasswordService {
             //log.info("duration.toMinutes = {}", duration.toMinutes());
             if (duration.toMinutes() < 5) { // 5분 이하로 인증 코드를 맞춘 경우
                 emailSignupRepository.delete(emailAuthEntity);
-                return "true";
+                return "success: correct auth code";
             }
             else{
                 emailSignupRepository.delete(emailAuthEntity);
-                return "false: over 5 minute";
+                return "failed: over 5 minute";
             }
         }
         // 인증 코드가 틀린 경우
-        return "false: not correct auth code";
+        return "failed: not correct auth code";
     }
 
     public void deleteExpiredAuthNum(){
@@ -133,7 +133,7 @@ public class ChangePasswordService {
 
         userRepository.save(userEntity);
 
-        return "password change success!";
+        return "success: change password";
     }
 
     public Boolean isUserTypeEmail(String email) {
