@@ -46,6 +46,20 @@ public class PostSearchService {
         return postSearchDtoList;
     }
 
+    // 특정 사용자의 전체 포토카드 생성날짜 조회
+    @Transactional
+    public List<String> getPostCreatedAt(Long userId){
+        List<PostEntity> posts;
+        List<String> createdAtList=new ArrayList<>();
+        UserEntity user = userRepository.findByUserId(userId);
+        posts=postRepository.findByUser(user);
+        for (PostEntity post : posts) {
+            createdAtList.add(post.getCreatedAt().toString());
+        }
+
+        return createdAtList;
+    }
+
     //특정 사용자의 포토카드 플랫폼 목록 조회(기록순,이름순)
     //flag 0: 기록순, 1:이름순
     @Transactional
@@ -72,6 +86,7 @@ public class PostSearchService {
     @Transactional
     public PostSearchFrontDto getFrontPage(Long postId) {
         PostEntity post = postRepository.findByPostId(postId);
+        if(post==null) return null;
         PostSearchFrontDto postSearchFrontDto = new PostSearchFrontDto();
         postSearchFrontDto.setComment(post.getComment());
         postSearchFrontDto.setImage(post.getImage());
@@ -82,6 +97,7 @@ public class PostSearchService {
     @Transactional
     public PostSearchBackDto getBackPage(Long postId) {
         PostEntity post = postRepository.findByPostId(postId);
+        if(post==null) return null;
         PostSearchBackDto postSearchBackDto = new PostSearchBackDto();
         postSearchBackDto.setMemo(post.getMemo());
         postSearchBackDto.setEmoji(post.getEmoji());
