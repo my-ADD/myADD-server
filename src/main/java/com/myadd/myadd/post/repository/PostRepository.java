@@ -7,10 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 public interface PostRepository extends JpaRepository<PostEntity,Long> {
     // 전체조회 시 And 조건을 이용하여 User까지 긁어오면 더 코드가 간편해질거같다!
+    // 사용자의 포토카드 전체 리스트 조회(pageable 제외)
+    List<PostEntity> findByUser(UserEntity user);
     // 사용자의 포토카드 전체 리스트 조회
     Page<PostEntity> findByUser(UserEntity user, Pageable pageable);
     // 포토카드 플랫폼에 따른 목록 조회(기록순)
