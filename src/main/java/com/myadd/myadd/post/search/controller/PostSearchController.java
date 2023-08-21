@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,6 +26,27 @@ public class PostSearchController {
     public PostSearchController(PostSearchService postSearchService){
         this.postSearchService = postSearchService;
     }
+    public Long getAuthentication(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null) return null;
+        Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+
+        return userId;
+    }
+    /**
+     특정 유저의 포토카드 전체 생성날짜 조회
+     [GET] /posts/createdAt
+     */
+    @GetMapping("/posts/createdAt")
+    @ResponseBody
+    public BaseResponse<List<String>> getCreatedAt(Model model){
+        Long userId = getAuthentication();
+        if(userId == null) return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
+        List<String> createdAtList = new ArrayList<>();
+        createdAtList=postSearchService.getPostCreatedAt(userId);
+
+        return new BaseResponse<>(createdAtList,BaseResponseStatus.SUCCESS);
+    }
     /**
     특정 유저의 포토카드 전체 목록 조회 API(기록순)
      [GET] /posts/get-post-list-all/createdAt?page={page}
@@ -32,10 +54,8 @@ public class PostSearchController {
     @GetMapping("/posts/get-post-listAll/createdAt")
     @ResponseBody
     public BaseResponse<List<PostBackDto>>  postListByCreatedAt(@RequestParam(defaultValue = "-1") int page, Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null)
-            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
-        Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        Long userId = getAuthentication();
+        if(userId == null) return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
         if(page==-1) // 클라이언트가 입력하지 않은 경우
             return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_PAGE);
 
@@ -54,10 +74,8 @@ public class PostSearchController {
     @GetMapping("/posts/get-post-listAll/title")
     @ResponseBody
     public BaseResponse<List<PostBackDto>> postListByTitle(@RequestParam(defaultValue = "-1") int page, Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null)
-            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
-        Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        Long userId = getAuthentication();
+        if(userId == null) return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
         if (page == -1) // 클라이언트가 입력하지 않은 경우
             return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_PAGE);
 
@@ -81,6 +99,7 @@ public class PostSearchController {
             return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_POSTID);
 
         PostSearchFrontDto postSearchFrontDto = postSearchService.getFrontPage(postId);
+        if(postSearchFrontDto==null) return new BaseResponse<>(BaseResponseStatus.GET_POST_NOT_EXISTS);
         if(postSearchFrontDto==null) // 없는 포토카드인 경우
             return new BaseResponse<>(BaseResponseStatus.GET_POST_NOT_EXISTS);
 
@@ -99,6 +118,7 @@ public class PostSearchController {
             return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_POSTID);
 
         PostSearchBackDto postSearchBackDto = postSearchService.getBackPage(postId);
+        if(postSearchBackDto==null) return new BaseResponse<>(BaseResponseStatus.GET_POST_NOT_EXISTS);
         if(postSearchBackDto==null) // 없는 포토카드인 경우
             return new BaseResponse<>(BaseResponseStatus.GET_POST_NOT_EXISTS);
 
@@ -114,10 +134,8 @@ public class PostSearchController {
                                                                          @RequestParam(defaultValue = "null") String platform,
                                                                          @RequestParam(defaultValue = "-1") int page,
                                                                          Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null)
-            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
-        Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        Long userId = getAuthentication();
+        if(userId == null) return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
         if(category.equals("null")||platform.equals("null")) // 카테고리나 플랫폼을 입력하지 않은 경우
             return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
         if (page == -1) // 클라이언트가 입력하지 않은 경우
@@ -141,10 +159,8 @@ public class PostSearchController {
                                                                     @RequestParam(defaultValue = "null") String platform,
                                                                     @RequestParam(defaultValue = "-1") int page,
                                                                     Model model){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null)
-            return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
-        Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        Long userId = getAuthentication();
+        if(userId == null) return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
         if(category.equals("null")||platform.equals("null")) // 카테고리나 플랫폼을 입력하지 않은 경우
             return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
         if (page == -1) // 클라이언트가 입력하지 않은 경우
