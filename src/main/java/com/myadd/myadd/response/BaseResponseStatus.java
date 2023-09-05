@@ -31,8 +31,6 @@ public enum BaseResponseStatus {
     FAILED_INVALID_INPUT(false, 2000, "입력하지 않은 정보가 존재합니다."),
     FAILED_NOT_CORRECT_AUTHCODE(false, 2001, "입력하신 인증번호가 일치하지 않습니다."),
 
-    // [GET] /posts/get-post-listAll/
-    POST_SEARCH_EMPTY_PAGE(false,2010,"페이지 번호를 입력해주세요."),
     // [GET]/posts/get-post/
     POST_SEARCH_EMPTY_POSTID(false,2011,"포토카드 아이디를 입력해주세요."),
 
@@ -45,11 +43,8 @@ public enum BaseResponseStatus {
     FAILED_OVERTIME_AUTHCODE(false, 3004, "인증번호 시간이 만료되었습니다."),
     FAILED_ALREADY_DELETE_POST(false, 3005, "이미 삭제된 포토카드입니다."),
 
-    // [GET] /posts/get-post-list/
-    GET_PAGE_NOT_EXISTS(false,3010,"존재하지 않는 페이지입니다."), // 페이지 0 제외
     // [GET] /posts/get-post/
     GET_POST_NOT_EXISTS(false,3011,"존재하지 않는 포토카드입니다."),
-
 
     // 4000 : 서버 측 오류
     FAILED_EMAIL_LOGIN(false, 4000, "이메일 로그인에 실패하였습니다."),
