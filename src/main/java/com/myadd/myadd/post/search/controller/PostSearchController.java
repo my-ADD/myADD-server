@@ -13,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -53,16 +52,11 @@ public class PostSearchController {
      */
     @GetMapping("/posts/get-post-listAll/createdAt")
     @ResponseBody
-    public BaseResponse<List<PostBackDto>>  postListByCreatedAt(@RequestParam(defaultValue = "-1") int page, Model model){
+    public BaseResponse<List<PostBackDto>>  postListByCreatedAt(Model model){
         Long userId = getAuthentication();
         if(userId == null) return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
-        if(page==-1) // 클라이언트가 입력하지 않은 경우
-            return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_PAGE);
 
-        List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId,0,page);
-        if(page!=0 && postSearchDtoList.size()==0){ // 없는 페이지를 요청하는 경우(첫번째 페이지 제외)
-            return new BaseResponse<>(BaseResponseStatus.GET_PAGE_NOT_EXISTS);
-        }
+        List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId,0);
         model.addAttribute("postList",postSearchDtoList);
         return new BaseResponse<>(postSearchDtoList,BaseResponseStatus.SUCCESS);
     }
@@ -73,16 +67,11 @@ public class PostSearchController {
     //PathVariable
     @GetMapping("/posts/get-post-listAll/title")
     @ResponseBody
-    public BaseResponse<List<PostBackDto>> postListByTitle(@RequestParam(defaultValue = "-1") int page, Model model) {
+    public BaseResponse<List<PostBackDto>> postListByTitle(Model model) {
         Long userId = getAuthentication();
         if(userId == null) return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
-        if (page == -1) // 클라이언트가 입력하지 않은 경우
-            return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_PAGE);
 
-        List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId, 1, page);
-        if (page != 0 && postSearchDtoList.size()==0) // 없는 페이지를 요청하는 경우(첫번째 페이지 제외)
-            return new BaseResponse<>(BaseResponseStatus.GET_PAGE_NOT_EXISTS);
-
+        List<PostBackDto> postSearchDtoList = postSearchService.getPostList(userId, 1);
         model.addAttribute("postList", postSearchDtoList);
         return new BaseResponse<>(postSearchDtoList, BaseResponseStatus.SUCCESS);
     }
@@ -132,20 +121,14 @@ public class PostSearchController {
     @ResponseBody
     public BaseResponse<List<PostBackDto>> postListByPlatformByCreatedAt(@RequestParam(defaultValue = "null") String category,
                                                                          @RequestParam(defaultValue = "null") String platform,
-                                                                         @RequestParam(defaultValue = "-1") int page,
                                                                          Model model){
         Long userId = getAuthentication();
         if(userId == null) return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
         if(category.equals("null")||platform.equals("null")) // 카테고리나 플랫폼을 입력하지 않은 경우
             return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
-        if (page == -1) // 클라이언트가 입력하지 않은 경우
-            return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_PAGE);
 
-        List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,0,category,platform,page);
-        if (page != 0 && postSearchDtoList.size()==0) // 없는 페이지를 요청하는 경우(첫번째 페이지 제외)
-            return new BaseResponse<>(BaseResponseStatus.GET_PAGE_NOT_EXISTS);
+        List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,0,category,platform);
         model.addAttribute("postList",postSearchDtoList);
-
         return new BaseResponse<>(postSearchDtoList,BaseResponseStatus.SUCCESS);
     }
     /**
@@ -157,20 +140,14 @@ public class PostSearchController {
     @ResponseBody
     public BaseResponse<List<PostBackDto>> postListByPlatformByTile(@RequestParam(defaultValue = "null") String category,
                                                                     @RequestParam(defaultValue = "null") String platform,
-                                                                    @RequestParam(defaultValue = "-1") int page,
                                                                     Model model){
         Long userId = getAuthentication();
         if(userId == null) return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
         if(category.equals("null")||platform.equals("null")) // 카테고리나 플랫폼을 입력하지 않은 경우
             return new BaseResponse<>(BaseResponseStatus.FAILED_INVALID_INPUT);
-        if (page == -1) // 클라이언트가 입력하지 않은 경우
-            return new BaseResponse<>(BaseResponseStatus.POST_SEARCH_EMPTY_PAGE);
 
-        List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,1,category,platform,page);
-        if (page != 0 && postSearchDtoList.size()==0) // 없는 페이지를 요청하는 경우(첫번째 페이지 제외)
-            return new BaseResponse<>(BaseResponseStatus.GET_PAGE_NOT_EXISTS);
+        List<PostBackDto> postSearchDtoList = postSearchService.getPostListByPlatform(userId,1,category,platform);
         model.addAttribute("postList",postSearchDtoList);
-
         return new BaseResponse<>(postSearchDtoList,BaseResponseStatus.SUCCESS);
     }
 }
