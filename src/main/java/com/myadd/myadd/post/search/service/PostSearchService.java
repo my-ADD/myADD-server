@@ -7,10 +7,6 @@ import com.myadd.myadd.post.search.dto.PostSearchBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchFrontDto;
 import com.myadd.myadd.user.domain.entity.UserEntity;
 import com.myadd.myadd.user.repository.UserRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,15 +26,14 @@ public class PostSearchService {
     //특정 사용자의 포토카드 전체 목록 조회(기록순,이름순)
     //flag 0: 기록순, 1:이름순
     @Transactional
-    public List<PostBackDto> getPostList(Long userId, int flag, int page) {
-        Page<PostEntity> posts;
+    public List<PostBackDto> getPostList(Long userId, int flag) {
+        List<PostEntity> posts;
         UserEntity user = userRepository.findByUserId(userId);
         if (flag == 0) // 기록순
-            posts = postRepository.findByUser(user,PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "createdAt")));
+            posts = postRepository.findByUserOrderByCreatedAtDesc(user);
         else // 이름순
-            posts = postRepository.findByUser(user,PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "title")));
+            posts = postRepository.findByUserOrderByTitle(user);
         List<PostBackDto> postSearchDtoList = new ArrayList<>();
-
         for (PostEntity post : posts) {
             PostBackDto postSearchDto = post.toPostBackDto(post);
             postSearchDtoList.add(postSearchDto);
@@ -52,7 +47,7 @@ public class PostSearchService {
         List<PostEntity> posts;
         List<String> createdAtList=new ArrayList<>();
         UserEntity user = userRepository.findByUserId(userId);
-        posts=postRepository.findByUser(user);
+        posts=postRepository.findByUserOrderByCreatedAtDesc(user);
         for (PostEntity post : posts) {
             createdAtList.add(post.getCreatedAt().toString());
         }
@@ -63,16 +58,14 @@ public class PostSearchService {
     //특정 사용자의 포토카드 플랫폼 목록 조회(기록순,이름순)
     //flag 0: 기록순, 1:이름순
     @Transactional
-    public List<PostBackDto> getPostListByPlatform(Long userId, int flag, String category,String platform, int page) {
-        Page<PostEntity> posts;
+    public List<PostBackDto> getPostListByPlatform(Long userId, int flag, String category,String platform) {
+        List<PostEntity> posts;
         UserEntity user = userRepository.findByUserId(userId);
-        Pageable pagingByCreatedAt = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Pageable pagingByTitle = PageRequest.of(page, 9, Sort.by(Sort.Direction.DESC, "title"));
 
         if (flag == 0)
-            posts = postRepository.findByPlatformAndCategoryAndUserOrderByCreatedAtDesc(platform,category,user,pagingByCreatedAt);
+            posts = postRepository.findByPlatformAndCategoryAndUserOrderByCreatedAtDesc(platform,category,user);
         else
-            posts = postRepository.findByPlatformAndCategoryAndUserOrderByTitle(platform,category,user,pagingByTitle);
+            posts = postRepository.findByPlatformAndCategoryAndUserOrderByTitle(platform,category,user);
         List<PostBackDto> postSearchDtoList = new ArrayList<>();
 
         for (PostEntity post : posts) {
