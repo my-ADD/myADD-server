@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 
 @Service
@@ -20,13 +19,13 @@ public class PostCrudService {
     private final PostCrudRepository postCrudRepository;
     private final FileUploadService fileUploadService;
 
-    public PostEntity savePost(PostBackDto postDto, MultipartFile image, Long id) throws IOException {
+    public String savePost(PostBackDto postDto, String image, Long id) throws IOException {
         if(!image.isEmpty()) {
-            String storedFileName = fileUploadService.upload(image);
-            postDto.setImage(storedFileName);
+            postDto.setImage(image);
         }
         postDto.setUserId(id);
-        return postCrudRepository.save(postDto.toPostEntity(postDto));
+        postCrudRepository.save(postDto.toPostEntity(postDto));
+        return "Success: save post";
     }
 
 
