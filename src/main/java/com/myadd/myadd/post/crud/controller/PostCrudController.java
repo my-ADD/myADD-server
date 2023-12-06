@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
@@ -19,7 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.validation.Valid;
 import java.io.IOException;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @Slf4j
 public class PostCrudController {
@@ -28,6 +29,7 @@ public class PostCrudController {
     @Autowired
     private final FileUploadService fileUploadService;
     //포토카드 작성 multipartFile 사용시 RequestPart 사용해야함.
+    @ResponseBody
     @PostMapping(value = "/posts/add-post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public BaseResponse<PostBackDto> create(@RequestPart PostBackDto post, @RequestPart(value = "image", required = false)MultipartFile image) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
