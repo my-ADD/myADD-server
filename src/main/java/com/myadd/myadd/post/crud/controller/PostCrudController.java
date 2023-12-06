@@ -25,7 +25,7 @@ public class PostCrudController {
     private final PostCrudService postCrudService;
 
     //포토카드 작성 multipartFile 사용시 RequestPart 사용해야함.
-    @PostMapping(value = "/posts/add-post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/posts/add-post",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public BaseResponse<PostBackDto> create(@Valid @RequestPart PostBackDto post, @RequestPart(value = "image", required = false)MultipartFile image) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
