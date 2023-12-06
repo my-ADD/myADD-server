@@ -13,14 +13,13 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class PostCrudService {
 
     private final PostCrudRepository postCrudRepository;
     private final FileUploadService fileUploadService;
-    @Transactional
+
     public PostEntity savePost(PostBackDto postDto, MultipartFile image, Long id) throws IOException {
         if(!image.isEmpty()) {
             String storedFileName = fileUploadService.upload(image);
@@ -31,7 +30,7 @@ public class PostCrudService {
     }
 
 
-    @Transactional
+
     public boolean deletePost(Long postId) {
         PostEntity postEntity = postCrudRepository.findByPostId(postId);
 
@@ -49,7 +48,7 @@ public class PostCrudService {
     }
 
 
-    @Transactional
+
     public PostEntity modifyPost(Long postId, PostBackDto postDto, MultipartFile image, Long id) throws IOException {
         PostEntity postEntity = postCrudRepository.findByPostId(postId);
 
