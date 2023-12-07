@@ -20,7 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.validation.Valid;
 import java.io.IOException;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @Slf4j
 public class PostCrudController {
@@ -29,9 +29,9 @@ public class PostCrudController {
     @Autowired
     private final FileUploadService fileUploadService;
     //포토카드 작성 multipartFile 사용시 RequestPart 사용해야함.
-    @ResponseBody
+
     @PostMapping(value = "/posts/add-post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public BaseResponse<PostBackDto> create(@RequestPart PostBackDto post, @RequestPart(value = "cardImage", required = false)MultipartFile multipartFile) throws IOException {
+    public BaseResponse<PostBackDto> create(@RequestPart("post") PostBackDto post, @RequestPart(value = "cardImage", required = false)MultipartFile multipartFile) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication == null)
@@ -42,11 +42,12 @@ public class PostCrudController {
         String S3FileName = fileUploadService.upload(multipartFile);
         postCrudService.savePost(post, S3FileName, id);
 
-        return new BaseResponse<>(post, BaseResponseStatus.SUCCESS_CREATE_POST);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS_CREATE_POST);
     }
 
 
     //포토카드 삭제
+
     @DeleteMapping(value = "/posts/delete-post")
     public BaseResponse<PostBackDto> delete(@RequestParam("postId") Long id) {
        if (!postCrudService.deletePost(id)) {
@@ -58,6 +59,7 @@ public class PostCrudController {
 
 
     //포토카드 수정
+
     @PutMapping(value = "/posts/update-post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public BaseResponse<PostBackDto> update(@RequestParam("postId") Long postId,@Valid @RequestPart PostBackDto post, @RequestPart(value = "image", required = false)MultipartFile image) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
