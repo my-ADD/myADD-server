@@ -31,7 +31,7 @@ public class PostCrudController {
     //포토카드 작성 multipartFile 사용시 RequestPart 사용해야함.
 
     @PostMapping(value = "/posts/add-post",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-    public BaseResponse<PostBackDto> create(@RequestPart PostBackDto post, @ModelAttribute MultipartFile multipartFile) throws IOException {
+    public BaseResponse<PostBackDto> create(@RequestPart PostBackDto post, @ModelAttribute MultipartFile image) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication == null)
@@ -40,7 +40,7 @@ public class PostCrudController {
         Long id = ((PrincipalDetails) authentication.getPrincipal()).getId();
 
         log.info(post.toString());
-        String S3FileName = fileUploadService.upload(multipartFile);
+        String S3FileName = fileUploadService.upload(image);
         postCrudService.savePost(post, S3FileName, id);
 
         return new BaseResponse<>(BaseResponseStatus.SUCCESS_CREATE_POST);
