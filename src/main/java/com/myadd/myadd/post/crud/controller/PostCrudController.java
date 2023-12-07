@@ -61,8 +61,8 @@ public class PostCrudController {
 
     //포토카드 수정
 
-    @PutMapping(value = "/posts/update-post",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public BaseResponse<PostBackDto> update(@RequestParam("postId") Long postId,@Valid @RequestPart PostBackDto post, @RequestPart(value = "image", required = false)MultipartFile image) throws IOException {
+    @PutMapping(value = "/posts/update-post",consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public BaseResponse<PostBackDto> update(@RequestParam("postId") Long postId,@RequestPart PostBackDto post, @ModelAttribute MultipartFile image) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if(authentication == null)
