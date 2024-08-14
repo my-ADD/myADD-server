@@ -1,13 +1,12 @@
 package com.myadd.myadd.post.search.controller;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchBackDto;
 import com.myadd.myadd.post.search.dto.PostSearchFrontDto;
 import com.myadd.myadd.post.search.service.PostSearchService;
 import com.myadd.myadd.response.BaseResponse;
 import com.myadd.myadd.response.BaseResponseStatus;
-import com.myadd.myadd.user.security.service.PrincipalDetails;
+import com.myadd.myadd.user.security.service.CustomUserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,7 @@ public class PostSearchController {
     public Long getAuthentication(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null) return null;
-        Long userId = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        Long userId = ((CustomUserDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
 
         return userId;
     }

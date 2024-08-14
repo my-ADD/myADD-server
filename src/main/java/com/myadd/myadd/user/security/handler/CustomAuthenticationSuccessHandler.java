@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// Spring Security: Authentication
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
@@ -32,5 +33,23 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonResponse);
+    }
+
+    public String oauth2LoginSuccess(HttpServletResponse response, String provider) throws IOException {
+        BaseResponse<BaseResponseStatus> successResponse = null;
+
+        if(provider.equals("google"))
+            successResponse = new BaseResponse<>(BaseResponseStatus.SUCCESS_GOOGLE_LOGIN);
+        else if(provider.equals("kakao"))
+            successResponse = new BaseResponse<>(BaseResponseStatus.SUCCESS_KAKAO_LOGIN);
+
+        String jsonResponse = new ObjectMapper().writeValueAsString(successResponse);
+
+         response.setStatus(HttpServletResponse.SC_OK);
+         response.setContentType("application/json");
+         response.setCharacterEncoding("UTF-8");
+         response.getWriter().write(jsonResponse);
+
+        return jsonResponse;
     }
 }

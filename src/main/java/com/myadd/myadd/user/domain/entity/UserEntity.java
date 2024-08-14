@@ -3,7 +3,7 @@ package com.myadd.myadd.user.domain.entity;
 
 import com.myadd.myadd.post.domain.PostEntity;
 import com.myadd.myadd.user.domain.dto.UserDto;
-import com.myadd.myadd.user.domain.usertype.UserTypeEnum;
+import com.myadd.myadd.user.security.usertype.UserTypeEnum;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

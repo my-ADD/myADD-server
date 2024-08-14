@@ -6,18 +6,16 @@ import com.myadd.myadd.post.crud.service.PostCrudService;
 import com.myadd.myadd.post.domain.PostEntity;
 import com.myadd.myadd.response.BaseResponse;
 import com.myadd.myadd.response.BaseResponseStatus;
-import com.myadd.myadd.user.security.service.PrincipalDetails;
+import com.myadd.myadd.user.security.service.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -37,7 +35,7 @@ public class PostCrudController {
         if(authentication == null)
             return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
 
-        Long id = ((PrincipalDetails) authentication.getPrincipal()).getId();
+        Long id = ((CustomUserDetails) authentication.getPrincipal()).getId();
 
         log.info(post.toString());
         String S3FileName = fileUploadService.upload(image);
@@ -68,7 +66,7 @@ public class PostCrudController {
         if(authentication == null)
             return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
 
-        Long id = ((PrincipalDetails) authentication.getPrincipal()).getId();
+        Long id = ((CustomUserDetails) authentication.getPrincipal()).getId();
 
         PostEntity postEntity = postCrudService.modifyPost(postId, post, image, id);
         if(postEntity == null) {

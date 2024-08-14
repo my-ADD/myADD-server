@@ -1,4 +1,4 @@
-package com.myadd.myadd.user.domain.usertype;
+package com.myadd.myadd.user.security.usertype;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonKey;

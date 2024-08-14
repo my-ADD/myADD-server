@@ -3,7 +3,7 @@ package com.myadd.myadd.user.non_security.google.service;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import com.myadd.myadd.user.domain.entity.UserEntity;
-import com.myadd.myadd.user.domain.usertype.UserTypeEnum;
+import com.myadd.myadd.user.security.usertype.UserTypeEnum;
 import com.myadd.myadd.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;

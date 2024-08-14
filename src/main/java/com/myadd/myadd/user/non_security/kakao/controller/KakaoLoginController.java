@@ -3,7 +3,7 @@ package com.myadd.myadd.user.non_security.kakao.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.myadd.myadd.user.domain.entity.UserEntity;
-import com.myadd.myadd.user.security.service.PrincipalDetails;
+import com.myadd.myadd.user.security.service.CustomUserDetails;
 import com.myadd.myadd.user.non_security.kakao.service.KakaoLoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,8 +62,8 @@ public class KakaoLoginController {  // 스프링 시큐리티를 적용하지 �
     @PostMapping("/users/my-info/delete/kakao-user")
     public @ResponseBody String kakaoWithdrawal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = ((PrincipalDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
-        Long id = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        String email = ((CustomUserDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
+        Long id = ((CustomUserDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
         log.info("email = {}", email);
         log.info("id = {}", id);
         return kakaoLoginService.kakaoWithdrawal(id, email);

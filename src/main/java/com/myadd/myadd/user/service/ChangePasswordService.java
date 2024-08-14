@@ -1,7 +1,7 @@
 package com.myadd.myadd.user.service;
 
 import com.myadd.myadd.user.domain.entity.UserEntity;
-import com.myadd.myadd.user.domain.usertype.UserTypeEnum;
+import com.myadd.myadd.user.security.usertype.UserTypeEnum;
 import com.myadd.myadd.user.repository.EmailSignupRepository;
 import com.myadd.myadd.user.repository.UserRepository;
 import com.myadd.myadd.user.domain.entity.EmailAuthEntity;

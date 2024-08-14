@@ -1,14 +1,10 @@
 package com.myadd.myadd.user.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.myadd.myadd.fileUpload.service.FileUploadService;
 import com.myadd.myadd.response.BaseResponse;
 import com.myadd.myadd.response.BaseResponseStatus;
-import com.myadd.myadd.user.domain.dto.ProfileChangeRequestDto;
 import com.myadd.myadd.user.domain.dto.UserProfileDto;
-import com.myadd.myadd.user.domain.entity.UserEntity;
-import com.myadd.myadd.user.security.service.PrincipalDetails;
+import com.myadd.myadd.user.security.service.CustomUserDetails;
 import com.myadd.myadd.user.service.ChangeProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,8 +43,8 @@ public class ChangeProfileController {
         if(authentication == null)
             return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
 
-        String email = ((PrincipalDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
-        Long id = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        String email = ((CustomUserDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
+        Long id = ((CustomUserDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
 
         userProfileDto = changeProfileService.findUser(id, email);
 
@@ -80,8 +76,8 @@ public class ChangeProfileController {
         if(authentication == null)
             return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
 
-        String email = ((PrincipalDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
-        Long id = ((PrincipalDetails) authentication.getPrincipal()).getId();
+        String email = ((CustomUserDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
+        Long id = ((CustomUserDetails) authentication.getPrincipal()).getId();
 
         userProfileDto = changeProfileService.findUser(id, email);
 

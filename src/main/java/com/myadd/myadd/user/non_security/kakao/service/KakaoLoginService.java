@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myadd.myadd.user.domain.entity.UserEntity;
-import com.myadd.myadd.user.domain.usertype.UserTypeEnum;
+import com.myadd.myadd.user.security.usertype.UserTypeEnum;
 import com.myadd.myadd.user.repository.UserRepository;
 import com.myadd.myadd.user.non_security.kakao.OAuthToken;
 import lombok.RequiredArgsConstructor;

@@ -1,15 +1,13 @@
-package com.myadd.myadd.user.domain.usertype;
+package com.myadd.myadd.user.security.usertype;
 
 import java.util.Map;
 
-public class KakaoUserInfo implements OAuth2UserInfo{
+public class GoogleUserInfo implements OAuth2UserInfo{
 
     private Map<String, Object> attributes; // oauth2User.getAttributes()
-    private Map<String, Object> profile;
 
-    public KakaoUserInfo(Map<String, Object> attributes){
+    public GoogleUserInfo(Map<String, Object> attributes){
         this.attributes = attributes;
-        this.profile = (Map)attributes.get("profile");
     }
 
     @Override
@@ -19,16 +17,16 @@ public class KakaoUserInfo implements OAuth2UserInfo{
 
     @Override
     public String getNickname() {
-        return (String)profile.get("nickname");
+        return (String)attributes.get("name");
     }
 
     @Override
     public UserTypeEnum getUsertype() {
-        return UserTypeEnum.KAKAO;
+        return UserTypeEnum.GOOGLE;
     }
 
     @Override
     public String getProfile() {
-        return (String)profile.get("profile_image_url");
+        return (String)attributes.get("picture");
     }
 }

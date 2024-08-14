@@ -1,4 +1,4 @@
-package com.myadd.myadd.user.domain.usertype;
+package com.myadd.myadd.user.security.usertype;
 
 public interface OAuth2UserInfo {
     String getEmail();

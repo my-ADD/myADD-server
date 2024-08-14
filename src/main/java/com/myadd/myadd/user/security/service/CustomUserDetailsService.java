@@ -8,10 +8,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+// Spring Security: UserDetailsService(사용자 정보를 로드하는 핵심 인터페이스)
 // 시큐리티 설정(SecurityConfig)에서 loginProcessUrl("/login");
 // /login 요청이 오면 자동으로 UserDetailsService 타입으로 IoC 되어 있는 loadUserByUsername 함수가 실행
 @Service
-public class PrincipalEmailUserService implements UserDetailsService { // 일반적인 로그인
+public class CustomUserDetailsService implements UserDetailsService { // 일반적인 로그인
 
     @Autowired
     private UserRepository userRepository;
@@ -28,10 +29,7 @@ public class PrincipalEmailUserService implements UserDetailsService { // 일반
         // -> 찾아지면 loadUserByUsername() 호출.
 
         UserEntity userEntity = userRepository.findByEmail(email).get();
-        if(userEntity != null){
-            return new PrincipalDetails(userEntity);
-        }
+        return new CustomUserDetails(userEntity);
 
-        return null;
     }
 }

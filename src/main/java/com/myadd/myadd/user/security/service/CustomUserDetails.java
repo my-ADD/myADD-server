@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+// Spring Security: UserDetails(사용자 정보를 담는 인터페이스)
 // 시큐리티가 /login 주소 요청이 오면 낚아채서 로그인 진행
 // 로그인 진행 완료 시 시큐리티 session을 생성 (Security ContextHolder)
 // 오브젝트 타입 => Authentication 타입 객체. Authentication 안에 User 정보가 있어야 함.
@@ -17,18 +18,18 @@ import java.util.Map;
 // Authentication 안에 들어갈 수 있는 객체는 UserDeatails 객체. 이를 통해 User object에 접근 가능
 // Security Session => Authentication => UserDetails(PrincipalDetails)
 @Data
-public class PrincipalDetails implements UserDetails, OAuth2User { // PrincipalDetails가 UserDetails 타입이 됨.
+public class CustomUserDetails implements UserDetails, OAuth2User { // PrincipalDetails가 UserDetails 타입이 됨.
 
-    private UserEntity user; // 콤포지션
-    private Map<String, Object> attributes;
+    private UserEntity user; // 사용자 엔티티
+    private Map<String, Object> attributes; // OAuth2 속성
 
     // 이메일 회원이 로그인할 때의 생성자
-    public PrincipalDetails(UserEntity user){
+    public CustomUserDetails(UserEntity user){
         this.user = user;
     }
 
     // Oauth2 회원이 로그인할 때의 생성자
-    public PrincipalDetails(UserEntity user, Map<String, Object> attributes){
+    public CustomUserDetails(UserEntity user, Map<String, Object> attributes){
         this.user = user;
         this.attributes = attributes;
     }

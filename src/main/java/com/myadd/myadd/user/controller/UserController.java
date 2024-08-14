@@ -4,16 +4,15 @@ import com.myadd.myadd.response.BaseResponse;
 import com.myadd.myadd.response.BaseResponseStatus;
 import com.myadd.myadd.user.domain.dto.EmailRequestDto;
 import com.myadd.myadd.user.domain.entity.UserEntity;
-import com.myadd.myadd.user.domain.usertype.UserTypeEnum;
+import com.myadd.myadd.user.security.usertype.UserTypeEnum;
 import com.myadd.myadd.user.domain.dto.UserDto;
-import com.myadd.myadd.user.security.service.PrincipalDetails;
+import com.myadd.myadd.user.security.service.CustomUserDetails;
 import com.myadd.myadd.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 // 로그인은 spring security에서 처리해주므로 별도로 controller를 구현할 필요 없음
@@ -69,8 +68,8 @@ public class UserController {
         if(authentication == null)
             return new BaseResponse<>(BaseResponseStatus.FAILED_NOT_AUTHENTICATION);
 
-        String email = ((PrincipalDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
-        Long id = ((PrincipalDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
+        String email = ((CustomUserDetails)authentication.getPrincipal()).getEmail(); // 이메일 또는 사용자명
+        Long id = ((CustomUserDetails) authentication.getPrincipal()).getId(); // UserDetailsImpl은 사용자의 상세 정보를 구현한 클래스
 
         if(userService.findByEmail(email) == null || !userService.deleteUser(id, email))
             return new BaseResponse<>(BaseResponseStatus.FAILED_ALREADY_DELETE_USER);

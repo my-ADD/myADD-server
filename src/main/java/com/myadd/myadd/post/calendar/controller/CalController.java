@@ -4,7 +4,6 @@ import com.myadd.myadd.post.calendar.service.CalService;
 import com.myadd.myadd.post.crud.dto.PostBackDto;
 import com.myadd.myadd.response.BaseResponse;
 import com.myadd.myadd.response.BaseResponseStatus;
-import com.myadd.myadd.user.security.service.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

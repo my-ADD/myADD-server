@@ -1,6 +1,6 @@
 package com.myadd.myadd.user.domain.dto;
 
-import com.myadd.myadd.user.domain.usertype.UserTypeEnum;
+import com.myadd.myadd.user.security.usertype.UserTypeEnum;
 import com.myadd.myadd.user.domain.entity.UserEntity;
 import lombok.*;
 
