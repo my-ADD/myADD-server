@@ -3,6 +3,8 @@ package com.myadd.myadd.post.repository;
 import com.myadd.myadd.post.domain.PostEntity;
 import com.myadd.myadd.user.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +23,7 @@ public interface PostRepository extends JpaRepository<PostEntity,Long> {
     List<PostEntity> findByPlatformAndCategoryAndUserOrderByTitle(String platform,String category,UserEntity user);
     // 포토카드 하나 조회
     PostEntity findByPostId(Long postId);
+
+    @Query("SELECT p FROM PostEntity p WHERE date_format(p.createdAt, '%Y-%m-%d') = :createdAt and p.user.userId = :userId")
+    List<PostEntity> findByCreatedAt(@Param("userId") Long userId, @Param("createdAt") String createdAt);
 }

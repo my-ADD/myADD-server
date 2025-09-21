@@ -1,7 +1,6 @@
 package com.myadd.myadd.post.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.myadd.myadd.post.crud.dto.PostBackDto;
+import com.myadd.myadd.post.dto.PostDto;
 import com.myadd.myadd.user.domain.entity.UserEntity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -13,14 +12,18 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name="Post")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PostEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="post_id")
     private Long postId;
 
-    @JsonIgnore //이걸 붙이면 에러 해결할 수 있는데 일단 DTO로 해결..
-    @ManyToOne @JoinColumn(name="user_id", insertable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name="user_id", insertable = false, updatable = false)
     private UserEntity user;
 
     @Column(name = "user_id")
@@ -39,42 +42,57 @@ public class PostEntity {
     private String endedAt;
 
     private String comment;
-
     private String title;
-
     private String memo;
-
     private String image;
-
     private String category;
 
     @ColumnDefault("0")
     private Long views;
 
     private String genre;
-
     private String platform;
-
     private String emoji;
 
-    public PostBackDto toPostBackDto(PostEntity post){
-        PostBackDto postBackDto = new PostBackDto();
+    /** PostDto -> PostEntity 변환 */
+    public static PostEntity fromDto(PostDto dto) {
+        return PostEntity.builder()
+                .postId(dto.getPostId())
+                .userId(dto.getUserId())
+                .createdAt(dto.getCreatedAt() != null ? dto.getCreatedAt() : LocalDateTime.now())
+                .modifiedAt(dto.getModifiedAt() != null ? dto.getModifiedAt() : LocalDateTime.now())
+                .startedAt(dto.getStartedAt())
+                .endedAt(dto.getEndedAt())
+                .comment(dto.getComment())
+                .title(dto.getTitle())
+                .memo(dto.getMemo())
+                .image(dto.getImage())
+                .category(dto.getCategory())
+                .views(dto.getViews() != null ? dto.getViews() : 0)
+                .genre(dto.getGenre())
+                .platform(dto.getPlatform())
+                .emoji(dto.getEmoji())
+                .build();
+    }
 
-        postBackDto.setUserId(post.getUserId());
-        postBackDto.setPostId(post.getPostId());
-        postBackDto.setCreatedAt(post.getCreatedAt());
-        postBackDto.setModifiedAt(post.getModifiedAt());
-        postBackDto.setStartedAt(post.getStartedAt());
-        postBackDto.setEndedAt(post.getEndedAt());
-        postBackDto.setComment(post.getComment());
-        postBackDto.setTitle(post.getTitle());
-        postBackDto.setMemo(post.getMemo());
-        postBackDto.setImage(post.getImage());
-        postBackDto.setCategory(post.getCategory());
-        postBackDto.setViews(post.getViews());
-        postBackDto.setGenre(post.getGenre());
-        postBackDto.setPlatform(post.getPlatform());
-        postBackDto.setEmoji(post.getEmoji());
-        return postBackDto;
+    /** PostEntity -> PostDto 변환 */
+    public PostDto toDto() {
+        return PostDto.builder()
+                .postId(this.postId)
+                .userId(this.userId)
+                .createdAt(this.createdAt)
+                .modifiedAt(this.modifiedAt)
+                .startedAt(this.startedAt)
+                .endedAt(this.endedAt)
+                .comment(this.comment)
+                .title(this.title)
+                .memo(this.memo)
+                .image(this.image)
+                .category(this.category)
+                .views(this.views)
+                .genre(this.genre)
+                .platform(this.platform)
+                .emoji(this.emoji)
+                .build();
     }
 }

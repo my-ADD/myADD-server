@@ -1,13 +1,16 @@
-package com.myadd.myadd.post.search.dto;
+package com.myadd.myadd.post.dto;
 
-import com.myadd.myadd.post.domain.PostEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class PostSearchFrontDto {
     private String image;
     private String comment;
